@@ -13,12 +13,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import javax.swing.JFileChooser;
-import javax.swing.JList;
-import javax.swing.ListModel;
 
 /**
  *
@@ -71,14 +69,15 @@ public final class Interfaz extends javax.swing.JFrame {
                             bw.write((String) cliente.getInformacionC().get(l));
                             bw.newLine();
                         }
-                        for(int l=0;l<cliente.getInformacionE().size();l++){
-                            bw.write((String) cliente.getInformacionE().get(l));
-                            bw.newLine();
+                        if(cliente.getInformacionE().size()!=0){
+                            for(int l=0;l<cliente.getInformacionE().size();l++){
+                                bw.write((String) cliente.getInformacionE().get(l));
+                                bw.newLine();
+                            }
                         }
                         bw.write("##");
                         bw.newLine();
                     }
-                    
               }
         } catch (IOException e) {
         }
@@ -248,12 +247,17 @@ public final class Interfaz extends javax.swing.JFrame {
     public void actualizarContactos(){
         listadoClientes=new String[1000];
         this.arrayListContactos=new  ArrayList<>();
-        for (Map.Entry<String, Cliente> entry : hashmapClientes.entrySet()) {
+        hashmapClientes.entrySet().forEach((entry) -> {
             this.arrayListContactos.add(entry.getValue().getApellidoNombre());
-        }
+            Collections.sort(this.arrayListContactos, new Comparator<String>() {
+            public int compare(String n1  , String n2) {
+               return n1.compareTo(n2);
+   }
+});
+         });
         for (int g=0;g<this.arrayListContactos.size();g++) {
             listadoClientes[g]=this.arrayListContactos.get(g);
-            System.out.println("\nExistente: "+this.listadoClientes[g]);
+            //System.out.println("\nExistente: "+this.listadoClientes[g]);
         }
          //System.out.println("ArrayList contactos:"+this.arrayListContactos.toString());
          
@@ -268,7 +272,7 @@ public final class Interfaz extends javax.swing.JFrame {
         }
         for (int g=0;g<this.arrayListContactosEliminados.size();g++) {
             listadoClientesEliminados[g]=this.arrayListContactosEliminados.get(g);
-            System.out.println("\nEliminado: "+this.listadoClientesEliminados[g]);
+            //System.out.println("\nEliminado: "+this.listadoClientesEliminados[g]);
         }
          //System.out.println("Contactos Eliminados:"+this.arrayListContactosEliminados.toString());
         
@@ -291,6 +295,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.tablacontactosVisualizar.setListData(vacio);
         this.tablaModificarInformacion.setListData(vacio);
         this.tablacontactosEliminar.setListData(vacio);
+        this.tablaEmbarcaciones.setListData(vacio);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -421,11 +426,11 @@ public final class Interfaz extends javax.swing.JFrame {
         jButton12 = new javax.swing.JButton();
         jButton18 = new javax.swing.JButton();
         jLabel67 = new javax.swing.JLabel();
-        marca1 = new javax.swing.JTextField();
+        m = new javax.swing.JTextField();
         jLabel68 = new javax.swing.JLabel();
-        tipo1 = new javax.swing.JTextField();
-        motor1 = new javax.swing.JTextField();
-        modelo1 = new javax.swing.JTextField();
+        t = new javax.swing.JTextField();
+        mot = new javax.swing.JTextField();
+        mo = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
         embarcacionSeleccionada = new javax.swing.JLabel();
         modificarLancha1 = new javax.swing.JPanel();
@@ -435,16 +440,15 @@ public final class Interfaz extends javax.swing.JFrame {
         jButton29 = new javax.swing.JButton();
         jScrollPane17 = new javax.swing.JScrollPane();
         tablaLanchasEliminar = new javax.swing.JList<>();
-        eliminarEliminar6 = new javax.swing.JButton();
-        recuperarBorrado4 = new javax.swing.JButton();
-        jLabel20 = new javax.swing.JLabel();
-        seleccionado7 = new javax.swing.JLabel();
-        jScrollPane18 = new javax.swing.JScrollPane();
-        tablaLanchas2 = new javax.swing.JList<>();
         seleccionBorrado4 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
         jLabel21 = new javax.swing.JLabel();
         seleccionado8 = new javax.swing.JLabel();
+        jScrollPane19 = new javax.swing.JScrollPane();
+        tablaEE = new javax.swing.JList<>();
+        seleccionBorrado5 = new javax.swing.JButton();
+        jLabel23 = new javax.swing.JLabel();
+        seleccionado6 = new javax.swing.JLabel();
+        seleccionBorrado6 = new javax.swing.JButton();
         Ordenes = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel9 = new javax.swing.JPanel();
@@ -523,7 +527,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(seleccionadoV, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(337, 343, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         visualizarLayout.setVerticalGroup(
             visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -777,7 +781,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(seleccionBorrado, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel3))))
-                .addContainerGap(388, Short.MAX_VALUE))
+                .addContainerGap(430, Short.MAX_VALUE))
         );
         eliminarLayout.setVerticalGroup(
             eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -943,7 +947,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(seleccionadoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(369, Short.MAX_VALUE))
+                .addContainerGap(411, Short.MAX_VALUE))
         );
         infoLayout.setVerticalGroup(
             infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1088,7 +1092,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
         jLabel19.setText("Estado: ");
 
-        seleccionadoAgregar.setText("-------------------------------");
+        seleccionadoAgregar.setText("-----------------------------");
 
         jLabel18.setText("Añadiendo Lancha a:  ");
 
@@ -1110,44 +1114,43 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addGroup(agregarLanchaLayout.createSequentialGroup()
                         .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(agregarLanchaLayout.createSequentialGroup()
-                                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(seleccionarLanchaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(agregarLanchaLayout.createSequentialGroup()
                                 .addComponent(jLabel15)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(seleccionadoAgregar)))
+                                .addComponent(seleccionadoAgregar))
+                            .addGroup(agregarLanchaLayout.createSequentialGroup()
+                                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(seleccionarLanchaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(59, 59, 59)
                         .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(agregarLanchaLayout.createSequentialGroup()
+                                .addComponent(jLabel18)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(agregarLanchaLayout.createSequentialGroup()
-                                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel19)
-                                            .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel57)
-                                                .addComponent(jLabel58)
-                                                .addComponent(jLabel59)
-                                                .addComponent(jLabel60)
-                                                .addComponent(jLabel56)))
-                                        .addGap(40, 40, 40)
+                                .addComponent(añadiendo))
+                            .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(agregarLanchaLayout.createSequentialGroup()
+                                    .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel19)
                                         .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(nSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(motor, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(agregarLanchaLayout.createSequentialGroup()
-                                        .addComponent(jLabel18)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(añadiendo))))
-                            .addGroup(agregarLanchaLayout.createSequentialGroup()
-                                .addGap(230, 230, 230)
-                                .addComponent(jButton17)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(guardarLancha))))
-                    .addComponent(estadoAgregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(354, Short.MAX_VALUE))
+                                            .addComponent(jLabel57)
+                                            .addComponent(jLabel58)
+                                            .addComponent(jLabel59)
+                                            .addComponent(jLabel60)
+                                            .addComponent(jLabel56)))
+                                    .addGap(40, 40, 40)
+                                    .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(nSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(motor, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(agregarLanchaLayout.createSequentialGroup()
+                                    .addGap(218, 218, 218)
+                                    .addComponent(jButton17)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(guardarLancha))
+                                .addComponent(estadoAgregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(349, Short.MAX_VALUE))
         );
         agregarLanchaLayout.setVerticalGroup(
             agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1175,29 +1178,29 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel57))
-                                .addGap(10, 10, 10)
-                                .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel58)
-                                    .addComponent(modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(motor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel59))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(nSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel60))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton17)
-                                    .addComponent(guardarLancha))
-                                .addGap(19, 19, 19)
-                                .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel19)
-                                    .addComponent(estadoAgregar)))
+                                    .addComponent(jLabel57)))
                             .addComponent(seleccionarLanchaAgregar))
-                        .addContainerGap(291, Short.MAX_VALUE))))
+                        .addGap(10, 10, 10)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel58)
+                            .addComponent(modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(motor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel59))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel60))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton17)
+                            .addComponent(guardarLancha))
+                        .addGap(19, 19, 19)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19)
+                            .addComponent(estadoAgregar))
+                        .addContainerGap(143, Short.MAX_VALUE))))
         );
 
         eliminarLanchaa.addTab("Agrega", agregarLancha);
@@ -1227,9 +1230,9 @@ public final class Interfaz extends javax.swing.JFrame {
         });
         jScrollPane15.setViewportView(tablaLanchasModificar);
 
-        jLabel17.setText("Cliente: ");
+        jLabel17.setText("Seleccionado: ");
 
-        seleccionado5.setText("---------------------------------------");
+        seleccionado5.setText("-----------------------------");
 
         tablaEmbarcaciones.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {};
@@ -1279,30 +1282,30 @@ public final class Interfaz extends javax.swing.JFrame {
 
         jLabel67.setText("N° Serie: ");
 
-        marca1.setText(" ");
-        marca1.addActionListener(new java.awt.event.ActionListener() {
+        m.setText(" ");
+        m.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                marca1ActionPerformed(evt);
+                mActionPerformed(evt);
             }
         });
 
         jLabel68.setText("Marca: ");
 
-        tipo1.setText(" ");
-        tipo1.addActionListener(new java.awt.event.ActionListener() {
+        t.setText(" ");
+        t.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tipo1ActionPerformed(evt);
+                tActionPerformed(evt);
             }
         });
 
-        motor1.setText(" ");
-        motor1.addActionListener(new java.awt.event.ActionListener() {
+        mot.setText(" ");
+        mot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                motor1ActionPerformed(evt);
+                motActionPerformed(evt);
             }
         });
 
-        modelo1.setText(" ");
+        mo.setText(" ");
 
         jLabel22.setText("Embarcacion");
 
@@ -1335,15 +1338,14 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addGroup(modificarLanchaLayout.createSequentialGroup()
                                 .addComponent(jLabel22)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(embarcacionSeleccionada)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(embarcacionSeleccionada))
                             .addGroup(modificarLanchaLayout.createSequentialGroup()
-                                .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                                .addComponent(jScrollPane16, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(modificarLanchaLayout.createSequentialGroup()
                                         .addComponent(seleccionBorrado3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(26, 26, 26)
                                         .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel68)
                                             .addComponent(jLabel64)
@@ -1352,16 +1354,16 @@ public final class Interfaz extends javax.swing.JFrame {
                                             .addComponent(jLabel66))
                                         .addGap(33, 33, 33)
                                         .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tipo1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(t, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(nSerie1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(motor1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(modelo1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(marca1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(mot, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(mo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(m, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, modificarLanchaLayout.createSequentialGroup()
                                         .addComponent(jButton18)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jButton12)))))))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         modificarLanchaLayout.setVerticalGroup(
             modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1376,14 +1378,13 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel22)
-                            .addComponent(embarcacionSeleccionada))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addComponent(embarcacionSeleccionada)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, modificarLanchaLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel17)
-                            .addComponent(seleccionado5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(seleccionado5))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane15)
                     .addComponent(jScrollPane16, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1391,33 +1392,33 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton27)
                             .addGroup(modificarLanchaLayout.createSequentialGroup()
-                                .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(seleccionBorrado3)
-                                    .addGroup(modificarLanchaLayout.createSequentialGroup()
-                                        .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel66)
-                                            .addComponent(tipo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(marca1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel68))
-                                        .addGap(10, 10, 10)
-                                        .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel64)
-                                            .addComponent(modelo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(motor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel63))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(nSerie1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel67))))
+                                .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel66)
+                                    .addComponent(t, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(m, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel68))
+                                .addGap(10, 10, 10)
+                                .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel64)
+                                    .addComponent(mo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(mot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel63))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(nSerie1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel67))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jButton12)
                                     .addComponent(jButton18))))
-                        .addContainerGap(326, Short.MAX_VALUE))))
+                        .addContainerGap(178, Short.MAX_VALUE))
+                    .addGroup(modificarLanchaLayout.createSequentialGroup()
+                        .addComponent(seleccionBorrado3)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         eliminarLanchaa.addTab("Modificar", modificarLancha);
@@ -1447,42 +1448,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
         jScrollPane17.setViewportView(tablaLanchasEliminar);
 
-        eliminarEliminar6.setText("Abrir");
-        eliminarEliminar6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                eliminarEliminar6MouseClicked(evt);
-            }
-        });
-        eliminarEliminar6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eliminarEliminar6ActionPerformed(evt);
-            }
-        });
-
-        recuperarBorrado4.setText("Eliminar");
-        recuperarBorrado4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                recuperarBorrado4MouseClicked(evt);
-            }
-        });
-        recuperarBorrado4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recuperarBorrado4ActionPerformed(evt);
-            }
-        });
-
-        jLabel20.setText("Cliente: ");
-
-        seleccionado7.setText("---------------------------------------");
-
-        tablaLanchas2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = {};
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane18.setViewportView(tablaLanchas2);
-
-        seleccionBorrado4.setText("Seleccionar");
+        seleccionBorrado4.setText("Cancelar");
         seleccionBorrado4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 seleccionBorrado4MouseClicked(evt);
@@ -1494,16 +1460,44 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        jButton16.setText("Guardar");
-        jButton16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton16ActionPerformed(evt);
-            }
-        });
-
         jLabel21.setText("Embarcacion");
 
         seleccionado8.setText("-----------------------------------------------");
+
+        tablaEE.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {};
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane19.setViewportView(tablaEE);
+
+        seleccionBorrado5.setText("Seleccionar");
+        seleccionBorrado5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleccionBorrado5MouseClicked(evt);
+            }
+        });
+        seleccionBorrado5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seleccionBorrado5ActionPerformed(evt);
+            }
+        });
+
+        jLabel23.setText("Seleccionado: ");
+
+        seleccionado6.setText("-----------------------------");
+
+        seleccionBorrado6.setText("Eliminar");
+        seleccionBorrado6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleccionBorrado6MouseClicked(evt);
+            }
+        });
+        seleccionBorrado6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seleccionBorrado6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout modificarLancha1Layout = new javax.swing.GroupLayout(modificarLancha1);
         modificarLancha1.setLayout(modificarLancha1Layout);
@@ -1519,31 +1513,29 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(modificarLancha1Layout.createSequentialGroup()
-                        .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(modificarLancha1Layout.createSequentialGroup()
-                                .addComponent(jLabel20)
+                                .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(modificarLancha1Layout.createSequentialGroup()
+                                .addComponent(jLabel23)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(seleccionado7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(seleccionado6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(eliminarEliminar6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(modificarLancha1Layout.createSequentialGroup()
                                 .addComponent(jLabel21)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(seleccionado8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(seleccionado8, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(modificarLancha1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(seleccionBorrado4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(recuperarBorrado4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(323, 323, 323)
-                        .addComponent(jButton16)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(seleccionBorrado5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(seleccionBorrado6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(459, 459, Short.MAX_VALUE))
         );
         modificarLancha1Layout.setVerticalGroup(
             modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1553,35 +1545,29 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(jLabel28)
                     .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton28))
-                .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(modificarLancha1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(seleccionado8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, modificarLancha1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel20)
-                            .addComponent(seleccionado7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGap(12, 12, 12)
+                .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(seleccionado8)
+                    .addComponent(jLabel23)
+                    .addComponent(seleccionado6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane17)
-                    .addComponent(jScrollPane18, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(modificarLancha1Layout.createSequentialGroup()
                         .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane19, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                             .addGroup(modificarLancha1Layout.createSequentialGroup()
-                                .addComponent(jButton29)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(eliminarEliminar6))
-                            .addGroup(modificarLancha1Layout.createSequentialGroup()
-                                .addComponent(seleccionBorrado4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(recuperarBorrado4)
-                                .addGap(128, 128, 128)
-                                .addComponent(jButton16)))
-                        .addContainerGap(280, Short.MAX_VALUE))))
+                                .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton29)
+                                    .addGroup(modificarLancha1Layout.createSequentialGroup()
+                                        .addComponent(seleccionBorrado5)
+                                        .addGap(14, 14, 14)
+                                        .addComponent(seleccionBorrado4)))
+                                .addGap(18, 18, 18)
+                                .addComponent(seleccionBorrado6)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
 
         eliminarLanchaa.addTab("Eliminar", modificarLancha1);
@@ -1603,7 +1589,7 @@ public final class Interfaz extends javax.swing.JFrame {
         editar1.setLayout(editar1Layout);
         editar1Layout.setHorizontalGroup(
             editar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1116, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
             .addGroup(editar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editar1Layout.createSequentialGroup()
                     .addComponent(tablaClienteLanchas)
@@ -1637,7 +1623,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1650,7 +1636,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1663,7 +1649,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1676,7 +1662,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1702,7 +1688,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1715,7 +1701,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1728,7 +1714,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1741,7 +1727,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1054, Short.MAX_VALUE)
+            .addGap(0, 1158, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1832,11 +1818,11 @@ public final class Interfaz extends javax.swing.JFrame {
         this.bCuidadorE.setText("");
         this.bCelCuidadorE.setText("");
         
-        this.tipo1.setText("");
-        this.marca1.setText("");
+        this.t.setText("");
+        this.m.setText("");
         this.nSerie1.setText("");
-        this.modelo1.setText("");
-        this.motor1.setText("");
+        this.mo.setText("");
+        this.mot.setText("");
         
         //Barras Crear
         this.bNombreC.setText("");
@@ -1999,77 +1985,68 @@ public final class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_bCorreoEActionPerformed
 
-    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton16ActionPerformed
-
     private void seleccionBorrado4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado4ActionPerformed
-        // TODO add your handling code here:
+        if(this.embarcacion!=null){
+            this.seleccionado8.setText("-----------------------------------------------");
+         }
+         embarcacion=null;
     }//GEN-LAST:event_seleccionBorrado4ActionPerformed
 
     private void seleccionBorrado4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionBorrado4MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_seleccionBorrado4MouseClicked
 
-    private void recuperarBorrado4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarBorrado4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_recuperarBorrado4ActionPerformed
-
-    private void recuperarBorrado4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recuperarBorrado4MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_recuperarBorrado4MouseClicked
-
-    private void eliminarEliminar6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarEliminar6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_eliminarEliminar6ActionPerformed
-
-    private void eliminarEliminar6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eliminarEliminar6MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_eliminarEliminar6MouseClicked
-
     private void jButton29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton29ActionPerformed
-        // TODO add your handling code here:
+        if(this.tablaLanchasEliminar.getSelectedValue()!=null){
+          cliente=new Cliente();
+          cliente=this.hashmapClientes.get(this.tablaLanchasEliminar.getSelectedValue());
+          this.seleccionado6.setText(cliente.getApellidoNombre());
+      }    
+      this.tablaEE.setListData(cliente.getListadoEmbarcaciones());
     }//GEN-LAST:event_jButton29ActionPerformed
 
     private void jButton29MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton29MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton29MouseClicked
 
-    private void motor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_motor1ActionPerformed
+    private void motActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_motActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_motor1ActionPerformed
+    }//GEN-LAST:event_motActionPerformed
 
-    private void tipo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipo1ActionPerformed
+    private void tActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tipo1ActionPerformed
+    }//GEN-LAST:event_tActionPerformed
 
-    private void marca1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_marca1ActionPerformed
+    private void mActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_marca1ActionPerformed
+    }//GEN-LAST:event_mActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-         if(tipo1.getText().length()!=0 && marca1.getText().length()!=0 && nSerie1.getText().length()!=0 && modelo1.getText().length()!=0 
-            && motor1.getText().length()!=0 && embarcacion!=null){ 
+         if(t.getText().length()!=0 && m.getText().length()!=0 && nSerie1.getText().length()!=0 && mo.getText().length()!=0 
+            && mot.getText().length()!=0 && embarcacion!=null){ 
+            cliente.eliminarEmbarcacion(embarcacion.getMotor());
             
-            cliente.embarcaciones.remove(embarcacion.getMotor());
-             
-            embarcacion.setTipo(tipo1.getText());
-            embarcacion.setMarca(marca1.getText());
-            embarcacion.setModelo(modelo1.getText());
-            embarcacion.setMotor(motor1.getText());
+            embarcacion.setTipo(t.getText());
+            embarcacion.setMarca(m.getText());
+            embarcacion.setModelo(mo.getText());
+            embarcacion.setMotor(mot.getText());
             embarcacion.setnSerie(nSerie1.getText());
-            
-            cliente.embarcaciones.put(embarcacion.getMotor(), embarcacion);
+           
+            cliente.addEmbarcacion(embarcacion.getMotor(), embarcacion);
             this.hashmapClientes.remove(cliente.getApellidoNombre());
             this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
-            this.tablaEmbarcaciones.setListData(cliente.getListadoEmbarcaciones());
+            this.actualizarTXTContactos();
             this.update();
+            this.tablaEmbarcaciones.setListData(cliente.getListadoEmbarcaciones());
          }
          embarcacion=null;
+         cliente=null;
+         this.seleccionado5.setText("-----------------------------");
+         this.embarcacionSeleccionada.setText("-----------------------------------------------");
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void nSerie1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nSerie1ActionPerformed
@@ -2078,15 +2055,17 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionBorrado3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado3ActionPerformed
         if(this.tablaEmbarcaciones.getSelectedValue()!=null){
+            
             embarcacion=cliente.embarcaciones.get(this.tablaEmbarcaciones.getSelectedValue());
-            this.seleccionado5.setText(embarcacion.getMotor());
-            this.tipo1.setText(embarcacion.getTipo());
-            this.marca1.setText(embarcacion.getMarca());
-            this.nSerie1.setText(embarcacion.getModelo());
-            this.modelo1.setText(embarcacion.getMotor());
-            this.motor1.setText(embarcacion.getnSerie());
-        }    
-        this.embarcacionSeleccionada.setText(embarcacion.getMotor());
+            this.embarcacionSeleccionada.setText(embarcacion.getMotor());
+            this.t.setText(embarcacion.getTipo());
+            this.m.setText(embarcacion.getMarca());
+            this.mot.setText(embarcacion.getMotor());
+            this.mo.setText(embarcacion.getModelo());
+            this.nSerie1.setText(embarcacion.getnSerie());
+             System.out.println(embarcacion.getInformacion());
+        }  
+        
     }//GEN-LAST:event_seleccionBorrado3ActionPerformed
 
     private void seleccionBorrado3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionBorrado3MouseClicked
@@ -2152,6 +2131,11 @@ public final class Interfaz extends javax.swing.JFrame {
             this.update();
             
         }   
+        this.vaciarBarras();
+        this.seleccionadoAgregar.setText("-------------------------------");
+        this.añadiendo.setText("---------------------------------------");
+        cliente=null;
+
     }//GEN-LAST:event_guardarLanchaActionPerformed
 
     private void nSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nSerieActionPerformed
@@ -2169,6 +2153,37 @@ public final class Interfaz extends javax.swing.JFrame {
     private void tipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tipoActionPerformed
+
+    private void seleccionBorrado5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionBorrado5MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seleccionBorrado5MouseClicked
+
+    private void seleccionBorrado5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado5ActionPerformed
+        if(this.tablaEE.getSelectedValue()!=null){
+            embarcacion=cliente.embarcaciones.get(this.tablaEE.getSelectedValue());
+            this.seleccionado8.setText(embarcacion.getMotor());
+        }  
+    }//GEN-LAST:event_seleccionBorrado5ActionPerformed
+
+    private void seleccionBorrado6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionBorrado6MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seleccionBorrado6MouseClicked
+
+    private void seleccionBorrado6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado6ActionPerformed
+        if(this.embarcacion!=null){
+            cliente.eliminarEmbarcacion(embarcacion.getMotor());
+            this.hashmapClientes.remove(cliente.getApellidoNombre());
+            this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
+            this.actualizarTXTContactos();
+            //this.update();
+         }
+        if(this.tablaLanchasEliminar.getSelectedValue()!=null){
+          cliente=new Cliente();
+          cliente=this.hashmapClientes.get(this.tablaLanchasEliminar.getSelectedValue());
+        }
+        this.tablaEE.setListData(cliente.getListadoEmbarcaciones());
+        
+    }//GEN-LAST:event_seleccionBorrado6ActionPerformed
        
         
         
@@ -2237,7 +2252,6 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTabbedPane editaraClientes;
     private javax.swing.JPanel eliminar;
     private javax.swing.JButton eliminarEliminar;
-    private javax.swing.JButton eliminarEliminar6;
     private javax.swing.JTabbedPane eliminarLanchaa;
     private javax.swing.JLabel embarcacionSeleccionada;
     private javax.swing.JLabel estadoAgregar;
@@ -2246,7 +2260,6 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton23;
@@ -2269,9 +2282,9 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
@@ -2314,7 +2327,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane16;
     private javax.swing.JScrollPane jScrollPane17;
-    private javax.swing.JScrollPane jScrollPane18;
+    private javax.swing.JScrollPane jScrollPane19;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
@@ -2329,23 +2342,24 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField17;
     private javax.swing.JPanel lanch;
+    private javax.swing.JTextField m;
     private javax.swing.JTextField marca;
-    private javax.swing.JTextField marca1;
+    private javax.swing.JTextField mo;
     private javax.swing.JTextField modelo;
-    private javax.swing.JTextField modelo1;
     private javax.swing.JPanel modificarLancha;
     private javax.swing.JPanel modificarLancha1;
+    private javax.swing.JTextField mot;
     private javax.swing.JTextField motor;
-    private javax.swing.JTextField motor1;
     private javax.swing.JTextField nSerie;
     private javax.swing.JTextField nSerie1;
     private javax.swing.JPanel panelPrincipalContactos;
-    private javax.swing.JButton recuperarBorrado4;
     private javax.swing.JButton seleccionBorrado;
     private javax.swing.JButton seleccionBorrado3;
     private javax.swing.JButton seleccionBorrado4;
+    private javax.swing.JButton seleccionBorrado5;
+    private javax.swing.JButton seleccionBorrado6;
     private javax.swing.JLabel seleccionado5;
-    private javax.swing.JLabel seleccionado7;
+    private javax.swing.JLabel seleccionado6;
     private javax.swing.JLabel seleccionado8;
     private javax.swing.JLabel seleccionadoAgregar;
     private javax.swing.JLabel seleccionadoInfo;
@@ -2353,18 +2367,18 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton seleccionarLanchaAgregar;
     private javax.swing.JButton seleccionarModificarInfo;
     private javax.swing.JButton seleccionarV;
+    private javax.swing.JTextField t;
     private javax.swing.JTabbedPane tablaClienteLanchas;
-    private javax.swing.JList<String> tablaEmbarcaciones;
-    private javax.swing.JList<String> tablaLanchas2;
-    private javax.swing.JList<String> tablaLanchasAgregar;
-    private javax.swing.JList<String> tablaLanchasEliminar;
-    private javax.swing.JList<String> tablaLanchasModificar;
+    public javax.swing.JList<String> tablaEE;
+    public javax.swing.JList<String> tablaEmbarcaciones;
+    public javax.swing.JList<String> tablaLanchasAgregar;
+    public javax.swing.JList<String> tablaLanchasEliminar;
+    public javax.swing.JList<String> tablaLanchasModificar;
     public javax.swing.JList<String> tablaModificarInformacion;
     public javax.swing.JList<String> tablacontactosEliminados;
     public javax.swing.JList<String> tablacontactosEliminar;
     public javax.swing.JList<String> tablacontactosVisualizar;
     private javax.swing.JTextField tipo;
-    private javax.swing.JTextField tipo1;
     private javax.swing.JPanel visualizar;
     private javax.swing.JTextArea visualizarContactoCreado;
     private javax.swing.JTextArea visualizarV;

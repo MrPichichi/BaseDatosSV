@@ -24,10 +24,22 @@ public class Cliente {
     public String cuidador="";
     public String celularCuidador="";
     Embarcacion emb;
- 
+
+    public String[] getListadoDeembarcaciones() {
+        return listadoDeembarcaciones;
+    }
+
+    public void setListadoDeembarcaciones(String[] listadoDeembarcaciones) {
+        this.listadoDeembarcaciones = listadoDeembarcaciones;
+    }
+    public void eliminarEmbarcacion(String motor){
+        this.embarcaciones.remove(motor);
+        this.listadoEmbarcaciones.remove(motor);
+    }
    
 
     public String[] getListadoEmbarcaciones() {
+        this.listadoDeembarcaciones=new String[1000];
         for (int g=0;g<this.listadoEmbarcaciones.size();g++) {
             listadoDeembarcaciones[g]=this.listadoEmbarcaciones.get(g);
             System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
