@@ -1,0 +1,33 @@
+#
+1
+200
+300
+500
+*
+Limpiar anodos
+servicio de lubricacion
+cambiar bujias
+**
+1
+anodo
+1
+bujias
+***
+##
+#
+5
+600
+700
+1300
+*
+Limpiar anodos
+cambiar bujias
+**
+1 Litro
+Bencina
+1
+anodo
+1
+bujias
+***
+##

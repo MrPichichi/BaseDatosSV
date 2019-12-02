@@ -13,6 +13,7 @@ import java.util.HashMap;
  * @author Psche
  */
 public class Cliente {
+    HashMap<String ,String> ordenes= new HashMap<>();
     HashMap<String ,Embarcacion> embarcaciones= new HashMap<>();
     ArrayList<String> listadoEmbarcaciones =new ArrayList<>();
     String listadoDeembarcaciones[]=new String[1000];
