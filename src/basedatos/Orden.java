@@ -7,11 +7,7 @@ package basedatos;
 
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  *
@@ -19,20 +15,53 @@ import java.util.function.Consumer;
  */
 public class Orden {
     String numeroOrden;
+    String cliente;
+    String fecha;
+    String nota;
     int totalManoObra;
     int totalVarios;
     int total;
-    String observacion;
+    ArrayList<String> ordenes = new ArrayList<>();
     ArrayList<String> manoObra = new ArrayList<>();
-    HashMap<String ,String> repuestos= new HashMap<>();
     ArrayList <String> listadoRepuestos= new ArrayList<>();
+    HashMap<String ,String> repuestos= new HashMap<>();
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+    
+    public ArrayList<String> getOrdenes() {
+        return ordenes;
+    }
+    public void addOrden() {
+        this.ordenes.add(cliente);
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
     
     public String getInformacion(){
-        String s=this.numeroOrden+"\n"+Integer.toString(this.getTotalManoObra())+"\n"+Integer.toString(this.getTotalVarios())+"\n"+Integer.toString(this.getTotal())
-                +"\n"+this.getManoObra()+"\n"+this.getRepuestos();
+        String s="\n N° Orden: "+this.numeroOrden+"\n Cliente: "+this.cliente+"\n Fecha: "+this.getFecha()
+                +"\n\n                             MANO DE OBRA\n\n"+this.getManoObra()+"\n\n                             REPUESTOS\n\n"+this.getRepuestos()+"\n\n                                   COSTE \n\n Mano de obra: "+Integer.toString(this.getTotalManoObra())+"\n Varios: "
+                +Integer.toString(this.getTotalVarios())+"\n Total: "+Integer.toString(this.getTotal())+"\n\n                             NOTA\n\n"+this.getNota();
         return s;
-                
-
     }
             
     public String getNumeroOrden() {
@@ -66,16 +95,13 @@ public class Orden {
         this.total = parseInt(total,10);;
     }
 
-    public String getObservacion() {
-        return observacion;
-    }
 
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
-    public ArrayList<String> getManoObra() {
-        return manoObra;
+    public String getManoObra() {
+        String mObra="";
+        for(int c=0;c<this.manoObra.size();c++){
+            mObra+=" - "+this.manoObra.get(c)+"\n";
+        }
+        return mObra;
     }
 
     public void addManoObra(String mo) {
@@ -86,7 +112,7 @@ public class Orden {
        String rep="";
        //System.out.println("cant rep: "+this.listadoRepuestos.size());
        for(int z=0;z<this.listadoRepuestos.size();z++){
-          rep+=listadoRepuestos.get(z)+" "+this.repuestos.get(listadoRepuestos.get(z))+"\n";
+          rep+=" - "+listadoRepuestos.get(z)+" "+this.repuestos.get(listadoRepuestos.get(z))+"\n";
        }
         return rep;
     }

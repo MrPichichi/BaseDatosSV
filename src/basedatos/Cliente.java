@@ -17,6 +17,8 @@ public class Cliente {
     HashMap<String ,Embarcacion> embarcaciones= new HashMap<>();
     ArrayList<String> listadoEmbarcaciones =new ArrayList<>();
     String listadoDeembarcaciones[]=new String[1000];
+    String listadoDeOrdenes[]=new String[1000];
+    
     public String nombre="";
     public String apellido="";
     public String celular="";
