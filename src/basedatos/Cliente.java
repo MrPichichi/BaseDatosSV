@@ -16,9 +16,11 @@ public class Cliente {
     HashMap<String ,String> ordenes= new HashMap<>();
     HashMap<String ,Embarcacion> embarcaciones= new HashMap<>();
     ArrayList<String> listadoEmbarcaciones =new ArrayList<>();
+    ArrayList<String> listadoOrdenes =new ArrayList<>();
     String listadoDeembarcaciones[]=new String[1000];
     String listadoDeOrdenes[]=new String[1000];
-    
+    boolean guarderia=false; 
+    boolean deuda=false;
     public String nombre="";
     public String apellido="";
     public String celular="";
@@ -27,7 +29,21 @@ public class Cliente {
     public String cuidador="";
     public String celularCuidador="";
     Embarcacion emb;
+    
+    public void setGuarderiaSi() {
+        this.guarderia=true;
+    }
 
+    public void setGuarderiaNO() {
+        this.guarderia=false;
+    }
+
+    public void setDeudaSi() {
+        this.deuda = true;
+    }
+     public void setDeudaNo() {
+        this.deuda = false;
+    }
     public String[] getListadoDeembarcaciones() {
         return listadoDeembarcaciones;
     }
@@ -45,7 +61,7 @@ public class Cliente {
         this.listadoDeembarcaciones=new String[1000];
         for (int g=0;g<this.listadoEmbarcaciones.size();g++) {
             listadoDeembarcaciones[g]=this.listadoEmbarcaciones.get(g);
-            System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
+            //System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
         }
         return listadoDeembarcaciones;
     }
@@ -124,7 +140,35 @@ public class Cliente {
         in.add(this.correo);
         in.add(this.cuidador);
         in.add(this.celularCuidador);
+        if(this.deuda==true){
+            in.add("si");
+        }
+        if(this.deuda==false){
+            in.add("no");
+        }
+        if(this.guarderia==true){
+            in.add("si");
+        }
+        if(this.guarderia==false){
+            in.add("no");
+        }
         return in;
+    }
+    public String getGuarderia(){
+        if(this.guarderia==true){
+            return "si";
+        }
+        else{
+            return "no";
+        }
+    }
+    public String getDeuda(){
+        if(this.deuda==true){
+            return "si";
+        }
+        else{
+            return "no";
+        }
     }
     public ArrayList getInformacionE(){
         ArrayList<String> in=new ArrayList<>();
@@ -141,7 +185,8 @@ public class Cliente {
     }
     public String getInformacionCiente(){
         return ("                                       \n\n  Nombre: "+this.nombre+"\n  Apellido: "+this.apellido+"\n  Correo: "+this.correo+"\n  Celular: "+this.celular+
-                "\n  Telefono fijo: "+this.TelFijo+"\n  Cuidador: "+this.cuidador+"\n  Numero Celular de Cuidador: "+this.celularCuidador+"\n");
+                "\n  Telefono fijo: "+this.TelFijo+"\n  Cuidador: "+this.cuidador+"\n  Numero Celular de Cuidador: "+
+                this.celularCuidador+"\n  Deuda: "+this.getDeuda()+"\n  Guarderia: "+this.getGuarderia());
     }
     public String getInformacionEmbarcacuiones(){
         String infoEmb="\n                             EMBARCACIONES\n";

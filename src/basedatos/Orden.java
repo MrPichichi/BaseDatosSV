@@ -21,11 +21,27 @@ public class Orden {
     int totalManoObra;
     int totalVarios;
     int total;
+    boolean cancelado=false;
     ArrayList<String> ordenes = new ArrayList<>();
     ArrayList<String> manoObra = new ArrayList<>();
     ArrayList <String> listadoRepuestos= new ArrayList<>();
     HashMap<String ,String> repuestos= new HashMap<>();
-
+    
+    public String getCancelado(){
+        if(this.cancelado==true){
+            return "si";
+        }
+        else{
+            return "no";
+        }
+    }
+    
+    public void setDeudaSi() {
+        this.cancelado = true;
+    }
+     public void setDeudaNo() {
+        this.cancelado = false;
+    }
     public String getNota() {
         return nota;
     }
@@ -58,7 +74,7 @@ public class Orden {
     }
     
     public String getInformacion(){
-        String s="\n N° Orden: "+this.numeroOrden+"\n Cliente: "+this.cliente+"\n Fecha: "+this.getFecha()
+        String s="\n N° Orden: "+this.numeroOrden+"\n Cliente: "+this.cliente+"\n Fecha: "+this.getFecha()+"\n Cancelada: "+this.getCancelado()
                 +"\n\n                             MANO DE OBRA\n\n"+this.getManoObra()+"\n\n                             REPUESTOS\n\n"+this.getRepuestos()+"\n\n                                   COSTE \n\n Mano de obra: "+Integer.toString(this.getTotalManoObra())+"\n Varios: "
                 +Integer.toString(this.getTotalVarios())+"\n Total: "+Integer.toString(this.getTotal())+"\n\n                             NOTA\n\n"+this.getNota();
         return s;

@@ -5,22 +5,35 @@
  */
 package basedatos;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Psche
  */
 public class Repuesto {
-    String nombe;
+    String nombre;
     String codigo;
     int precio;
-    int cantidad;
-
-    public String getNombe() {
-        return nombe;
+    double cantidad=0;
+    public String getInformacionVisualizar(){
+        String s="\n Repuesto: "+this.nombre+"\n Precio: "+this.getPrecio()+"\n Codigo: "+this.getCodigo()+"\n Disponibles: "+this.getCantidad();
+        return s;
+    }
+    public ArrayList getInformacionR(){
+        ArrayList<String> in=new ArrayList<>();
+        in.add(this.nombre);
+        in.add(this.codigo);
+        in.add(this.getPrecio());
+        in.add(this.getCantidad());
+        return in;
+    }
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombe(String nombe) {
-        this.nombe = nombe;
+    public void setNombre(String nombe) {
+        this.nombre = nombe;
     }
 
     public String getCodigo() {
@@ -31,20 +44,21 @@ public class Repuesto {
         this.codigo = codigo;
     }
 
-    public int getPrecio() {
-        return precio;
+    public String getPrecio() {
+        
+        return Integer.toString(precio);
     }
 
-    public void setPrecio(int precio) {
-        this.precio = precio;
+    public void setPrecio(String precio) {
+        this.precio = Integer.parseInt(precio);
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public String getCantidad() {
+        return Double.toString(cantidad);
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setCantidad(String cantidad) {
+        this.cantidad = Double.parseDouble(cantidad);
     }
     
 }
