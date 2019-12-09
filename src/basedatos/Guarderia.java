@@ -7,47 +7,64 @@ package basedatos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Psche
  */
 public class Guarderia {
-    int precio; 
-    int abono1,abono2,abono3;
-    ArrayList<Integer> pagos=new ArrayList<>();
-    HashMap<String ,ArrayList> hashmapClientes= new HashMap<>();
+    Pago pago;
+    ArrayList<String> listadoEmbarcaciones=new ArrayList<>();
+    HashMap<String ,HashMap> embarcacionsYPAgos=new HashMap<>();
+    ArrayList<String> año=new ArrayList<>();
+    //<embarcacion><HasMap<año><pagos>>
+    HashMap<String ,Pago> abonosYTOtal=new HashMap<>();
+    HashMap<String ,Integer> PrecioDeembarcaciones=new HashMap<>();
+    Cliente cliente;
 
-    public int getPrecio() {
-        return precio;
+    public Pago getPago() {
+        return pago;
     }
 
-    public void setPrecio(int precio) {
-        this.precio = precio;
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
 
-    public int getAbono1() {
-        return abono1;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setAbono1(int abono1) {
-        this.abono1 = abono1;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public int getAbono2() {
-        return abono2;
+    
+    public void inicializarAñosGuarderia(String precio){
+        abonosYTOtal=new HashMap<>();
+        int añoInicio=2014;
+        int añoTermino=2040;
+        while(añoInicio<=añoTermino){
+            año.add( Integer.toString(añoInicio) );
+            añoInicio+=1;
+        }
+        pago=new Pago(precio);
+        for(int g=0;g<año.size();g++){
+            System.out.println(año.get(g));
+            abonosYTOtal.put(año.get(g), pago);
+        }
+        abonosYTOtal.entrySet().forEach((Map.Entry<String, Pago> entry) -> {
+            System.out.println(" Fecha: "+entry.getKey());
+            //Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
+        });
+        
+    }
+    public void agregarLanchaAGuarderia(String embarcacion, String precio){
+         this.inicializarAñosGuarderia(precio);
+        this.embarcacionsYPAgos.put(embarcacion, abonosYTOtal);
+        
     }
 
-    public void setAbono2(int abono2) {
-        this.abono2 = abono2;
-    }
 
-    public int getAbono3() {
-        return abono3;
-    }
-
-    public void setAbono3(int abono3) {
-        this.abono3 = abono3;
-    }
     
 }

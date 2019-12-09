@@ -10,12 +10,41 @@ package basedatos;
  * @author Psche
  */
 public class Embarcacion {
-    String tipo;
-    String marca;
-    String modelo;
-    String motor;
-    String nSerie;
+    String tipo="vacio";
+    String marca="vacio";
+    String modelo="vacio";
+    String motor="vacio";
+    String nSerie="vacio";
+    String codigo="vacio";
+    boolean enGuarderia=false;
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public boolean getEnGuarderia() {
+        return enGuarderia;
+    }
+    public String getEnGuarderiaSiNo() {
+        if(enGuarderia==true){
+            return "SI";
+        }
+        else{
+            return "NO";
+        }
+        
+    }
+    public void setEnGuarderiaSI() {
+        this.enGuarderia = true;
+    }
+    public void setEnGuarderiaNo() {
+        this.enGuarderia = false;
+    }
+    
     public String getTipo() {
         return tipo;
     }

@@ -13,22 +13,45 @@ import java.util.HashMap;
  * @author Psche
  */
 public class Cliente {
-    HashMap<String ,String> ordenes= new HashMap<>();
     HashMap<String ,Embarcacion> embarcaciones= new HashMap<>();
     ArrayList<String> listadoEmbarcaciones =new ArrayList<>();
     ArrayList<String> listadoOrdenes =new ArrayList<>();
     String listadoDeembarcaciones[]=new String[1000];
     String listadoDeOrdenes[]=new String[1000];
     boolean guarderia=false; 
-    boolean deuda=false;
-    public String nombre="";
-    public String apellido="";
-    public String celular="";
-    public String TelFijo="";
-    public String correo="";
-    public String cuidador="";
-    public String celularCuidador="";
+    boolean deudaOrden=false;
+    boolean deudaGuarderia=false;
+    public String nombre="vacio";
+    public String apellido="vacio";
+    public String celular="vacio";
+    public String TelFijo="vacio";
+    public String TelFijoOficina1="vacio";
+    public String TelFijoOficina2="vacio";
+    public String correo="vacio";
+    public String cuidador="vacio";
+    public String celularCuidador="vacio";
     Embarcacion emb;
+
+    public String getTelFijoOficina1() {
+        return TelFijoOficina1;
+    }
+    public void actualizarListadoEmbarcaciones(){
+        this.listadoDeembarcaciones=new String[this.listadoEmbarcaciones.size()];
+        for(int x=0;x<this.listadoEmbarcaciones.size();x++ ){
+            listadoDeembarcaciones[x]=this.listadoEmbarcaciones.get(x);
+        }
+    }
+    public void setTelFijoOficina1(String TelFijoOficina1) {
+        this.TelFijoOficina1 = TelFijoOficina1;
+    }
+
+    public String getTelFijoOficina2() {
+        return TelFijoOficina2;
+    }
+
+    public void setTelFijoOficina2(String TelFijoOficina2) {
+        this.TelFijoOficina2 = TelFijoOficina2;
+    }
     
     public void setGuarderiaSi() {
         this.guarderia=true;
@@ -37,12 +60,17 @@ public class Cliente {
     public void setGuarderiaNO() {
         this.guarderia=false;
     }
-
-    public void setDeudaSi() {
-        this.deuda = true;
+    public void setDeudaGuarderiaSI() {
+        this.deudaGuarderia = true;
     }
-     public void setDeudaNo() {
-        this.deuda = false;
+     public void setDeudaGuarderiaNO() {
+        this.deudaGuarderia = false;
+    }
+    public void setDeudaOrdenSi() {
+        this.deudaOrden = true;
+    }
+     public void setDeudaOrdenNo() {
+        this.deudaOrden = false;
     }
     public String[] getListadoDeembarcaciones() {
         return listadoDeembarcaciones;
@@ -137,37 +165,53 @@ public class Cliente {
         in.add(this.apellido);
         in.add(this.celular);
         in.add(this.TelFijo);
+        in.add(this.TelFijoOficina1);
+        in.add(this.TelFijoOficina2);
         in.add(this.correo);
         in.add(this.cuidador);
         in.add(this.celularCuidador);
-        if(this.deuda==true){
-            in.add("si");
-        }
-        if(this.deuda==false){
-            in.add("no");
-        }
         if(this.guarderia==true){
-            in.add("si");
+            in.add("SI");
         }
-        if(this.guarderia==false){
-            in.add("no");
+        else{
+            in.add("NO");
+        }
+        if(this.deudaGuarderia==true){
+            in.add("SI");
+        }
+        else{
+            in.add("NO");
+        }
+         if(this.deudaOrden==true){
+            in.add("SI");
+        }
+       else{
+            in.add("NO");
         }
         return in;
     }
     public String getGuarderia(){
         if(this.guarderia==true){
-            return "si";
+            return "SI";
         }
         else{
-            return "no";
+            return "NO";
         }
     }
-    public String getDeuda(){
-        if(this.deuda==true){
-            return "si";
+    public String getDeudaOrden(){
+        if(this.deudaOrden==true){
+            return "SI";
         }
         else{
-            return "no";
+            return "NO";
+        }
+    }
+    public String getDeudaGuarderia(){
+        if(this.deudaGuarderia==true){
+            return "SI";
+        }
+        else{
+            return "NO";
         }
     }
     public ArrayList getInformacionE(){
@@ -180,19 +224,20 @@ public class Cliente {
             in.add(emb.modelo);
             in.add(emb.motor);
             in.add(emb.nSerie);
+            in.add(emb.codigo);
         }
         return in;
     }
-    public String getInformacionCiente(){
+    public String getInformacionClienteVisualizar(){
         return ("                                       \n\n  Nombre: "+this.nombre+"\n  Apellido: "+this.apellido+"\n  Correo: "+this.correo+"\n  Celular: "+this.celular+
-                "\n  Telefono fijo: "+this.TelFijo+"\n  Cuidador: "+this.cuidador+"\n  Numero Celular de Cuidador: "+
-                this.celularCuidador+"\n  Deuda: "+this.getDeuda()+"\n  Guarderia: "+this.getGuarderia());
+                "\n  Telefono fijo: "+this.TelFijo+"\n  Telefono fijo Oficina 1: "+this.TelFijoOficina1+"\n  Telefono fijo Oficina 2: "+this.TelFijoOficina2+"\n  Cuidador: "+this.cuidador+"\n  Numero Celular de Cuidador: "+
+                this.celularCuidador+"\n  Guarderia: "+this.getGuarderia()+"\n  Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  Deuda Orden: "+this.getDeudaOrden());
     }
-    public String getInformacionEmbarcacuiones(){
+    public String getInformacionEmbarcaciones(){
         String infoEmb="\n                             EMBARCACIONES\n";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.embarcaciones.get(this.listadoEmbarcaciones.get(x));
-            infoEmb+="\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+emb.modelo+"\n  Motor: "+emb.motor+"\n  Numero Serie: "+emb.nSerie;
+            infoEmb+="\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+emb.modelo+"\n  Motor: "+emb.motor+"\n  Numero Serie: "+emb.nSerie+"\n  Codigo: "+emb.codigo;
             infoEmb+="\n";
         }
         return infoEmb;

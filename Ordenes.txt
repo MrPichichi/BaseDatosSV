@@ -1,47 +1,20 @@
 #
-1
-200
-300
-500
-Francisco GAmboa
-12-10-2019
-no
-cliente solicita limpieza casco 
-awdadwdwdwdwadawdawdawda
-wddddddddddddddddadw dwdawdawda
-wd eroroerleroe 
-*
-Limpiar anodos
-servicio de lubricacion
-cambiar bujias
+2222
+99000
+0
+4200
+103200
+Felipe  Gamboa
+yahama
+23/2/19
+NO
+  Sin Nota
+*#
+  Sin Varios
+#*
+Servicio de lubricado
 **
-1
-anodo
-1
-bujias
-***
-##
-#
-5
-600
-700
-1300
-Pepe gola
-17-02-2019
-no
-cliente solicita limpieza casco 
-awdadwdwdwdwadawdawdawdawdddddd
-ddddddddddadw dwdawdawdawd eror
-oerleroe 
-*
-Limpiar anodos
-cambiar bujias
-**
-1 Litro
-Bencina
-1
-anodo
-1
-bujias
+3.0
+Grasa
 ***
 ##

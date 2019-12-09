@@ -8,31 +8,56 @@ package basedatos;
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Psche
  */
 public class Orden {
+    Interfaz interfaz;
     String numeroOrden;
     String cliente;
+    String embrcacion;
     String fecha;
     String nota;
+    String varios;
     int totalManoObra;
     int totalVarios;
     int total;
+    int totalRepuestos;
     boolean cancelado=false;
-    ArrayList<String> ordenes = new ArrayList<>();
     ArrayList<String> manoObra = new ArrayList<>();
-    ArrayList <String> listadoRepuestos= new ArrayList<>();
+    ArrayList <Repuesto> listadoRepuestos= new ArrayList<>();
     HashMap<String ,String> repuestos= new HashMap<>();
+    public String getEmbrcacion() {
+        return embrcacion;
+    }
+
+    public void setEmbrcacion(String embrcacion) {
+        this.embrcacion = embrcacion;
+    }
+
+    public String getVarios() {
+        return varios;
+    }
+
+    public void setVarios(String varios) {
+        this.varios = varios;
+    }
+    
+
+    public int getTotalRepuestos() {
+        return totalRepuestos;
+    }
+ 
     
     public String getCancelado(){
         if(this.cancelado==true){
-            return "si";
+            return "SI";
         }
         else{
-            return "no";
+            return "NO";
         }
     }
     
@@ -58,12 +83,6 @@ public class Orden {
         this.fecha = fecha;
     }
     
-    public ArrayList<String> getOrdenes() {
-        return ordenes;
-    }
-    public void addOrden() {
-        this.ordenes.add(cliente);
-    }
 
     public String getCliente() {
         return cliente;
@@ -72,11 +91,21 @@ public class Orden {
     public void setCliente(String cliente) {
         this.cliente = cliente;
     }
-    
+     public ArrayList getManoObra(){
+         
+        
+        return this.manoObra;
+    }
     public String getInformacion(){
-        String s="\n N° Orden: "+this.numeroOrden+"\n Cliente: "+this.cliente+"\n Fecha: "+this.getFecha()+"\n Cancelada: "+this.getCancelado()
-                +"\n\n                             MANO DE OBRA\n\n"+this.getManoObra()+"\n\n                             REPUESTOS\n\n"+this.getRepuestos()+"\n\n                                   COSTE \n\n Mano de obra: "+Integer.toString(this.getTotalManoObra())+"\n Varios: "
-                +Integer.toString(this.getTotalVarios())+"\n Total: "+Integer.toString(this.getTotal())+"\n\n                             NOTA\n\n"+this.getNota();
+        String s="----------------------------------------------------------------------\n                                   DETALLES\n                                   ---------------\n\n"+
+                "  N° Orden: "+this.numeroOrden+"\n  Cliente: "+this.cliente+"\n  Embarcacion: "+this.embrcacion+"\n  Fecha: "+this.getFecha()+"\n  Cancelada: "+this.getCancelado()+
+                "\n\n                                MANO DE OBRA\n                                ----------------------\n\n"+this.getManoObraVisualizar()+
+                "\n\n                                   REPUESTOS\n                                   ------------------\n\n"+this.getRepuestos()+
+                "\n\n                                        VARIOS\n                                        -----------\n\n"+" "+this.getVarios()+
+                "\n\n                                          NOTA\n                                          --------\n\n"+this.getNota()+
+                "\n\n                                         COSTE\n                                         ----------\n\n  Mano de obra: "+Integer.toString(this.getTotalManoObra())+"\n  Repuestos: "+Integer.toString(this.getTotalRepuestos())+
+                "\n  Varios: "+Integer.toString(this.getTotalVarios())+"\n  TOTAL: "+Integer.toString(this.getTotal())+
+                "\n\n----------------------------------------------------------------------\n";
         return s;
     }
             
@@ -91,7 +120,9 @@ public class Orden {
     public int getTotalManoObra() {
         return totalManoObra;
     }
-
+    public void setTotalRepuestos(String totalRepuestos) {
+        this.totalRepuestos = parseInt(totalRepuestos,10);
+    }
     public void setTotalManoObra(String totalManoObra) {
         this.totalManoObra = parseInt(totalManoObra,10);
     }
@@ -112,7 +143,7 @@ public class Orden {
     }
 
 
-    public String getManoObra() {
+    public String getManoObraVisualizar() {
         String mObra="";
         for(int c=0;c<this.manoObra.size();c++){
             mObra+=" - "+this.manoObra.get(c)+"\n";
@@ -127,15 +158,17 @@ public class Orden {
     public String getRepuestos() {
        String rep="";
        //System.out.println("cant rep: "+this.listadoRepuestos.size());
-       for(int z=0;z<this.listadoRepuestos.size();z++){
-          rep+=" - "+listadoRepuestos.get(z)+" "+this.repuestos.get(listadoRepuestos.get(z))+"\n";
-       }
+       for (Map.Entry<String, String> entry : repuestos.entrySet()) {
+            System.out.println("clave=" + entry.getKey() + ", valor=" + entry.getValue());
+            rep+=" - "+entry.getValue()+" "+entry.getKey()+"\n";
+        }
         return rep;
     }
 
     public void addRepuesto(String repuesto, String cant) {
+        System.out.println(" R"+repuesto+"   c: "+cant);
         this.repuestos.put(repuesto,cant);
-        this.listadoRepuestos.add(repuesto);
+        
     }
     
 }

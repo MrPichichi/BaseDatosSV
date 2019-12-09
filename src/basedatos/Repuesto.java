@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Repuesto {
     String nombre;
-    String codigo;
+    String codigo="vacio";;
     int precio;
     double cantidad=0;
     public String getInformacionVisualizar(){

@@ -27,6 +27,7 @@ public final class Interfaz extends javax.swing.JFrame {
     Cliente cliente= new Cliente();
     Orden orden= new Orden();
     Repuesto repuesto= new Repuesto();
+    Guarderia guarderia=new Guarderia();
     //CLIENTES
     HashMap<String ,Cliente> hashmapClientes= new HashMap<>();
     ArrayList<String> arrayListContactos=new ArrayList<>();
@@ -36,18 +37,27 @@ public final class Interfaz extends javax.swing.JFrame {
     ArrayList<String> arrayListContactosEliminados=new ArrayList<>();
     String [] listadoClientesEliminados = new String[1000];	
     
+    
     //ORDENES
     HashMap<String ,Orden> hashmapOrdenes= new HashMap<>();
     ArrayList<String> arrayListOrdenes=new ArrayList<>();
     String [] listadoOrdenes = new String[1000];
-    ArrayList<Repuesto> arrayListOrdenesAñadirRepuestosCliente=new ArrayList<>();
     
-    String [] listadoOrdenesAñadirRepuestosCliente = new String[1000];
-    String [] listadoOrdenesAñadirRepuestosClienteCantidad = new String[1000];
-        //ELIMINADOS
     HashMap<String ,Orden> hashmapOrdenesEliminadas= new HashMap<>();
     ArrayList<String> arrayListOrdenesEliminadas=new ArrayList<>();
     String [] listadoOrdenesEliminadas = new String[1000];
+    //Crear ORden
+    ArrayList<Repuesto> arrayListOrdenesAñadirRepuestosCliente=new ArrayList<>();
+    String [] listadoOrdenesAñadirRepuestosCliente = new String[1000];
+    String [] listadoOrdenesAñadirRepuestosClienteCantidad = new String[1000];
+        //MANO OBRA
+    ArrayList<String> arrayListOrdenesAñadirManoObra=new ArrayList<>();
+    String [] listadoOrdenesAñadirManoObra= new String[1000];
+    
+    HashMap<String ,Guarderia> hashmapClientesGuarderia= new HashMap<>();
+    ArrayList<String> arrayListContactosGuarderia=new ArrayList<>();
+    String [] listadoClientesGuarderia = new String[1000];
+    
     
     //REPUESTOS
     HashMap<String ,Repuesto> hashmapRepuestos= new HashMap<>();
@@ -58,35 +68,106 @@ public final class Interfaz extends javax.swing.JFrame {
     ArrayList<String> arrayListRepuestosEliminados=new ArrayList<>();
     String [] listadoRepuestosEliminados = new String[1000];
     //Mano obra
-    HashMap<String , String> hashmapManoObra = new HashMap<>();
     ArrayList<String> arrayListManoObra=new ArrayList<>();
     String [] listadoManoObra = new String[1000];
      //Embarcaciones
-     
+    
+    
+    
+    boolean selected=false; 
+    int totalRepuestos=0,totalManoObra=0;
+    
      public Interfaz() {
          
         this.setVisible(true);
         this.initComponents();
         
         this.cargarManoObra();
-        this.actualizarManoObra();
+        this.actualizarListadoManoObra();
         
         this.cargarClientes();
         this.cargarClientesEliminados();
-        this.cargarRepuestos();
-        this.cargarOrdenes();
-        
-        
         this.updateVCliente();
+        this.cargarRepuestos();
+        
+        this.cargarOrdenes();
         this.updateVRepuesto();
+        //actualizamos listas
         this.updateVOrden();  
-        //actualizarTXTContactos();
         
+        guarderia=new Guarderia();
+        
+        guarderia.agregarLanchaAGuarderia("Yamaha", "300000");
+        this.añadirGuarderia("Gamboa Felipe");
     }
-        
+    public void actualizarTXTManoObra(){
+          try {
+            String ruta = "ManoObra.txt";
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+              try (BufferedWriter bw = new BufferedWriter(fw)) {
+                    for(int f=0;f<this.arrayListManoObra.size();f++){
+                        bw.write("#");
+                        bw.newLine();
+                        bw.write(this.arrayListManoObra.get(f));
+                        bw.newLine();
+                        bw.write("##");
+                        bw.newLine();
+                    }
+              }
+        } catch (IOException e) {
+        }
+    
+      
+    }    
     /**
      * Creates new form Main
      */
+    public void añadirGuarderia(String nombreApellido){
+        this.actualizarListadoContactos();
+        guarderia=new Guarderia();
+        guarderia.setCliente(this.hashmapClientes.get(nombreApellido));
+        this.hashmapClientesGuarderia.put(nombreApellido, guarderia);
+        
+     }
+    
+    public void añadirEmbAGuardria( String emba, String preci ){
+        guarderia.inicializarAñosGuarderia(preci);
+        for(int x=0;x<this.arrayListContactos.size();x++){
+            cliente=this.hashmapClientes.get(this.arrayListContactos.get(x));
+                for(int r=0;r<cliente.listadoEmbarcaciones.size();r++){
+                    embarcacion=cliente.embarcaciones.get(cliente.listadoEmbarcaciones.get(r));
+                    if(embarcacion.getMotor().equals(emba)){
+                        
+                        
+                    }
+                }
+        }
+        guarderia.agregarLanchaAGuarderia(emba, preci);
+    }
+    public void actualizarGuarderias(){
+        this.actualizarListadoContactos();
+        for(int x=0;x<this.arrayListContactos.size();x++){
+            cliente=this.hashmapClientes.get(this.arrayListContactos.get(x));
+            if("SI".equals(cliente.getGuarderia())){
+                for(int r=0;r<cliente.listadoEmbarcaciones.size();r++){
+                    embarcacion=cliente.embarcaciones.get(cliente.listadoEmbarcaciones.get(r));
+                    if(embarcacion.getEnGuarderia()==true){
+                        guarderia=new Guarderia();
+                        
+                        guarderia.setCliente(cliente);
+                        
+                        //this.hashmapClientesGuarderia.put(cliente.getNombre(),);
+                    }
+                }
+                //
+            }
+        }
+    }
     public void actualizarTXTContactos(){
           try {
             String ruta = "Clientes.txt";
@@ -103,6 +184,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         bw.newLine();
                         for(int l=0;l<cl.getInformacionC().size();l++){
                             bw.write((String) cl.getInformacionC().get(l));
+                            System.out.println(cl.getInformacionC().get(l));
                             bw.newLine();
                         }
                         if(!cl.getInformacionE().isEmpty()){
@@ -120,6 +202,141 @@ public final class Interfaz extends javax.swing.JFrame {
     
       
     }
+     public void actualizarTXTOrdenes(){
+            try {
+            String ruta = "Ordenes.txt";
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            System.out.println("ORDENES cantidad :"+this.hashmapOrdenes.size());
+            FileWriter fw = new FileWriter(file);
+              try (BufferedWriter bw = new BufferedWriter(fw)) {
+                    for(int f=0;f<this.hashmapOrdenes.size();f++){
+                        orden=this.hashmapOrdenes.get(this.arrayListOrdenes.get(f));
+                        System.out.println("ACTUALIZAR:"+orden.getInformacion());
+                        bw.write("#");
+                        bw.newLine();
+                        bw.write(orden.getNumeroOrden());
+                        bw.newLine();
+                        bw.write(Integer.toString(orden.getTotalManoObra()));
+                        bw.newLine();
+                        bw.write(Integer.toString(orden.getTotalVarios()));
+                        bw.newLine();
+                        bw.write(Integer.toString(orden.getTotalRepuestos()));
+                        bw.newLine();
+                        bw.write(Integer.toString(orden.getTotal()));
+                        bw.newLine();
+                        bw.write(orden.getCliente());
+                        bw.newLine();
+                        bw.write(orden.getEmbrcacion());
+                        bw.newLine();
+                        bw.write(orden.getFecha());
+                        bw.newLine();
+                        bw.write(orden.getCancelado());
+                        bw.newLine();
+                        bw.write(orden.getNota());
+                        bw.newLine();
+                        bw.write("*#");
+                        bw.newLine();
+                        bw.write(orden.getVarios());
+                        bw.newLine();
+                        bw.write("#*");
+                        for(int l=0;l<orden.getManoObra().size();l++){
+                            bw.newLine();
+                            bw.write((String) orden.getManoObra().get(l));
+                           
+                        }
+                        bw.newLine();
+                        bw.write("**");
+                        if(!this.arrayListOrdenesAñadirRepuestosCliente.isEmpty()){
+                            for(int l=0;l<this.arrayListOrdenesAñadirRepuestosCliente.size();l++){
+                                //or.listadoRepuestos.get(l);
+                                //or.repuestos.get(or.listadoRepuestos.get(l));
+                                bw.newLine();
+                                bw.write((String)this.arrayListOrdenesAñadirRepuestosCliente.get(l).getCantidad());
+                                bw.newLine();
+                                bw.write((String)this.arrayListOrdenesAñadirRepuestosCliente.get(l).getNombre());
+                                
+                            }
+                            bw.newLine();
+                            bw.write("***");
+                            bw.newLine();
+                        }
+                        bw.write("##");
+                        bw.newLine();
+                    }
+              }
+        } catch (IOException e) {
+        }
+      
+    }
+    public void actualizarTXTOrdenesEliminadas(){
+           try {
+            String ruta = "OrdenesEliminadas.txt";
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+              try (BufferedWriter bw = new BufferedWriter(fw)) {
+                    for(int f=0;f<this.arrayListOrdenesEliminadas.size();f++){
+                        Orden or=this.hashmapOrdenesEliminadas.get(this.arrayListOrdenesEliminadas.get(f));
+                        bw.write("#");
+                        bw.newLine();
+                        bw.write(or.getNumeroOrden());
+                        bw.newLine();
+                        bw.write(Integer.toString(or.getTotalManoObra()));
+                        bw.newLine();
+                        bw.write(Integer.toString(or.getTotalVarios()));
+                        bw.newLine();
+                        bw.write(Integer.toString(or.getTotalRepuestos()));
+                        bw.newLine();
+                        bw.write(Integer.toString(or.getTotal()));
+                        bw.newLine();
+                        bw.write(or.getCliente());
+                        bw.newLine();
+                        bw.write(or.getEmbrcacion());
+                        bw.newLine();
+                        bw.write(or.getFecha());
+                        bw.newLine();
+                        bw.write(or.getCancelado());
+                        bw.newLine();
+                        bw.write(or.getNota());
+                        bw.newLine();
+                        bw.write("*");
+                        bw.newLine();
+                        for(int l=0;l<or.getManoObra().size();l++){
+                            bw.write((String) or.getManoObra().get(l));
+                            bw.newLine();
+                        }
+                        bw.write("**");
+                        if(!or.listadoRepuestos.isEmpty()){
+                            for(int l=0;l<or.listadoRepuestos.size();l++){
+                                //or.listadoRepuestos.get(l);
+                                //or.repuestos.get(or.listadoRepuestos.get(l));
+                                bw.newLine();
+                                bw.write((String)or.listadoRepuestos.get(l).getCantidad());
+                                bw.newLine();
+                                bw.write((String)or.listadoRepuestos.get(l).getNombre());
+                                
+                            }
+                            bw.newLine();
+                            bw.write("***");
+                            bw.newLine();
+                        }
+                        bw.write("##");
+                        bw.newLine();
+                    }
+              }
+        } catch (IOException e) {
+        }
+    
+      
+    }
+    
     public void actualizarTXTRepuestos(){
           try {
             String ruta = "Repuestos.txt";
@@ -171,6 +388,12 @@ public final class Interfaz extends javax.swing.JFrame {
                         //seteamos TelFijo
                         linea = entrada.readLine(); 
                         cl.setTelFijo(linea);
+                        
+                        linea = entrada.readLine(); 
+                        cl.setTelFijoOficina1(linea);
+                        
+                        linea = entrada.readLine(); 
+                        cl.setTelFijoOficina2(linea);
                         //seteamos Correo
                         linea = entrada.readLine(); 
                         cl.setCorreo(linea);
@@ -181,23 +404,33 @@ public final class Interfaz extends javax.swing.JFrame {
                         linea = entrada.readLine(); 
                         cl.setCelularCuidador(linea);
                         linea = entrada.readLine(); 
-                        if("si".equals(linea)){
-                            cl.setDeudaSi();
-                        }
-                        if("no".equals(linea)){
-                            cl.setDeudaNo();
-                        }
-                        linea = entrada.readLine(); 
-                        if("si".equals(linea)){
+                        if("SI".equals(linea)){
                             cl.setGuarderiaSi();
                         }
-                        if("no".equals(linea)){
+                        else{
                             cl.setGuarderiaNO();
                         }
-                        this.hashmapClientes.put(cl.getApellidoNombre(),cl);
                         linea = entrada.readLine(); 
+                        System.out.println("Deuda G: "+linea);
+                        if("SI".equals(linea)){
+                            cl.setDeudaGuarderiaSI();
+                            System.out.println("seteando: "+linea);
+                        }
+                        else{
+                            System.out.println("seteando: "+linea);
+                            cl.setDeudaGuarderiaNO();
+                        }
+                        linea = entrada.readLine(); 
+                        if("SI".equals(linea)){
+                            cl.setDeudaOrdenSi();
+                        }
+                        else{
+                            cl.setDeudaOrdenNo();
+                        }
+                        linea = entrada.readLine(); 
+                        System.out.println(cl.getInformacionClienteVisualizar());
                     }
-                    if("*".equals(linea)){
+                    while(!"##".equals(linea)){
                         embarcacion=new Embarcacion();
                         linea = entrada.readLine(); 
                         embarcacion.setTipo(linea);
@@ -210,8 +443,13 @@ public final class Interfaz extends javax.swing.JFrame {
                         linea = entrada.readLine(); 
                         embarcacion.setnSerie(linea);
                         linea = entrada.readLine(); 
+                        embarcacion.setCodigo(linea);
+                        linea = entrada.readLine(); 
                         cl.addEmbarcacion(embarcacion.getMotor(), embarcacion);
+                        
                     }
+                    this.hashmapClientes.put(cl.getApellidoNombre(),cl);
+                    
                 }
                 
             } 
@@ -236,24 +474,24 @@ public final class Interfaz extends javax.swing.JFrame {
             Repuesto rep= new Repuesto();
             while(entrada.ready()){ 
                 linea = entrada.readLine(); 
-                System.out.println("Linea entrante: "+rep.getNombre());
+                //System.out.println("Linea entrante: "+rep.getNombre());
                 while(!"##".equals(linea)){
                     if("#".equals(linea)){
                         rep= new Repuesto();
                         linea = entrada.readLine(); 
                         rep.setNombre(linea);
-                        System.out.println("nombre: "+rep.getNombre());
+                        //System.out.println("nombre: "+rep.getNombre());
                         linea = entrada.readLine(); 
                         rep.setCodigo(linea);
-                        System.out.println("codigo: "+rep.getCodigo());
+                        //System.out.println("codigo: "+rep.getCodigo());
                         linea = entrada.readLine(); 
                         rep.setPrecio(linea);
-                        System.out.println("precio: "+rep.getPrecio());
+                        //System.out.println("precio: "+rep.getPrecio());
                         linea = entrada.readLine(); 
                         rep.setCantidad(linea);
-                        System.out.println("cant: "+rep.getCantidad());
+                        //System.out.println("cant: "+rep.getCantidad());
                         this.hashmapRepuestos.put(rep.getNombre(), rep);
-                        System.out.println("Repuesto Agregado: "+rep.getNombre());
+                        //System.out.println("Repuesto Agregado: "+rep.getNombre());
                         linea = entrada.readLine(); 
                     }
                 }
@@ -276,18 +514,18 @@ public final class Interfaz extends javax.swing.JFrame {
             try { 
             entrada = new BufferedReader( new FileReader( f ) ); 
             String linea;
-            this.hashmapManoObra= new HashMap<>();
+            this.arrayListManoObra= new ArrayList<>();
             while(entrada.ready()){ 
                 linea = entrada.readLine(); 
-                System.out.println("Linea entrante: "+linea);
+                //System.out.println("Linea entrante: "+linea);
                 if("#".equals(linea)){
+                    linea = entrada.readLine(); 
                     while(!"##".equals(linea)){
-                            linea = entrada.readLine(); 
                             if(!"##".equals(linea)){
-                                String precio=entrada.readLine();
-                                this.hashmapManoObra.put(linea, precio);
-                                System.out.println("Linea Manoobra: "+linea+" Precio: "+precio);
+                                this.arrayListManoObra.add(linea);
+                                //System.out.println("Linea Manoobra: "+linea);
                             }
+                    linea = entrada.readLine(); 
                     }
                 }
             } 
@@ -339,10 +577,10 @@ public final class Interfaz extends javax.swing.JFrame {
             entrada = new BufferedReader( new FileReader( f ) ); 
             String linea;
             Orden or= new Orden();
-            
+            String cant="";
             while(entrada.ready()){ 
                 linea = entrada.readLine();
-                while(!"##".equals(linea)&& entrada.ready()){
+                while(!"##".equals(cant)&& entrada.ready()){
                     if("#".equals(linea)){
                         or= new Orden();
                         linea = entrada.readLine(); 
@@ -352,29 +590,40 @@ public final class Interfaz extends javax.swing.JFrame {
                         linea = entrada.readLine(); 
                         or.setTotalVarios(linea);
                         linea = entrada.readLine(); 
+                        or.setTotalRepuestos(linea);
+                        linea = entrada.readLine(); 
                         or.setTotal(linea);
                         linea = entrada.readLine(); 
                         or.setCliente(linea);
                         linea = entrada.readLine(); 
+                        or.setEmbrcacion(linea);
+                        linea = entrada.readLine(); 
                         or.setFecha(linea);
                         linea = entrada.readLine();
-                        if("si".equals(linea)){
+                        if("SI".equals(linea)){
                             or.setDeudaSi();
                         }
-                        if("no".equals(linea)){
+                        if("NO".equals(linea)){
                             or.setDeudaNo();
                         }
                         linea = entrada.readLine(); 
                         String nota=""; 
                         //System.out.println("lin: "+linea);
-                        while(!"*".equals(linea)){
+                        while(!"*#".equals(linea)){
                             nota+=" "+linea+"\n";
                             linea = entrada.readLine();
                         }
-                        //System.out.println(nota);
                         or.setNota(nota);
+                        linea = entrada.readLine();
+                        String varios=""; 
+                         while(!"#*".equals(linea)){
+                            varios+=" "+linea+"\n";
+                            linea = entrada.readLine();
+                        }
+                        //System.out.println(nota);
+                        or.setVarios(varios);
                     }
-                    if("*".equals(linea)){
+                    if("#*".equals(linea)){
                         linea = entrada.readLine(); 
                         or.manoObra=new ArrayList<>();
                         while(!"**".equals(linea)){
@@ -382,13 +631,18 @@ public final class Interfaz extends javax.swing.JFrame {
                             linea = entrada.readLine(); 
                         }
                     }
-                    String cant="";
+                    cant=entrada.readLine();
+                    System.out.println("Entrando: "+cant);
+                    if("##".equals(cant)){
+                        break;
+                    }
                     while(!"***".equals(cant)){
-                        linea = entrada.readLine();
-                        cant = linea;
-                        linea = entrada.readLine();
                         if(!"***".equals(cant)){
-                           or.addRepuesto(cant, linea);
+                            linea = entrada.readLine();
+                            System.out.println("linea: "+linea+" Cant: "+cant);
+                            or.addRepuesto(cant,linea);
+                            cant=entrada.readLine();
+                            
                         }
                     }
                 }
@@ -412,12 +666,13 @@ public final class Interfaz extends javax.swing.JFrame {
             try { 
             entrada = new BufferedReader( new FileReader( f ) ); 
             String linea;
+            Cliente cl= new Cliente();
             while(entrada.ready()){ 
                 linea = entrada.readLine(); 
                 while(!"##".equals(linea)){
                     if("#".equals(linea)){
                         //creamos cliente
-                        Cliente cl= new Cliente();
+                        
                         linea = entrada.readLine(); 
                         cl.setNombe(linea);
                         //seteamos nombre
@@ -429,6 +684,11 @@ public final class Interfaz extends javax.swing.JFrame {
                         //seteamos TelFijo
                         linea = entrada.readLine(); 
                         cl.setTelFijo(linea);
+                        linea = entrada.readLine(); 
+                        cl.setTelFijoOficina1(linea);
+                        
+                        linea = entrada.readLine(); 
+                        cl.setTelFijoOficina2(linea);
                         //seteamos Correo
                         linea = entrada.readLine(); 
                         cl.setCorreo(linea);
@@ -438,24 +698,51 @@ public final class Interfaz extends javax.swing.JFrame {
                         //seteamos Celular Cuidador
                         linea = entrada.readLine(); 
                         cl.setCelularCuidador(linea);
-                        this.hashmapClientesBorrados.put(cl.getApellidoNombre(),cl);
+                        linea = entrada.readLine(); 
+                        if("SI".equals(linea)){
+                            cl.setGuarderiaSi();
+                        }
+                        else{
+                            cl.setGuarderiaNO();
+                        }
+                        linea = entrada.readLine(); 
+                        System.out.println("Deuda G: "+linea);
+                        if("SI".equals(linea)){
+                            cl.setDeudaGuarderiaSI();
+                            System.out.println("seteando: "+linea);
+                        }
+                        else{
+                            System.out.println("seteando: "+linea);
+                            cl.setDeudaGuarderiaNO();
+                        }
+                        linea = entrada.readLine(); 
+                        if("SI".equals(linea)){
+                            cl.setDeudaOrdenSi();
+                        }
+                        else{
+                            cl.setDeudaOrdenNo();
+                        }
+                        
                         linea = entrada.readLine(); 
                     }
-                    if("*".equals(linea)){
-                        Embarcacion emb=new Embarcacion();
+                   while(!"##".equals(linea)){
+                        embarcacion=new Embarcacion();
                         linea = entrada.readLine(); 
-                        emb.setTipo(linea);
+                        embarcacion.setTipo(linea);
                         linea = entrada.readLine(); 
-                        emb.setMarca(linea);
+                        embarcacion.setMarca(linea);
                         linea = entrada.readLine(); 
-                        emb.setModelo(linea);
+                        embarcacion.setModelo(linea);
                         linea = entrada.readLine(); 
-                        emb.setMotor(linea);
+                        embarcacion.setMotor(linea);
                         linea = entrada.readLine(); 
-                        emb.setnSerie(linea);
+                        embarcacion.setnSerie(linea);
                         linea = entrada.readLine(); 
-                        cliente.addEmbarcacion(emb.getMotor(), emb);
-                    }
+                        embarcacion.setCodigo(linea);
+                        linea = entrada.readLine(); 
+                        cl.addEmbarcacion(embarcacion.getMotor(), embarcacion);
+                        
+                    }this.hashmapClientesBorrados.put(cl.getApellidoNombre(),cl);
                 }
                 
             } 
@@ -472,13 +759,14 @@ public final class Interfaz extends javax.swing.JFrame {
             
     }
     
-    public void actualizarOrdenes(){
+    public void actualizarListadoOrdenes(){
         listadoOrdenes=new String[1000];
         this.arrayListOrdenes=new  ArrayList<>();
         hashmapOrdenes.entrySet().forEach((Map.Entry<String, Orden> entry) -> {
             Interfaz.this.arrayListOrdenes.add(entry.getValue().getNumeroOrden());
-            Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
+            //Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
         });
+        //Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
         for (int g=0;g<this.arrayListOrdenes.size();g++) {
             listadoOrdenes[g]=this.arrayListOrdenes.get(g);
             //System.out.println("\nExistente: "+this.listadoOrdenes[g]);
@@ -490,40 +778,37 @@ public final class Interfaz extends javax.swing.JFrame {
         hashmapRepuestosEliminados.entrySet().forEach((Map.Entry<String, Repuesto> entry) -> {
             Interfaz.this.arrayListRepuestosEliminados.add(entry.getValue().getNombre());
             //System.out.println("\n Repuesto hash: "+entry.getValue().getNombre());
-            Collections.sort(Interfaz.this.arrayListRepuestos, String::compareTo);
+            
         });
+        Collections.sort(Interfaz.this.arrayListRepuestosEliminados, String::compareTo);
         for (int g=0;g<this.arrayListRepuestosEliminados.size();g++) {
             listadoRepuestosEliminados[g]=this.arrayListRepuestosEliminados.get(g);
            // System.out.println("\n Repuesto: "+this.listadoRepuestosEliminados[g]);
         }
     }
-    public void actualizarRepuestos(){
+    public void actualizarListadoRepuestos(){
         listadoRepuestos=new String[1000];
         this.arrayListRepuestos=new  ArrayList<>();
         hashmapRepuestos.entrySet().forEach((Map.Entry<String, Repuesto> entry) -> {
             Interfaz.this.arrayListRepuestos.add(entry.getValue().getNombre());
-            System.out.println("\n Repuesto hash: "+entry.getValue().getNombre());
-            Collections.sort(Interfaz.this.arrayListRepuestos, String::compareTo);
+            //System.out.println("\n Repuesto hash: "+entry.getValue().getNombre());
+            
         });
+        Collections.sort(Interfaz.this.arrayListRepuestos, String::compareTo);
         for (int g=0;g<this.arrayListRepuestos.size();g++) {
             listadoRepuestos[g]=this.arrayListRepuestos.get(g);
-            System.out.println("\n Repuesto: "+this.listadoRepuestos[g]);
+            //7System.out.println("\n Repuesto: "+this.listadoRepuestos[g]);
         }
     }
-    public void actualizarManoObra(){
+    public void actualizarListadoManoObra(){
         listadoManoObra=new String[1000];
-        this.arrayListManoObra=new  ArrayList<>();
-        hashmapManoObra.entrySet().forEach((Map.Entry<String, String> entry) -> {
-            Interfaz.this.arrayListManoObra.add(entry.getKey());
-            System.out.println("\n Mano obra : "+entry.getKey());
-            Collections.sort(Interfaz.this.arrayListManoObra, String::compareTo);
-        });
+        Collections.sort(Interfaz.this.arrayListManoObra, String::compareTo);
         for (int g=0;g<this.arrayListManoObra.size();g++) {
             listadoManoObra[g]=this.arrayListManoObra.get(g);
-            System.out.println("\n Mano obra: "+this.listadoManoObra[g]);
+            
         }
     }
-    public void actualizarContactos(){
+    public void actualizarListadoContactos(){
         listadoClientes=new String[1000];
         this.arrayListContactos=new  ArrayList<>();
         hashmapClientes.entrySet().forEach((Map.Entry<String, Cliente> entry) -> {
@@ -548,16 +833,18 @@ public final class Interfaz extends javax.swing.JFrame {
          //System.out.println("Contactos Eliminados:"+this.arrayListContactosEliminados.toString());
         //this.contactos.add(cliente.getApellidoNombre());
     }
-    public void actualizarContactosEliminados(){
+    public void actualizarListadoContactosEliminados(){
         listadoClientesEliminados=new String[1000];
         this.arrayListContactosEliminados=new  ArrayList<>();
         for (Map.Entry<String, Cliente> entry : hashmapClientesBorrados.entrySet()) {
             this.arrayListContactosEliminados.add(entry.getValue().getApellidoNombre());
         }
+        Collections.sort(Interfaz.this.arrayListContactosEliminados, String::compareTo);
         for (int g=0;g<this.arrayListContactosEliminados.size();g++) {
             listadoClientesEliminados[g]=this.arrayListContactosEliminados.get(g);
             //System.out.println("\nEliminado: "+this.listadoClientesEliminados[g]);
         }
+        
          //System.out.println("Contactos Eliminados:"+this.arrayListContactosEliminados.toString());
         //this.contactos.add(cliente.getApellidoNombre());
     }
@@ -567,6 +854,7 @@ public final class Interfaz extends javax.swing.JFrame {
         for (Map.Entry<String, Orden> entry : hashmapOrdenesEliminadas.entrySet()) {
             this.arrayListOrdenesEliminadas.add(entry.getValue().getNumeroOrden());
         }
+        Collections.sort(Interfaz.this.arrayListOrdenesEliminadas, String::compareTo);
         for (int g=0;g<this.arrayListOrdenesEliminadas.size();g++) {
             listadoOrdenesEliminadas[g]=this.arrayListOrdenesEliminadas.get(g);
             //System.out.println("\nEliminado: "+this.listadoClientesEliminados[g]);
@@ -591,7 +879,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.tablaRepuestosEliminar.setListData(listadoRepuestos);
         this.tablaRepuestosEliminados.setListData(listadoRepuestosEliminados);
         this.tablaRepuestosModificar.setListData(listadoRepuestos);
-        this.tablaOrdenesCrear.setListData(listadoClientes);
+        
     }
     public void setearTablasListadoOrdenes(){
         //this.tablacontactosEditarLanchas.setListData(listadoClientes);
@@ -601,6 +889,9 @@ public final class Interfaz extends javax.swing.JFrame {
         this.tablaOdenCrearAñadirRepuestos.setListData(listadoRepuestos);
         this.tablaOrdenesCrearVPRepuestos.setListData(listadoOrdenesAñadirRepuestosClienteCantidad);
         this.tablaOrdenesCrearManoObra.setListData(listadoManoObra);
+        this.tablacontactosEliminados1.setListData(listadoOrdenesEliminadas);
+         this.tablaOrdenesCrear.setListData(listadoClientes);
+        
         
     }
     public void vaciarTablasO(){
@@ -609,7 +900,10 @@ public final class Interfaz extends javax.swing.JFrame {
         this.tablacontactosEliminar1.setListData(vacio);
         this.tablaOdenCrearAñadirRepuestos.setListData(vacio);
         this.tablaOrdenesCrearVPRepuestos.setListData(vacio);
-
+        this.tablacontactosEliminados1.setListData(vacio);
+        this.tablaOrdenesCrear.setListData(vacio);
+         this.tablaOrdenesCrear2.setListData(vacio);
+        
     }
     public void vaciarTablasC(){
         String [] vacio = new String[1000];
@@ -666,6 +960,10 @@ public final class Interfaz extends javax.swing.JFrame {
         bCelCuidadorC = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         contactosCrear = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        bTelFijoC1 = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
+        bTelFijoC4 = new javax.swing.JTextField();
         eliminar = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jTextField10 = new javax.swing.JTextField();
@@ -704,6 +1002,10 @@ public final class Interfaz extends javax.swing.JFrame {
         jButton23 = new javax.swing.JButton();
         jScrollPane13 = new javax.swing.JScrollPane();
         tablaModificarInformacion = new javax.swing.JList<>();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        bTelFijoC5 = new javax.swing.JTextField();
+        bTelFijoC6 = new javax.swing.JTextField();
         lanch = new javax.swing.JPanel();
         eliminarLanchaa = new javax.swing.JTabbedPane();
         agregarLancha = new javax.swing.JPanel();
@@ -783,7 +1085,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         seleccionarV3 = new javax.swing.JButton();
         CrearOrden = new javax.swing.JPanel();
-        bFechaOrdenesCrear = new javax.swing.JTextField();
+        dia = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         contactosCrear1 = new javax.swing.JButton();
         jScrollPane49 = new javax.swing.JScrollPane();
@@ -812,28 +1114,40 @@ public final class Interfaz extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         ordenesCrearNota = new javax.swing.JTextPane();
         jLabel1 = new javax.swing.JLabel();
-        bFechaOrdenesCrear2 = new javax.swing.JTextField();
+        pHTrabajo = new javax.swing.JTextField();
         jLabel155 = new javax.swing.JLabel();
         jLabel156 = new javax.swing.JLabel();
-        bFechaOrdenesCrear3 = new javax.swing.JTextField();
+        tRepuestos = new javax.swing.JTextField();
         jLabel157 = new javax.swing.JLabel();
         jLabel158 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         ordenesCrearVarios = new javax.swing.JTextPane();
         seleccionarModificarInfo13 = new javax.swing.JButton();
-        bFechaOrdenesCrear5 = new javax.swing.JTextField();
+        tVarios = new javax.swing.JTextField();
         jScrollPane26 = new javax.swing.JScrollPane();
         visualizarV4 = new javax.swing.JTextArea();
-        bFechaOrdenesCrear4 = new javax.swing.JTextField();
+        hTrabajo = new javax.swing.JTextField();
         jLabel163 = new javax.swing.JLabel();
-        bFechaOrdenesCrear6 = new javax.swing.JTextField();
+        tManoObra = new javax.swing.JTextField();
         jLabel165 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         cantidad = new javax.swing.JTextField();
-        bFechaOrdenesCrear7 = new javax.swing.JTextField();
-        bFechaOrdenesCrear8 = new javax.swing.JTextField();
+        mes = new javax.swing.JTextField();
+        año = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
+        contactosCrear4 = new javax.swing.JButton();
+        calcularRepuestos = new javax.swing.JButton();
+        contactosCrear5 = new javax.swing.JButton();
+        tTotal = new javax.swing.JTextField();
+        jLabel166 = new javax.swing.JLabel();
+        jLabel167 = new javax.swing.JLabel();
+        bFechaOrdenesCrear8 = new javax.swing.JTextField();
+        calcularRepuestos1 = new javax.swing.JButton();
+        seleccionarModificarInfo10 = new javax.swing.JButton();
+        jScrollPane56 = new javax.swing.JScrollPane();
+        tablaOrdenesCrear2 = new javax.swing.JList<>();
+        jLabel36 = new javax.swing.JLabel();
         EliminarOrden = new javax.swing.JPanel();
         jLabel32 = new javax.swing.JLabel();
         jTextField11 = new javax.swing.JTextField();
@@ -1033,10 +1347,10 @@ public final class Interfaz extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Servinautica v0.1");
         setBackground(java.awt.SystemColor.controlDkShadow);
-        setPreferredSize(new java.awt.Dimension(1300, 720));
 
         Fondo.setBackground(new java.awt.Color(187, 187, 201));
-        Fondo.setPreferredSize(new java.awt.Dimension(900, 700));
+        Fondo.setPreferredSize(new java.awt.Dimension(1300, 720));
+        Fondo.setVerifyInputWhenFocusTarget(false);
 
         tablacontactosVisualizar.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {};
@@ -1091,7 +1405,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(663, 663, Short.MAX_VALUE))
+                .addGap(726, 726, Short.MAX_VALUE))
         );
         visualizarLayout.setVerticalGroup(
             visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1179,41 +1493,60 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        jLabel24.setText("Tel. Fijo Oficina 1:");
+
+        bTelFijoC1.setText(" ");
+        bTelFijoC1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTelFijoC1ActionPerformed(evt);
+            }
+        });
+
+        jLabel29.setText("Tel. Fijo Oficina 2:");
+
+        bTelFijoC4.setText(" ");
+        bTelFijoC4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTelFijoC4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout crearLayout = new javax.swing.GroupLayout(crear);
         crear.setLayout(crearLayout);
         crearLayout.setHorizontalGroup(
             crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(crearLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
                 .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(crearLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(crearLayout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(4, 4, 4)
-                                .addComponent(bCelCuidadorC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(crearLayout.createSequentialGroup()
-                                .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel4))
-                                .addGap(31, 31, 31)
-                                .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bNombreC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bCorreoC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bCuidadorC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bTelFijoC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bCelularC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bApellidoC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(crearLayout.createSequentialGroup()
-                        .addGap(230, 230, 230)
+                        .addGap(219, 219, 219)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(contactosCrear)))
-                .addContainerGap(962, Short.MAX_VALUE))
+                        .addComponent(contactosCrear))
+                    .addGroup(crearLayout.createSequentialGroup()
+                        .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel29))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(bTelFijoC4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bTelFijoC1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(bCelCuidadorC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bCorreoC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bCuidadorC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bNombreC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bTelFijoC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bCelularC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bApellidoC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jLabel24))
+                .addContainerGap(985, Short.MAX_VALUE))
         );
         crearLayout.setVerticalGroup(
             crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1236,6 +1569,14 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bTelFijoC1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bTelFijoC4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel29))
+                .addGap(5, 5, 5)
+                .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bCorreoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1250,7 +1591,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addGroup(crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(contactosCrear))
-                .addContainerGap(420, Short.MAX_VALUE))
+                .addContainerGap(369, Short.MAX_VALUE))
         );
 
         editaraClientes.addTab("Crear", crear);
@@ -1329,7 +1670,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(seleccionBorrado, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel3))))
-                .addContainerGap(631, Short.MAX_VALUE))
+                .addContainerGap(694, Short.MAX_VALUE))
         );
         eliminarLayout.setVerticalGroup(
             eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1350,11 +1691,11 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(seleccionBorrado)
                             .addComponent(eliminarEliminar))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, eliminarLayout.createSequentialGroup()
-                        .addGroup(eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
-                            .addComponent(jScrollPane6))
-                        .addContainerGap())))
+                    .addGroup(eliminarLayout.createSequentialGroup()
+                        .addGroup(eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addContainerGap(102, Short.MAX_VALUE))))
         );
 
         editaraClientes.addTab("Eliminar", eliminar);
@@ -1448,6 +1789,24 @@ public final class Interfaz extends javax.swing.JFrame {
         });
         jScrollPane13.setViewportView(tablaModificarInformacion);
 
+        jLabel30.setText("Tel. Fijo Oficina 1:");
+
+        jLabel35.setText("Tel. Fijo Oficina 2:");
+
+        bTelFijoC5.setText(" ");
+        bTelFijoC5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTelFijoC5ActionPerformed(evt);
+            }
+        });
+
+        bTelFijoC6.setText(" ");
+        bTelFijoC6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bTelFijoC6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout infoLayout = new javax.swing.GroupLayout(info);
         info.setLayout(infoLayout);
         infoLayout.setHorizontalGroup(
@@ -1456,45 +1815,54 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(infoLayout.createSequentialGroup()
-                        .addComponent(jLabel25)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(infoLayout.createSequentialGroup()
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(seleccionarModificarInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(infoLayout.createSequentialGroup()
+                                .addComponent(seleccionarModificarInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 36, Short.MAX_VALUE)
+                                .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel44, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jLabel47, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                                            .addComponent(jLabel46, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel35, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel45, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel48, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(bCorreoE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bCuidadorE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(bCelularE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bApellidoE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bNombreE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(bTelFijoC5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bTelFijoC6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(bCelCuidadorE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(bTelFijE, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(infoLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButton15)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton9))
-                            .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(infoLayout.createSequentialGroup()
-                                    .addComponent(jLabel48)
-                                    .addGap(4, 4, 4)
-                                    .addComponent(bCelCuidadorE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(infoLayout.createSequentialGroup()
-                                    .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel43)
-                                        .addComponent(jLabel44)
-                                        .addComponent(jLabel45)
-                                        .addComponent(jLabel46)
-                                        .addComponent(jLabel47)
-                                        .addComponent(jLabel42))
-                                    .addGap(31, 31, 31)
-                                    .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(bNombreE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bCorreoE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bCuidadorE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bTelFijE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bCelularE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bApellidoE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(606, Short.MAX_VALUE))
+                                .addComponent(jButton9)))
+                        .addContainerGap(619, Short.MAX_VALUE))
+                    .addGroup(infoLayout.createSequentialGroup()
+                        .addComponent(jLabel25)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         infoLayout.setVerticalGroup(
             infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1511,17 +1879,25 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jLabel42)
                             .addComponent(bNombreE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(bApellidoE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel43))
-                        .addGap(10, 10, 10)
+                        .addGap(8, 8, 8)
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel44)
-                            .addComponent(bCelularE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(bCelularE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel44))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bTelFijE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel45))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bTelFijoC6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel30))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bTelFijoC5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel35))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bCorreoE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1536,9 +1912,9 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jLabel48))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton9)
-                            .addComponent(jButton15))
-                        .addContainerGap(358, Short.MAX_VALUE))
+                            .addComponent(jButton15)
+                            .addComponent(jButton9))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(infoLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(jLabel13)
@@ -1547,11 +1923,11 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addGroup(infoLayout.createSequentialGroup()
                                 .addComponent(seleccionarModificarInfo)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane13))
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE))
                         .addContainerGap())))
         );
 
-        tablaClienteLanchas.addTab("Informacion ", info);
+        tablaClienteLanchas.addTab("Datos", info);
 
         jLabel56.setText("Tipo:");
 
@@ -1634,7 +2010,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
         jScrollPane14.setViewportView(tablaLanchasAgregar);
 
-        estado.setText("Estado: ");
+        estado.setText("Estado: Seleccionando Cliente");
 
         añadiendolanchaa.setText("Añadiendo Lancha a:  ");
 
@@ -1681,7 +2057,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(guardarLancha))
                             .addComponent(estado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(añadiendolanchaa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(597, Short.MAX_VALUE))
+                .addContainerGap(660, Short.MAX_VALUE))
         );
         agregarLanchaLayout.setVerticalGroup(
             agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2048,7 +2424,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(seleccionBorrado4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(seleccionBorrado5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(seleccionBorrado6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(estado1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE))))
+                            .addComponent(estado1, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE))))
                 .addGap(186, 186, 186))
         );
         modificarLancha1Layout.setVerticalGroup(
@@ -2101,7 +2477,7 @@ public final class Interfaz extends javax.swing.JFrame {
         editar1.setLayout(editar1Layout);
         editar1Layout.setHorizontalGroup(
             editar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1359, Short.MAX_VALUE)
+            .addGap(0, 1422, Short.MAX_VALUE)
             .addGroup(editar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(editar1Layout.createSequentialGroup()
                     .addComponent(tablaClienteLanchas)
@@ -2162,7 +2538,7 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "N° Orden", "Cliente " }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "N° Orden", "Cliente" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -2196,7 +2572,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(seleccionarV3, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(VisualizarOrdenLayout.createSequentialGroup()
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2204,7 +2580,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(842, 1058, Short.MAX_VALUE))
         );
         VisualizarOrdenLayout.setVerticalGroup(
             VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2235,10 +2611,9 @@ public final class Interfaz extends javax.swing.JFrame {
 
         editaraClientes1.addTab("Visualizar", VisualizarOrden);
 
-        bFechaOrdenesCrear.setText(" ");
-        bFechaOrdenesCrear.addActionListener(new java.awt.event.ActionListener() {
+        dia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bFechaOrdenesCrearActionPerformed(evt);
+                diaActionPerformed(evt);
             }
         });
 
@@ -2366,18 +2741,27 @@ public final class Interfaz extends javax.swing.JFrame {
 
         jLabel154.setText("Agregar Nota");
 
+        ordenesCrearNota.setToolTipText("");
         ordenesCrearNota.setMaximumSize(new java.awt.Dimension(6, 22));
         jScrollPane2.setViewportView(ordenesCrearNota);
 
         jLabel1.setText("Repuestos agregados ");
 
-        bFechaOrdenesCrear2.setText(" ");
+        pHTrabajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pHTrabajoActionPerformed(evt);
+            }
+        });
 
         jLabel155.setText("Precio H.Trabajo");
 
         jLabel156.setText("Total Repuestos");
 
-        bFechaOrdenesCrear3.setText(" ");
+        tRepuestos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tRepuestosActionPerformed(evt);
+            }
+        });
 
         jLabel157.setText("Total Varios");
 
@@ -2398,10 +2782,9 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        bFechaOrdenesCrear5.setText(" ");
-        bFechaOrdenesCrear5.addActionListener(new java.awt.event.ActionListener() {
+        tVarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bFechaOrdenesCrear5ActionPerformed(evt);
+                tVariosActionPerformed(evt);
             }
         });
 
@@ -2411,15 +2794,11 @@ public final class Interfaz extends javax.swing.JFrame {
         visualizarV4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane26.setViewportView(visualizarV4);
 
-        bFechaOrdenesCrear4.setText(" ");
-
         jLabel163.setText("Horas de trabajo");
-
-        bFechaOrdenesCrear6.setText(" ");
 
         jLabel165.setText("Total Mano Obra");
 
-        jLabel11.setText("    Cantidad");
+        jLabel11.setText("     Cantidad");
 
         cantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2427,17 +2806,15 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        bFechaOrdenesCrear7.setText(" ");
-        bFechaOrdenesCrear7.addActionListener(new java.awt.event.ActionListener() {
+        mes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bFechaOrdenesCrear7ActionPerformed(evt);
+                mesActionPerformed(evt);
             }
         });
 
-        bFechaOrdenesCrear8.setText(" ");
-        bFechaOrdenesCrear8.addActionListener(new java.awt.event.ActionListener() {
+        año.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bFechaOrdenesCrear8ActionPerformed(evt);
+                añoActionPerformed(evt);
             }
         });
 
@@ -2445,229 +2822,315 @@ public final class Interfaz extends javax.swing.JFrame {
 
         jLabel23.setText("/");
 
+        contactosCrear4.setText("Calcular");
+        contactosCrear4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contactosCrear4ActionPerformed(evt);
+            }
+        });
+
+        calcularRepuestos.setText("Calcular");
+        calcularRepuestos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calcularRepuestosActionPerformed(evt);
+            }
+        });
+
+        contactosCrear5.setText("Vista Previa");
+        contactosCrear5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contactosCrear5ActionPerformed(evt);
+            }
+        });
+
+        tTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tTotalActionPerformed(evt);
+            }
+        });
+
+        jLabel166.setText("TOTAL: ");
+
+        jLabel167.setText("N° Orden: ");
+
+        bFechaOrdenesCrear8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bFechaOrdenesCrear8ActionPerformed(evt);
+            }
+        });
+
+        calcularRepuestos1.setText("Calcular");
+        calcularRepuestos1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calcularRepuestos1ActionPerformed(evt);
+            }
+        });
+
+        seleccionarModificarInfo10.setText("Seleccionar");
+        seleccionarModificarInfo10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleccionarModificarInfo10MouseClicked(evt);
+            }
+        });
+        seleccionarModificarInfo10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seleccionarModificarInfo10ActionPerformed(evt);
+            }
+        });
+
+        tablaOrdenesCrear2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {};
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane56.setViewportView(tablaOrdenesCrear2);
+
+        jLabel36.setText("Embarcacion: ");
+
         javax.swing.GroupLayout CrearOrdenLayout = new javax.swing.GroupLayout(CrearOrden);
         CrearOrden.setLayout(CrearOrdenLayout);
         CrearOrdenLayout.setHorizontalGroup(
             CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+            .addGroup(CrearOrdenLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel148, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(seleccionarModificarInfo7)
-                        .addComponent(jScrollPane50, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                .addComponent(jLabel31)
-                                .addGap(175, 175, 175)
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(seleccionarModificarInfo9, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane52, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel152))
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addGap(2, 2, 2)
-                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(bFechaOrdenesCrear4, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel163, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(bFechaOrdenesCrear2, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                                    .addGap(0, 0, Short.MAX_VALUE)
-                                                    .addComponent(jLabel155)))
-                                            .addComponent(jLabel165)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(bFechaOrdenesCrear6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addComponent(jLabel149)
-                                        .addGap(83, 83, 83))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(bFechaOrdenesCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                                .addComponent(seleccionarModificarInfo5, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(12, 12, 12))
                     .addGroup(CrearOrdenLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(contactosCrear5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(contactosCrear1))
+                    .addGroup(CrearOrdenLayout.createSequentialGroup()
                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(CrearOrdenLayout.createSequentialGroup()
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CrearOrdenLayout.createSequentialGroup()
-                                                .addGap(3, 3, 3)
-                                                .addComponent(jLabel150))
-                                            .addComponent(jLabel154, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(179, 179, 179))
-                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addComponent(jScrollPane51, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cantidad)
-                                    .addComponent(seleccionarModificarInfo13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(seleccionarModificarInfo8)))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(seleccionarModificarInfo7)
+                                        .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                            .addComponent(jLabel148, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(1, 1, 1)))
+                                    .addComponent(seleccionarModificarInfo10, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane56, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane50, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel158)
+                            .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel31)
+                                .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                            .addGap(1, 1, 1)
+                                            .addComponent(jLabel154))
+                                        .addComponent(jLabel150, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane51, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane2))
+                                    .addGap(13, 13, 13)
+                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(seleccionarModificarInfo8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(cantidad)
+                                        .addComponent(seleccionarModificarInfo9, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                                    .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addGap(12, 12, 12)
+                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(seleccionarModificarInfo13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                    .addGap(1, 1, 1)
+                                    .addComponent(bFechaOrdenesCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(seleccionarModificarInfo5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel149, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                .addComponent(jLabel158)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel152)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jScrollPane52, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tManoObra)
+                                    .addComponent(jLabel155, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pHTrabajo)
+                                    .addComponent(jLabel163, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(hTrabajo, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(contactosCrear4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel165, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane3)
+                                    .addComponent(jScrollPane53, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel156, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tRepuestos)
+                                    .addComponent(calcularRepuestos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel157, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tVarios, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(21, 21, 21)))
+                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel151)
+                            .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dia, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
+                                .addComponent(mes, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(1, 1, 1)
+                                .addComponent(año, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(CrearOrdenLayout.createSequentialGroup()
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jScrollPane53, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel166)
+                                    .addComponent(jLabel167, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(2, 2, 2)
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bFechaOrdenesCrear3)
+                                    .addComponent(bFechaOrdenesCrear8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel156)
-                                            .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(bFechaOrdenesCrear5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel157, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addGap(13, 13, 13)))
-                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bFechaOrdenesCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(bFechaOrdenesCrear7, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)
-                        .addComponent(bFechaOrdenesCrear8, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(140, 140, 140))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                        .addComponent(jLabel151)
-                        .addGap(105, 105, 105))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(contactosCrear1)
-                            .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29))))
+                                        .addComponent(tTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(calcularRepuestos1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addGap(484, 484, 484))
         );
         CrearOrdenLayout.setVerticalGroup(
             CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CrearOrdenLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                .addComponent(jLabel151)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel20)
-                                        .addComponent(jLabel155))
-                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(bFechaOrdenesCrear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bFechaOrdenesCrear7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bFechaOrdenesCrear8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel19)
-                                        .addComponent(jLabel23)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(contactosCrear1))
-                            .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(seleccionarModificarInfo13)
-                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addComponent(jLabel156)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(bFechaOrdenesCrear3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(95, 95, 95)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel158)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addComponent(jLabel157, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(bFechaOrdenesCrear5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                        .addGap(8, 8, 8)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel152)
+                                .addComponent(jLabel151))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel31)
+                                .addComponent(jLabel148)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(CrearOrdenLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                                .addGap(37, 37, 37)
-                                                .addComponent(bFechaOrdenesCrear2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel163)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(bFechaOrdenesCrear4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel165)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(bFechaOrdenesCrear6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                                        .addComponent(jLabel152)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(jScrollPane52, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CrearOrdenLayout.createSequentialGroup()
+                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(dia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(mes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(año, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel19)
+                                                        .addComponent(jLabel23))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(bFechaOrdenesCrear8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel167, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(calcularRepuestos1)
                                                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                            .addComponent(jLabel31)
-                                                            .addComponent(jLabel148))
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                            .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                                                .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(90, 90, 90)
-                                                                .addComponent(seleccionarModificarInfo9)))))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel149)
-                                                .addGap(0, 0, 0)
-                                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(bFechaOrdenesCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(seleccionarModificarInfo5))))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel150)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(jLabel166, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(tTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel20)
+                                                        .addComponent(jLabel155))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(pHTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jLabel163)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(hTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(contactosCrear4)
+                                                    .addGap(28, 28, 28)
+                                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel149)
+                                                        .addComponent(jLabel165)))
+                                                .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                                .addComponent(seleccionarModificarInfo8)
+                                                .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(62, 62, 62)
+                                                .addComponent(seleccionarModificarInfo13)
+                                                .addGap(43, 43, 43)))
+                                        .addGap(33, 33, 33)
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jScrollPane53, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                        .addComponent(jScrollPane52, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(128, 128, 128)
+                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                                                .addComponent(jLabel156)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(tRepuestos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(calcularRepuestos))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
                                                 .addComponent(jLabel11)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jScrollPane51, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(12, 12, 12))
+                                                .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(seleccionarModificarInfo9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(6, 6, 6)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jScrollPane53, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(15, 15, 15)))
-                                .addComponent(jLabel154))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(jScrollPane50)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(seleccionarModificarInfo7))))
-                .addContainerGap(131, Short.MAX_VALUE))
+                                        .addComponent(jLabel158)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                                .addComponent(jLabel157, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(tVarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(102, 102, 102))
+                                            .addComponent(jScrollPane3)))
+                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                        .addComponent(jLabel154)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                        .addGap(170, 170, 170)
+                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(bFechaOrdenesCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(seleccionarModificarInfo5)
+                                            .addComponent(tManoObra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel150))
+                                    .addComponent(jScrollPane50))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane51, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                                            .addComponent(seleccionarModificarInfo8)
+                                            .addGap(98, 98, 98)))
+                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                        .addComponent(seleccionarModificarInfo7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel36)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane56, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seleccionarModificarInfo10))))
+                    .addComponent(jScrollPane26, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(contactosCrear1)
+                    .addComponent(contactosCrear5))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         editaraClientes1.addTab("Crear", CrearOrden);
@@ -2746,7 +3209,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(seleccionBorrado1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel34))))
-                .addContainerGap(561, Short.MAX_VALUE))
+                .addContainerGap(1023, Short.MAX_VALUE))
         );
         EliminarOrdenLayout.setVerticalGroup(
             EliminarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2775,7 +3238,7 @@ public final class Interfaz extends javax.swing.JFrame {
         Ordenes.setLayout(OrdenesLayout);
         OrdenesLayout.setHorizontalGroup(
             OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(editaraClientes1, javax.swing.GroupLayout.DEFAULT_SIZE, 1295, Short.MAX_VALUE)
+            .addComponent(editaraClientes1)
         );
         OrdenesLayout.setVerticalGroup(
             OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4324,11 +4787,11 @@ public final class Interfaz extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 1300, Short.MAX_VALUE)
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -4359,8 +4822,8 @@ public final class Interfaz extends javax.swing.JFrame {
             cliente=new Cliente();
             cliente=this.hashmapClientes.get(this.tablacontactosVisualizar.getSelectedValue());
             this.TablaContactosVsualizar.setText("----------------------------------------------------------------------\n                                   DATOS"
-                    +cliente.getInformacionCiente()+"\n----------------------------------------------------------------------"
-                    +cliente.getInformacionEmbarcacuiones()+"\n----------------------------------------------------------------------");
+                    +cliente.getInformacionClienteVisualizar()+"\n----------------------------------------------------------------------"
+                    +cliente.getInformacionEmbarcaciones()+"\n----------------------------------------------------------------------");
             this.jLabel12.setText("Seleccionado: "+cliente.getApellidoNombre());
     }//GEN-LAST:event_seleccionarVActionPerformed
     }
@@ -4371,6 +4834,8 @@ public final class Interfaz extends javax.swing.JFrame {
         this.bCorreoE.setText("");
         this.bCelularE.setText("");
         this.bTelFijE.setText("");
+        this.bTelFijoC6.setText("");
+        this.bTelFijoC5.setText("");
         this.bCuidadorE.setText("");
         this.bCelCuidadorE.setText("");
         
@@ -4414,15 +4879,17 @@ public final class Interfaz extends javax.swing.JFrame {
     public void vaciarBarrasO(){
         
         //Barras Crear
-        this.bFechaOrdenesCrear.setText("");
+        this.dia.setText("");
         this.bFechaOrdenesCrear1.setText("");
         this.ordenesCrearNota.setText("");
         this.ordenesCrearVarios.setText("");
+        this.bTelFijoC1.setText("");
+        this.bTelFijoC4.setText("");
     }
     public void updateVRepuesto(){
         this.vaciarTablasR();
         this.vaciarBarrasR();
-        this.actualizarRepuestos();
+        this.actualizarListadoRepuestos();
         this.actualizarRepuestosEliminados();
         this.setearTablasListadoRepuestos();
         this.repaint();
@@ -4431,8 +4898,8 @@ public final class Interfaz extends javax.swing.JFrame {
     public void updateVOrden(){
         this.vaciarTablasO();
         this.vaciarBarrasO();
-        this.actualizarOrdenes();
-        this.actualizarContactosEliminados();
+        this.actualizarListadoOrdenes();
+        this.actualizarOrdenesEliminadas();
         this.setearTablasListadoOrdenes();
         this.repaint();
     
@@ -4440,26 +4907,37 @@ public final class Interfaz extends javax.swing.JFrame {
     public void updateVCliente(){
         this.vaciarTablasC();
         this.vaciarBarrasC();
-        this.actualizarContactos();
-        this.actualizarContactosEliminados();
+        this.actualizarListadoContactos();
+        this.actualizarListadoContactosEliminados();
         this.setearTablasListadoClientes();
         this.repaint();
     
 }
     private void contactosCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactosCrearActionPerformed
-       if(bNombreC.getText().length()!=0 && bApellidoC.getText().length()!=0 && bCorreoC.getText().length()!=0 && bCelularC.getText().length()!=0 
-            && bTelFijoC.getText().length()!=0 && bCuidadorC.getText().length()!=0 && bCelCuidadorC.getText().length()!=0){
+       if(bNombreC.getText().length()!=0 && bApellidoC.getText().length()!=0 && (bCelularC.getText().length()!=0 || bCorreoC.getText().length()!=0)){ 
             cliente=new Cliente();
             cliente.setNombe(this.bNombreC.getText());
             cliente.setApellido(this.bApellidoC.getText());
-            cliente.setCorreo(this.bCorreoC.getText());
-            cliente.setCelular(this.bCelularC.getText());
-            cliente.setTelFijo(this.bTelFijoC.getText());
-            cliente.setCuidador(this.bCuidadorC.getText());
-            cliente.setCelularCuidador(this.bCelCuidadorC.getText());
+            if(this.bCorreoC.getText().length()!=0){
+            cliente.setCorreo(this.bCorreoC.getText());}
+            if(this.bCelularC.getText().length()!=0){
+            cliente.setCelular(this.bCelularC.getText());}
+            if(this.bTelFijoC.getText().length()!=0){
+            cliente.setTelFijo(this.bTelFijoC.getText());}
+            if(this.bTelFijoC1.getText().length()!=0){
+            cliente.setTelFijoOficina1(this.bTelFijoC1.getText());}
+            if(this.bTelFijoC4.getText().length()!=0){
+            cliente.setTelFijoOficina2(this.bTelFijoC4.getText());}
+            if(this.bCuidadorC.getText().length()!=0){
+            cliente.setCuidador(this.bCuidadorC.getText());}
+            if(this.bCelCuidadorC.getText().length()!=0){
+            cliente.setCelularCuidador(this.bCelCuidadorC.getText());}
 
             this.hashmapClientes.put(cliente.getApellidoNombre(),cliente);
+            cliente= null;
             this.updateVCliente();
+            this.updateVOrden();
+            this.updateVRepuesto();
             this.actualizarTXTContactos();
        }
     }//GEN-LAST:event_contactosCrearActionPerformed
@@ -4489,6 +4967,8 @@ public final class Interfaz extends javax.swing.JFrame {
             this.actualizarTXTContactos();
             this.actualizarTXTContactosEliminados();
              this.updateVCliente();
+              this.updateVOrden();
+               this.updateVRepuesto();
             cliente=null;
         }
     }//GEN-LAST:event_eliminarEliminarActionPerformed
@@ -4512,6 +4992,7 @@ public final class Interfaz extends javax.swing.JFrame {
             this.actualizarTXTContactos();
             this.actualizarTXTContactosEliminados();
         }
+        cliente=null;
     }//GEN-LAST:event_seleccionBorradoActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
@@ -4536,8 +5017,11 @@ public final class Interfaz extends javax.swing.JFrame {
             this.hashmapClientes.remove(apNombrAnterior);
             this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
             
-            //this.actualizarTXTContactos();
+            
             this.updateVCliente();
+            this.updateVOrden();
+            this.updateVRepuesto();
+            this.actualizarTXTContactos();
        }
        cliente=null;
        this.jLabel13.setText("Seleccionado: ");
@@ -4571,6 +5055,8 @@ public final class Interfaz extends javax.swing.JFrame {
             this.bCorreoE.setText(cliente.getCorreo());
             this.bCelularE.setText(cliente.getCelular());
             this.bTelFijE.setText(cliente.getTelFijo());
+            this.bTelFijoC6.setText(cliente.getTelFijoOficina1());
+            this.bTelFijoC5.setText(cliente.getTelFijoOficina2());
             this.bCuidadorE.setText(cliente.getCuidador());
             this.bCelCuidadorE.setText(cliente.getCelularCuidador());
         }
@@ -4789,7 +5275,27 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_eliminarEliminar1MouseClicked
 
     private void eliminarEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarEliminar1ActionPerformed
-        // TODO add your handling code here:
+        if(this.tablacontactosEliminar1.getSelectedValue()!=null){
+            orden=new Orden();
+            orden=this.hashmapOrdenes.get(this.tablacontactosEliminar1.getSelectedValue());
+        }
+       
+        
+        if(orden!=null){
+            this.hashmapOrdenesEliminadas.put(orden.getNumeroOrden(),orden);
+            this.hashmapOrdenes.remove(orden.getNumeroOrden(),orden);
+            this.updateVOrden();
+            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
+            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
+            this.actualizarTXTOrdenes();
+            this.actualizarTXTOrdenesEliminadas();
+            repuesto=null;
+        }
+        
+        
+        
+        
+        
     }//GEN-LAST:event_eliminarEliminar1ActionPerformed
 
     private void seleccionBorrado1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionBorrado1MouseClicked
@@ -4797,7 +5303,22 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionBorrado1MouseClicked
 
     private void seleccionBorrado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado1ActionPerformed
-        // TODO add your handling code here:
+         if(this.tablacontactosEliminados1.getSelectedValue()!=null){
+            orden=new Orden();
+            orden=this.hashmapOrdenesEliminadas.get(this.tablacontactosEliminados1.getSelectedValue());
+        }
+       
+        
+        if(orden!=null){
+            this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
+            this.hashmapOrdenesEliminadas.remove(orden.getNumeroOrden(),orden);
+            this.updateVOrden();
+            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
+            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
+            this.actualizarTXTOrdenes();
+            this.actualizarTXTOrdenesEliminadas();
+            repuesto=null;
+        }
     }//GEN-LAST:event_seleccionBorrado1ActionPerformed
 
     private void seleccionarV2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV2MouseClicked
@@ -4805,7 +5326,8 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarV2MouseClicked
 
     private void seleccionarV2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV2ActionPerformed
-        // TODO add your handling code here:
+      
+        
     }//GEN-LAST:event_seleccionarV2ActionPerformed
 
     private void seleccionarV3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV3MouseClicked
@@ -4816,8 +5338,7 @@ public final class Interfaz extends javax.swing.JFrame {
         if(this.tablaOrdenesVisualizar.getSelectedValue()!=null){
             orden=new Orden();
             orden=this.hashmapOrdenes.get(this.tablaOrdenesVisualizar.getSelectedValue());
-            this.visualizarV1.setText("----------------------------------------------------------------------\n                                DETALLES\n"
-                    +orden.getInformacion()+"\n----------------------------------------------------------------------");
+            this.visualizarV1.setText(orden.getInformacion());
             this.jLabel15.setText("Seleccionado: "+orden.getNumeroOrden());
         }
     }//GEN-LAST:event_seleccionarV3ActionPerformed
@@ -4849,7 +5370,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_bCorreoC2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+       this.vaciarBarrasR();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void contactosCrear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactosCrear2ActionPerformed
@@ -5096,6 +5617,9 @@ public final class Interfaz extends javax.swing.JFrame {
             cliente = new Cliente();
             cliente=this.hashmapClientes.get(this.tablaOrdenesCrear.getSelectedValue());
             this.jLabel148.setText("Seleccionado: "+cliente.getApellidoNombre());
+            this.selected=true;
+            cliente.actualizarListadoEmbarcaciones();
+            this.tablaOrdenesCrear2.setListData(cliente.getListadoDeembarcaciones());
         }
 
     }//GEN-LAST:event_seleccionarModificarInfo7ActionPerformed
@@ -5105,7 +5629,14 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarModificarInfo7MouseClicked
 
     private void seleccionarModificarInfo6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo6ActionPerformed
-        // TODO add your handling code here:
+        if(this.tablaOrdenesCrearManoObra.getSelectedValue()!=null ){
+            
+           for(int d=0; d<this.tablaOrdenesCrearManoObra.getSelectedValuesList().size();d++){
+               String mO=this.tablaOrdenesCrearManoObra.getSelectedValuesList().get(d);
+               this.arrayListOrdenesAñadirManoObra.add(mO);
+           } 
+          this.actualizarOrdenManoObraAdd();          
+      }
     }//GEN-LAST:event_seleccionarModificarInfo6ActionPerformed
 
     private void seleccionarModificarInfo6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo6MouseClicked
@@ -5113,7 +5644,13 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarModificarInfo6MouseClicked
 
     private void seleccionarModificarInfo5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo5ActionPerformed
-        // TODO add your handling code here:
+       if(!"".equals(this.bFechaOrdenesCrear1.getText())){
+           this.arrayListManoObra.add(this.bFechaOrdenesCrear1.getText());
+           this.actualizarTXTManoObra();
+           this.actualizarListadoManoObra();
+           this.tablaOrdenesCrearManoObra.setListData(this.listadoManoObra);
+           this.bFechaOrdenesCrear1.setText("");
+       }
     }//GEN-LAST:event_seleccionarModificarInfo5ActionPerformed
 
     private void seleccionarModificarInfo5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo5MouseClicked
@@ -5121,12 +5658,66 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarModificarInfo5MouseClicked
 
     private void contactosCrear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactosCrear1ActionPerformed
-        // TODO add your handling code here:
+        if(this.selected==true && this.bFechaOrdenesCrear8.getText().length()!=0 && !this.arrayListOrdenesAñadirManoObra.isEmpty() && !this.arrayListOrdenesAñadirRepuestosCliente.isEmpty()
+                && tRepuestos.getText().length()!=0 && tManoObra.getText().length()!=0 && this.tTotal.getText().length()!=0
+                && this.dia.getText().length()!=0 && this.mes.getText().length()!=0 && this.año.getText().length()!=0  ){
+            orden=new Orden();
+            orden.setNumeroOrden(bFechaOrdenesCrear8.getText());
+            orden.setTotalManoObra(this.tManoObra.getText());
+            if(this.tVarios.getText().length()!=0 && this.ordenesCrearVarios.getText().length()!=0){
+                orden.setTotalVarios(this.tVarios.getText());
+            }
+                else{
+                    orden.setTotalVarios("0");
+                    this.ordenesCrearVarios.setText("  Sin Varios");
+                }
+            orden.setTotalRepuestos(this.tRepuestos.getText());
+            orden.setTotal(this.tTotal.getText() );
+            orden.setCliente(cliente.getNombre()+" "+cliente.getApellido());
+            orden.setEmbrcacion(embarcacion.getMotor());
+            String fcha=this.dia.getText()+"/"+this.mes.getText()+"/"+this.año.getText();
+            //fecha
+            orden.setFecha(fcha);
+            if(this.ordenesCrearNota.getText().length()!=0){
+                orden.setNota(this.ordenesCrearNota.getText());
+            }
+                else{
+                    orden.setNota("  Sin Nota");
+                }
+            if(this.ordenesCrearVarios.getText().length()!=0){
+                orden.setVarios(this.ordenesCrearVarios.getText());
+            }
+            for(int x=0; x<this.arrayListOrdenesAñadirManoObra.size();x++){
+                String mO=this.arrayListOrdenesAñadirManoObra.get(x);
+                orden.addManoObra(mO);
+            }
+            for(int x=0; x<this.arrayListOrdenesAñadirRepuestosCliente.size();x++){
+                repuesto=this.arrayListOrdenesAñadirRepuestosCliente.get(x);
+                orden.addRepuesto(repuesto.getNombre(),repuesto.getCantidad());
+            }
+            this.visualizarV4.setText(orden.getInformacion());
+            System.out.println(orden.getInformacion());
+            this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
+            this.updateVOrden();
+            this.actualizarTXTOrdenes();
+        }
+        
     }//GEN-LAST:event_contactosCrear1ActionPerformed
 
     private void seleccionarModificarInfo8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo8MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_seleccionarModificarInfo8MouseClicked
+    public void actualizarOrdenManoObraAdd(){
+        this.listadoOrdenesAñadirManoObra= new String[1000];
+        String [] vacio = new String[1000];
+        this.tablaOrdenesCrearVPMO.setListData(vacio);
+        Collections.sort(Interfaz.this.arrayListOrdenesAñadirManoObra, String::compareTo);
+        for(int g=0;g<this.arrayListOrdenesAñadirManoObra.size();g++){
+            this.listadoOrdenesAñadirManoObra[g]=this.arrayListOrdenesAñadirManoObra.get(g);
+            //System.out.println("\n Actualizando MO: "+this.listadoOrdenesAñadirManoObra[g]);
+        }
+        this.tablaOrdenesCrearVPMO.setListData(this.listadoOrdenesAñadirManoObra);
+    }
     public void actualizarOrdenRepuestosAgregados(){
         this.listadoOrdenesAñadirRepuestosCliente= new String[1000];
         this.listadoOrdenesAñadirRepuestosClienteCantidad= new String[1000];
@@ -5139,7 +5730,20 @@ public final class Interfaz extends javax.swing.JFrame {
         }
         this.tablaOrdenesCrearVPRepuestos.setListData(this.listadoOrdenesAñadirRepuestosClienteCantidad);
     }
-    public boolean isNumeric(String cant) {
+    public boolean isNumericInteger(String cant) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cant);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
+    public boolean isNumericDouble(String cant) {
 
         boolean resultado;
 
@@ -5156,15 +5760,15 @@ public final class Interfaz extends javax.swing.JFrame {
        
         //Double cant=Double.parseDouble(this.cantidad.getText());
         
-        if(this.tablaOdenCrearAñadirRepuestos.getSelectedValue()!=null && this.isNumeric(this.cantidad.getText())==true){
-          
+        if(this.tablaOdenCrearAñadirRepuestos.getSelectedValue()!=null && this.isNumericInteger(this.cantidad.getText())==true){
+          this.repuesto=new Repuesto();
           this.repuesto=this.hashmapRepuestos.get(this.tablaOdenCrearAñadirRepuestos.getSelectedValue());
           repuesto.setCantidad(this.cantidad.getText());
           this.arrayListOrdenesAñadirRepuestosCliente.add(repuesto);
           this.actualizarOrdenRepuestosAgregados();
           this.cantidad.setText("");
-          
       }
+        
     }//GEN-LAST:event_seleccionarModificarInfo8ActionPerformed
 
     private void seleccionarModificarInfo9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo9MouseClicked
@@ -5172,7 +5776,26 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarModificarInfo9MouseClicked
 
     private void seleccionarModificarInfo9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo9ActionPerformed
-        // TODO add your handling code here:
+        ArrayList<String> rC=new ArrayList<>();
+        if(this.tablaOrdenesCrearVPRepuestos.getSelectedValue()!=null ){   
+            for(int g=0;g<this.tablaOrdenesCrearVPRepuestos.getSelectedValuesList().size();g++){
+               String rp=this.tablaOrdenesCrearVPRepuestos.getSelectedValuesList().get(g);
+               rC.add(rp);
+               
+            }
+            for(int d=0; d<rC.size();d++){
+                for(int g=0;g<this.arrayListOrdenesAñadirRepuestosCliente.size();g++){
+                   if(this.listadoOrdenesAñadirRepuestosClienteCantidad[g].equals(rC.get(d))){
+                           this.arrayListOrdenesAñadirRepuestosCliente.remove(g);
+                           this.actualizarOrdenRepuestosAgregados();
+                   }
+                }
+            }
+        }
+           this.actualizarOrdenRepuestosAgregados();
+           this.tablaOrdenesCrearVPRepuestos.setListData(listadoOrdenesAñadirRepuestosClienteCantidad);
+           //this.actualizarOrdenManoObraAdd();
+           //this.arrayListOrdenesAñadirRepuestosCliente.remove(this.arrayListOrdenesAñadirRepuestosCliente.get(this.tablaOrdenesCrearVPRepuestos.getSelectedValue()));
     }//GEN-LAST:event_seleccionarModificarInfo9ActionPerformed
 
     private void seleccionarModificarInfo13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo13MouseClicked
@@ -5180,13 +5803,21 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarModificarInfo13MouseClicked
 
     private void seleccionarModificarInfo13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo13ActionPerformed
-       if(this.tablaOrdenesCrearVPRepuestos.getSelectedValue()!=null){
-           for(int g=0;g<this.arrayListOrdenesAñadirRepuestosCliente.size();g++){
-               if(this.listadoOrdenesAñadirRepuestosClienteCantidad[g].equals(this.tablaOrdenesCrearVPRepuestos.getSelectedValue())){
-                       this.arrayListOrdenesAñadirRepuestosCliente.remove(g);
+        ArrayList<String> moc=new ArrayList<>();
+        if(this.tablaOrdenesCrearVPMO.getSelectedValue()!=null){
+        for(int d=0; d<this.tablaOrdenesCrearVPMO.getSelectedValuesList().size();d++){
+               String mO=this.tablaOrdenesCrearVPMO.getSelectedValuesList().get(d);
+               moc.add(mO);
+           }
+       for(int d=0; d<moc.size();d++){
+            for(int g=0;g<this.arrayListOrdenesAñadirManoObra.size();g++){
+               if(this.listadoOrdenesAñadirManoObra[g].equals(moc.get(d))){
+                       this.arrayListOrdenesAñadirManoObra.remove(g);
+                       this.actualizarOrdenManoObraAdd();
                }
            }
-           this.actualizarOrdenRepuestosAgregados();
+       }
+           this.actualizarOrdenManoObraAdd();
            //this.arrayListOrdenesAñadirRepuestosCliente.remove(this.arrayListOrdenesAñadirRepuestosCliente.get(this.tablaOrdenesCrearVPRepuestos.getSelectedValue()));
        }
     }//GEN-LAST:event_seleccionarModificarInfo13ActionPerformed
@@ -5214,21 +5845,23 @@ public final class Interfaz extends javax.swing.JFrame {
             String repAntesdemodificar=repuesto.getNombre();
             repuesto.setNombre(this.bRepuestosModNombre.getText());
             repuesto.setCodigo(this.bRepuestosModCodigo.getText());
-            repuesto.setCodigo(this.bRepuestosModPrecio.getText());
-            repuesto.setCodigo(this.bRepuestosModCantidad.getText());
+            repuesto.setPrecio(this.bRepuestosModPrecio.getText());
+            repuesto.setCantidad(this.bRepuestosModCantidad.getText());
 
             this.hashmapRepuestos.remove(repAntesdemodificar);
             this.hashmapRepuestos.put(repuesto.getNombre(), repuesto);
             
             //this.actualizarTXTContactos();
             this.updateVRepuesto();
+            this.actualizarTXTRepuestos();
        }
        repuesto=null;
        this.estado12.setText("Estado: Repuesto modificado exitosamente");
     }//GEN-LAST:event_jButton61ActionPerformed
 
     private void jButton62ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton62ActionPerformed
-        // TODO add your handling code here:
+        repuesto=null;
+        this.vaciarBarrasR();
     }//GEN-LAST:event_jButton62ActionPerformed
 
     private void bRepuestosModCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRepuestosModCodigoActionPerformed
@@ -5247,31 +5880,159 @@ public final class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cantidadActionPerformed
 
-    private void bFechaOrdenesCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bFechaOrdenesCrearActionPerformed
+    private void diaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bFechaOrdenesCrearActionPerformed
+    }//GEN-LAST:event_diaActionPerformed
 
     private void bFechaOrdenesCrear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bFechaOrdenesCrear1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bFechaOrdenesCrear1ActionPerformed
 
-    private void bFechaOrdenesCrear5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bFechaOrdenesCrear5ActionPerformed
+    private void tVariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tVariosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bFechaOrdenesCrear5ActionPerformed
+    }//GEN-LAST:event_tVariosActionPerformed
 
-    private void bFechaOrdenesCrear7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bFechaOrdenesCrear7ActionPerformed
+    private void mesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bFechaOrdenesCrear7ActionPerformed
+    }//GEN-LAST:event_mesActionPerformed
+
+    private void añoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_añoActionPerformed
+
+    private void contactosCrear4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactosCrear4ActionPerformed
+        if(this.isNumericDouble(this.pHTrabajo.getText())==true && this.isNumericDouble(this.hTrabajo.getText())==true){
+            Double tHT=Double.parseDouble(this.pHTrabajo.getText())*Double.parseDouble(this.hTrabajo.getText());
+            this.tManoObra.setText(Integer.toString(tHT.intValue()));
+        }
+                
+    }//GEN-LAST:event_contactosCrear4ActionPerformed
+
+    private void pHTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pHTrabajoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pHTrabajoActionPerformed
+
+    private void tRepuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tRepuestosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tRepuestosActionPerformed
+
+    private void calcularRepuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcularRepuestosActionPerformed
+        int repu=0;
+        this.totalRepuestos=0;
+        if(!this.arrayListOrdenesAñadirRepuestosCliente.isEmpty() ){
+            for(int h=0;h<this.arrayListOrdenesAñadirRepuestosCliente.size();h++){
+                //System.out.println(this.arrayListOrdenesAñadirRepuestosCliente.get(h).getNombre());
+                repuesto=this.arrayListOrdenesAñadirRepuestosCliente.get(h);
+                //System.out.println(repuesto.getNombre());
+                repu+=repuesto.precio*repuesto.cantidad;
+            }
+            this.totalRepuestos=repu;
+            this.tRepuestos.setText(Integer.toString(repu));
+            
+        }
+        
+    }//GEN-LAST:event_calcularRepuestosActionPerformed
+
+    private void contactosCrear5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactosCrear5ActionPerformed
+        if(this.selected==true && this.bFechaOrdenesCrear8.getText().length()!=0 && !this.arrayListOrdenesAñadirManoObra.isEmpty() && !this.arrayListOrdenesAñadirRepuestosCliente.isEmpty()
+                && tRepuestos.getText().length()!=0 && tManoObra.getText().length()!=0 && this.tTotal.getText().length()!=0
+                && this.dia.getText().length()!=0 && this.mes.getText().length()!=0 && this.año.getText().length()!=0  ){
+            orden=new Orden();
+            orden.setNumeroOrden(bFechaOrdenesCrear8.getText());
+            orden.setTotalManoObra(this.tManoObra.getText());
+            if(this.tVarios.getText().length()!=0 && this.ordenesCrearVarios.getText().length()!=0){
+                orden.setTotalVarios(this.tVarios.getText());
+            }
+                else{
+                    orden.setTotalVarios("0");
+                    this.ordenesCrearVarios.setText("  Sin Varios");
+                }
+            orden.setTotalRepuestos(this.tRepuestos.getText());
+            orden.setTotal(this.tTotal.getText() );
+            orden.setCliente(cliente.getNombre()+" "+cliente.getApellido());
+            orden.setEmbrcacion(embarcacion.getMotor());
+            String fcha=this.dia.getText()+"/"+this.mes.getText()+"/"+this.año.getText();
+            //fecha
+            orden.setFecha(fcha);
+            if(this.ordenesCrearNota.getText().length()!=0){
+                orden.setNota(this.ordenesCrearNota.getText());
+            }
+                else{
+                    orden.setNota("  Sin Nota");
+                }
+            if(this.ordenesCrearVarios.getText().length()!=0){
+                orden.setVarios(this.ordenesCrearVarios.getText());
+            }
+            for(int x=0; x<this.arrayListOrdenesAñadirManoObra.size();x++){
+                String mO=this.arrayListOrdenesAñadirManoObra.get(x);
+                orden.addManoObra(mO);
+            }
+            for(int x=0; x<this.arrayListOrdenesAñadirRepuestosCliente.size();x++){
+                repuesto=this.arrayListOrdenesAñadirRepuestosCliente.get(x);
+                orden.addRepuesto(repuesto.getNombre(),repuesto.getCantidad());
+            }
+            this.visualizarV4.setText(orden.getInformacion());
+            System.out.println(orden.getInformacion());
+            //this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
+        }
+    }//GEN-LAST:event_contactosCrear5ActionPerformed
+
+    private void tTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tTotalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tTotalActionPerformed
 
     private void bFechaOrdenesCrear8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bFechaOrdenesCrear8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bFechaOrdenesCrear8ActionPerformed
-       
-        
-        
-    
-    
-    
+
+    private void calcularRepuestos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcularRepuestos1ActionPerformed
+        if(tManoObra.getText().length()!=0){
+            Double tHT=0.0;
+            if(this.tRepuestos.getText().length()!=0){
+                tHT+=Double.parseDouble(tRepuestos.getText());
+            }
+            else{
+                tHT+=0.0;
+            }
+            if(this.tVarios.getText().length()!=0){
+                tHT+=Double.parseDouble(tVarios.getText());
+            }
+            else{
+                tHT+=0.0;
+            }
+            tHT+=Double.parseDouble(tManoObra.getText());
+            tTotal.setText(Integer.toString(tHT.intValue()));
+        }
+    }//GEN-LAST:event_calcularRepuestos1ActionPerformed
+
+    private void bTelFijoC1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTelFijoC1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bTelFijoC1ActionPerformed
+
+    private void bTelFijoC4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTelFijoC4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bTelFijoC4ActionPerformed
+
+    private void bTelFijoC5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTelFijoC5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bTelFijoC5ActionPerformed
+
+    private void bTelFijoC6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTelFijoC6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bTelFijoC6ActionPerformed
+
+    private void seleccionarModificarInfo10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo10MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seleccionarModificarInfo10MouseClicked
+
+    private void seleccionarModificarInfo10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo10ActionPerformed
+       if(cliente!=null && this.tablaOrdenesCrear2.getSelectedValue()!=null){
+           embarcacion=cliente.embarcaciones.get(this.tablaOrdenesCrear2.getSelectedValue());
+           this.jLabel36.setText("Embarcacion: "+embarcacion.getMotor());
+           
+       }
+    }//GEN-LAST:event_seleccionarModificarInfo10ActionPerformed
+ 
     /**
      * @param args the command line arguments
      */
@@ -5323,6 +6084,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JPanel agregarLancha3;
     private javax.swing.JLabel añadiendolanchaa;
     private javax.swing.JLabel añadiendolanchaa3;
+    private javax.swing.JTextField año;
     private javax.swing.JTextField bApellidoC;
     private javax.swing.JTextField bApellidoE;
     private javax.swing.JTextField bApellidoE3;
@@ -5345,14 +6107,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField bCuidadorC3;
     private javax.swing.JTextField bCuidadorE;
     private javax.swing.JTextField bCuidadorE3;
-    private javax.swing.JTextField bFechaOrdenesCrear;
     private javax.swing.JTextField bFechaOrdenesCrear1;
-    private javax.swing.JTextField bFechaOrdenesCrear2;
-    private javax.swing.JTextField bFechaOrdenesCrear3;
-    private javax.swing.JTextField bFechaOrdenesCrear4;
-    private javax.swing.JTextField bFechaOrdenesCrear5;
-    private javax.swing.JTextField bFechaOrdenesCrear6;
-    private javax.swing.JTextField bFechaOrdenesCrear7;
     private javax.swing.JTextField bFechaOrdenesCrear8;
     private javax.swing.JTextField bNombreC;
     private javax.swing.JTextField bNombreE;
@@ -5364,16 +6119,25 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField bTelFijE;
     private javax.swing.JTextField bTelFijE3;
     private javax.swing.JTextField bTelFijoC;
+    private javax.swing.JTextField bTelFijoC1;
     private javax.swing.JTextField bTelFijoC2;
     private javax.swing.JTextField bTelFijoC3;
+    private javax.swing.JTextField bTelFijoC4;
+    private javax.swing.JTextField bTelFijoC5;
+    private javax.swing.JTextField bTelFijoC6;
+    private javax.swing.JButton calcularRepuestos;
+    private javax.swing.JButton calcularRepuestos1;
     private javax.swing.JTextField cantidad;
     private javax.swing.JButton contactosCrear;
     private javax.swing.JButton contactosCrear1;
     private javax.swing.JButton contactosCrear2;
     private javax.swing.JButton contactosCrear3;
+    private javax.swing.JButton contactosCrear4;
+    private javax.swing.JButton contactosCrear5;
     private javax.swing.JPanel crear;
     private javax.swing.JPanel crear2;
     private javax.swing.JPanel crear3;
+    private javax.swing.JTextField dia;
     private javax.swing.JPanel editar1;
     private javax.swing.JPanel editar4;
     private javax.swing.JTabbedPane editaraClientes;
@@ -5398,6 +6162,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel estado9;
     private javax.swing.JButton guardarLancha;
     private javax.swing.JButton guardarLancha3;
+    private javax.swing.JTextField hTrabajo;
     private javax.swing.JPanel info;
     private javax.swing.JPanel info3;
     private javax.swing.JButton jButton11;
@@ -5499,6 +6264,8 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel163;
     private javax.swing.JLabel jLabel164;
     private javax.swing.JLabel jLabel165;
+    private javax.swing.JLabel jLabel166;
+    private javax.swing.JLabel jLabel167;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -5507,15 +6274,20 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
@@ -5583,6 +6355,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane52;
     private javax.swing.JScrollPane jScrollPane53;
     private javax.swing.JScrollPane jScrollPane54;
+    private javax.swing.JScrollPane jScrollPane56;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
@@ -5609,6 +6382,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField m3;
     private javax.swing.JTextField marca;
     private javax.swing.JTextField marca3;
+    private javax.swing.JTextField mes;
     private javax.swing.JTextField mo;
     private javax.swing.JTextField mo3;
     private javax.swing.JTextField modelo;
@@ -5628,6 +6402,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField nSerie7;
     private javax.swing.JTextPane ordenesCrearNota;
     private javax.swing.JTextPane ordenesCrearVarios;
+    private javax.swing.JTextField pHTrabajo;
     private javax.swing.JLabel sel;
     private javax.swing.JLabel sel3;
     private javax.swing.JButton seleccionBorrado;
@@ -5647,6 +6422,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton seleccionarLanchaAgregar;
     private javax.swing.JButton seleccionarLanchaAgregar3;
     private javax.swing.JButton seleccionarModificarInfo;
+    private javax.swing.JButton seleccionarModificarInfo10;
     private javax.swing.JButton seleccionarModificarInfo13;
     private javax.swing.JButton seleccionarModificarInfo3;
     private javax.swing.JButton seleccionarModificarInfo5;
@@ -5661,6 +6437,10 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton seleccionarV6;
     private javax.swing.JTextField t;
     private javax.swing.JTextField t3;
+    private javax.swing.JTextField tManoObra;
+    private javax.swing.JTextField tRepuestos;
+    private javax.swing.JTextField tTotal;
+    private javax.swing.JTextField tVarios;
     private javax.swing.JTabbedPane tablaClienteLanchas;
     private javax.swing.JTabbedPane tablaClienteLanchas3;
     public javax.swing.JList<String> tablaContactosEliminar;
@@ -5678,6 +6458,7 @@ public final class Interfaz extends javax.swing.JFrame {
     public javax.swing.JList<String> tablaModificarInformacion3;
     public javax.swing.JList<String> tablaOdenCrearAñadirRepuestos;
     public javax.swing.JList<String> tablaOrdenesCrear;
+    public javax.swing.JList<String> tablaOrdenesCrear2;
     public javax.swing.JList<String> tablaOrdenesCrearManoObra;
     public javax.swing.JList<String> tablaOrdenesCrearVPMO;
     public javax.swing.JList<String> tablaOrdenesCrearVPRepuestos;

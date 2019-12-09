@@ -1,0 +1,27 @@
+#
+2
+200
+300
+450
+950
+Pepe foro
+suzuki
+12-10-2019
+NO
+cliente solicita limpieza casco 
+  
+
+*#
+VARIOS
+vARIOs
+#*
+Limpiar anodos
+servicio de lubricacion
+cambiar bujias
+**
+1
+bujias
+1
+bujias
+***
+##
