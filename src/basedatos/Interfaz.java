@@ -280,47 +280,54 @@ public final class Interfaz extends javax.swing.JFrame {
             if (!file.exists()) {
                 file.createNewFile();
             }
+            System.out.println("ORDENES cantidad :"+this.hashmapOrdenesEliminadas.size());
             FileWriter fw = new FileWriter(file);
               try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    for(int f=0;f<this.arrayListOrdenesEliminadas.size();f++){
-                        Orden or=this.hashmapOrdenesEliminadas.get(this.arrayListOrdenesEliminadas.get(f));
+                    for(int f=0;f<this.hashmapOrdenesEliminadas.size();f++){
+                        orden=this.hashmapOrdenesEliminadas.get(this.arrayListOrdenesEliminadas.get(f));
+                        System.out.println("ACTUALIZAR ELIMINADA:"+orden.getInformacion());
                         bw.write("#");
                         bw.newLine();
-                        bw.write(or.getNumeroOrden());
+                        bw.write(orden.getNumeroOrden());
                         bw.newLine();
-                        bw.write(Integer.toString(or.getTotalManoObra()));
+                        bw.write(Integer.toString(orden.getTotalManoObra()));
                         bw.newLine();
-                        bw.write(Integer.toString(or.getTotalVarios()));
+                        bw.write(Integer.toString(orden.getTotalVarios()));
                         bw.newLine();
-                        bw.write(Integer.toString(or.getTotalRepuestos()));
+                        bw.write(Integer.toString(orden.getTotalRepuestos()));
                         bw.newLine();
-                        bw.write(Integer.toString(or.getTotal()));
+                        bw.write(Integer.toString(orden.getTotal()));
                         bw.newLine();
-                        bw.write(or.getCliente());
+                        bw.write(orden.getCliente());
                         bw.newLine();
-                        bw.write(or.getEmbrcacion());
+                        bw.write(orden.getEmbrcacion());
                         bw.newLine();
-                        bw.write(or.getFecha());
+                        bw.write(orden.getFecha());
                         bw.newLine();
-                        bw.write(or.getCancelado());
+                        bw.write(orden.getCancelado());
                         bw.newLine();
-                        bw.write(or.getNota());
+                        bw.write(orden.getNota());
                         bw.newLine();
-                        bw.write("*");
+                        bw.write("*#");
                         bw.newLine();
-                        for(int l=0;l<or.getManoObra().size();l++){
-                            bw.write((String) or.getManoObra().get(l));
+                        bw.write(orden.getVarios());
+                        bw.newLine();
+                        bw.write("#*");
+                        for(int l=0;l<orden.getManoObra().size();l++){
                             bw.newLine();
+                            bw.write((String) orden.getManoObra().get(l));
+                           
                         }
+                        bw.newLine();
                         bw.write("**");
-                        if(!or.listadoRepuestos.isEmpty()){
-                            for(int l=0;l<or.listadoRepuestos.size();l++){
+                        if(!orden.listadoRepuestos.isEmpty()){
+                            for(int l=0;l<orden.listadoRepuestos.size();l++){
                                 //or.listadoRepuestos.get(l);
                                 //or.repuestos.get(or.listadoRepuestos.get(l));
                                 bw.newLine();
-                                bw.write((String)or.listadoRepuestos.get(l).getCantidad());
+                                bw.write((String)orden.listadoRepuestos.get(l).getCantidad());
                                 bw.newLine();
-                                bw.write((String)or.listadoRepuestos.get(l).getNombre());
+                                bw.write((String)orden.listadoRepuestos.get(l).getNombre());
                                 
                             }
                             bw.newLine();
@@ -333,8 +340,6 @@ public final class Interfaz extends javax.swing.JFrame {
               }
         } catch (IOException e) {
         }
-    
-      
     }
     
     public void actualizarTXTRepuestos(){
@@ -5700,6 +5705,7 @@ public final class Interfaz extends javax.swing.JFrame {
             this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
             this.updateVOrden();
             this.actualizarTXTOrdenes();
+            this.hashmapClientes.get(cliente.getApellidoNombre()).listadoOrdenes.add(orden.getNumeroOrden());
         }
         
     }//GEN-LAST:event_contactosCrear1ActionPerformed
