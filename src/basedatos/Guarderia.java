@@ -50,11 +50,11 @@ public class Guarderia {
         }
         pago=new Pago(precio);
         for(int g=0;g<año.size();g++){
-            System.out.println(año.get(g));
+            //System.out.println(año.get(g));
             abonosYTOtal.put(año.get(g), pago);
         }
         abonosYTOtal.entrySet().forEach((Map.Entry<String, Pago> entry) -> {
-            System.out.println(" Fecha: "+entry.getKey());
+            //System.out.println(" Fecha: "+entry.getKey());
             //Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
         });
         

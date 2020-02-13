@@ -345,17 +345,11 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bNombreC">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bNombreCActionPerformed"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bApellidoC">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bApellidoCActionPerformed"/>
                           </Events>
@@ -366,9 +360,6 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bCelularC">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel6">
                           <Properties>
@@ -376,9 +367,6 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bTelFijoC">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bTelFijoCActionPerformed"/>
                           </Events>
@@ -389,9 +377,6 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bCorreoC">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bCorreoCActionPerformed"/>
                           </Events>
@@ -402,9 +387,6 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bCuidadorC">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel9">
                           <Properties>
@@ -417,9 +399,9 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bCelCuidadorC">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bCelCuidadorCActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton3">
                           <Properties>
@@ -443,9 +425,6 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bTelFijoC1">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bTelFijoC1ActionPerformed"/>
                           </Events>
@@ -456,9 +435,6 @@
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="bTelFijoC4">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value=" "/>
-                          </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bTelFijoC4ActionPerformed"/>
                           </Events>
