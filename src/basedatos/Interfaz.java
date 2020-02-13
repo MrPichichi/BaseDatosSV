@@ -34,6 +34,7 @@ public final class Interfaz extends javax.swing.JFrame {
     HashMap<String ,Cliente> hashmapClientes= new HashMap<>();
     ArrayList<String> arrayListContactos=new ArrayList<>();
     String [] listadoClientes = new String[1000];
+    boolean modificar=false;
     //ELIMINADOS
     HashMap<String ,Cliente> hashmapClientesBorrados= new HashMap<>();
     ArrayList<String> arrayListContactosEliminados=new ArrayList<>();
@@ -52,7 +53,7 @@ public final class Interfaz extends javax.swing.JFrame {
     ArrayList<Repuesto> arrayListOrdenesAñadirRepuestosCliente=new ArrayList<>();
     String [] listadoOrdenesAñadirRepuestosCliente = new String[1000];
     String [] listadoOrdenesAñadirRepuestosClienteCantidad = new String[1000];
-        //MANO OBRA
+    //MANO OBRA
     ArrayList<String> arrayListOrdenesAñadirManoObra=new ArrayList<>();
     String [] listadoOrdenesAñadirManoObra= new String[1000];
     
@@ -85,7 +86,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.initComponents();
         
         this.cargarTxTClientes();
-        //this.crearArchivosContacto("Gamboa Francisco");
+      
         //this.actualizarListadoContactos();
         //this.setearTablasListadoClientes();
         //this.cargarManoObra();
@@ -130,7 +131,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.actualizarListadoContactos();
         this.setearTablasListadoClientes();
     }
-    public void cargarArchivosCliente(String apellidoNombre) {
+    public void extraerArchivosCliente(String apellidoNombre) {
         final File carpeta = new File("Clientes");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals(apellidoNombre)) {
@@ -160,27 +161,39 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         }
     }
-    public void cargarInformacionCliente(File carpetainfo) {
+       public void modificarInformacionCliente(File carpetainfo) {
         System.out.println("LOADING INFO");
         for (final File ficheroEntrada : carpetainfo.listFiles()) {
             if (ficheroEntrada.isFile()) {
-               System.out.println("Cliente: "+ficheroEntrada.getName());
-               this.cargarCliente(ficheroEntrada);
+               //System.out.println("Cliente: "+ficheroEntrada.getName());
+               this.cargarTXTInfo(ficheroEntrada);
             }
         }
     }
-    public void cargarTXTInfo(String cliente){
+    public void cargarInformacionCliente(File carpetainfo) {
+        System.out.println("LOADING INFO");
+        for (final File ficheroEntrada : carpetainfo.listFiles()) {
+            if (ficheroEntrada.isFile() && this.modificar==false ) {
+               System.out.println("Cliente: "+ficheroEntrada.getName());
+               this.cargarCliente(ficheroEntrada);
+            }
+            if (ficheroEntrada.isFile() && this.modificar==true ) {
+               System.out.println("Cliente: "+ficheroEntrada.getName());
+               this.modificarInformacionCliente(ficheroEntrada);
+            }
+        }
+    }
+    public void cargarTXTInfo(File doc){
         try {
-            String ruta = "ClientesEliminados.txt";
-            File file = new File(ruta);
+            File file = doc;
+            Cliente cl=new Cliente();
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
             }
             FileWriter fw = new FileWriter(file);
               try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    for(int f=0;f<this.arrayListContactosEliminados.size();f++){
-                        Cliente cl =this.hashmapClientesBorrados.get(this.arrayListContactosEliminados.get(f));
+                        cl =this.hashmapClientes.get(cliente.getApellidoNombre());
                         bw.write("#");
                         bw.newLine();
                         for(int l=0;l<cl.getInformacionC().size();l++){
@@ -194,7 +207,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         bw.write("##");
                         bw.newLine();
                     }
-              }
+              
         } catch (IOException e) {
         
     } 
@@ -488,8 +501,8 @@ public final class Interfaz extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
-        File info = new File(dir+"/Informacion/Info.txt");
-        this.actualizarTXTInfoContacto(info,cliente);
+        File inf = new File(dir+"/Informacion/Info.txt");
+        this.actualizarTXTInfoContacto(inf,cliente);
         
     } 
     public void cargarCliente(File f){
@@ -5141,7 +5154,7 @@ public final class Interfaz extends javax.swing.JFrame {
             this.hashmapClientes.remove(apNombrAnterior);
             this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
             
-            this.cargarArchivosCliente(apNombrAnterior);
+            this.extraerArchivosCliente(cliente.getApellidoNombre());
             //this.actualizarTXTInfoContacto(info, cliente);
             
             this.updateVCliente();
@@ -5172,6 +5185,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private void seleccionarModificarInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfoActionPerformed
       if(this.tablaModificarInformacion.getSelectedValue()!=null){
           cliente=new Cliente();
+          this.modificar=true;
           cliente=this.hashmapClientes.get(this.tablaModificarInformacion.getSelectedValue());
           this.jLabel13.setText("Seleccionado: "+cliente.getApellidoNombre());
       }    
