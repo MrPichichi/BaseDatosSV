@@ -31,7 +31,15 @@ public class Cliente {
     public String cuidador="vacio";
     public String celularCuidador="vacio";
     Embarcacion emb;
+    int numCliente;
 
+    public int getNumCliente() {
+        return numCliente;
+    }
+
+    public void setNumCliente(int numCliente) {
+        this.numCliente = numCliente;
+    }
     public String getTelFijoOficina1() {
         return TelFijoOficina1;
     }
@@ -234,7 +242,7 @@ public class Cliente {
                 this.celularCuidador+"\n  Guarderia: "+this.getGuarderia()+"\n  Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  Deuda Orden: "+this.getDeudaOrden());
     }
     public String getInformacionEmbarcaciones(){
-        String infoEmb="\n                             EMBARCACIONES\n";
+        String infoEmb="\n                             EMBARCACIONES";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.embarcaciones.get(this.listadoEmbarcaciones.get(x));
             infoEmb+="\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+emb.modelo+"\n  Motor: "+emb.motor+"\n  Numero Serie: "+emb.nSerie+"\n  Codigo: "+emb.codigo;
