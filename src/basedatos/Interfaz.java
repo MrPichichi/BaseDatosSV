@@ -121,7 +121,7 @@ public final class Interfaz extends javax.swing.JFrame {
         final File carpeta = new File("Clientes");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isDirectory()) {
-               this.cargarCarpetaCliente(ficheroEntrada);
+               this.cargarCarpetaInformacionCliente(ficheroEntrada);
                //this.arrayListContactos.add(ficheroEntrada.getName());
             }
         }
@@ -131,9 +131,9 @@ public final class Interfaz extends javax.swing.JFrame {
     public void extraerArchivosCliente(Integer num) {
         final File carpeta = new File("Clientes");
         for (final File ficheroEntrada : carpeta.listFiles()) {
-            if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals(num)) {
+            if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals(num.toString())) {
                //System.out.println(ficheroEntrada.getName());
-               this.cargarCarpetaCliente(ficheroEntrada);
+               this.cargarCarpetaInformacionCliente(ficheroEntrada);
             }
         }
     }
@@ -150,41 +150,41 @@ public final class Interfaz extends javax.swing.JFrame {
         System.out.println(ordenesCliente);
         return ordenesCliente;
     }
-    public void cargarCarpetaCliente(File carpetaCliente) {
+    public void cargarCarpetaInformacionCliente(File carpetaCliente) {
         System.out.println("\nLOADING CARPETA");
         for (final File ficheroEntrada : carpetaCliente.listFiles()) {
             if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Informacion") ) {
-               this.cargarInformacionCliente(ficheroEntrada);
+               this.cargarTxTInformacionCliente(ficheroEntrada);
             }
         }
     }
-       public void modificarInformacionCliente(File carpetainfo) {
-        System.out.println("LOADING INFO");
-        for (final File ficheroEntrada : carpetainfo.listFiles()) {
-            if (ficheroEntrada.isFile()) {
-               //System.out.println("Cliente: "+ficheroEntrada.getName());
-               ficheroEntrada.delete();
-               File crear_TxTInfo = new File("Contactos"+cliente.getNumCliente()+"/Informacion/Info.txt");
-               try{
-               crear_TxTInfo.createNewFile();
-                } catch (IOException ex) {
-                  Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-                }
+       public void modificarInformacionCliente() {
+            System.out.println("Modificando info cliente"+cliente.getNumCliente());
+            File crear_TxTInfo = new File("Clientes/"+cliente.getNumCliente()+"/Informacion/Info.txt");
+            try{
+            crear_TxTInfo.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.actualizarTXTInfoContacto(crear_TxTInfo,cliente);
+             System.out.println("INFO.txt CREADO");
                this.actualizarTXTInfoContacto(crear_TxTInfo, cliente);
                //this.cargarTXTInfo(ficheroEntrada);
             }
-        }
-    }
-    public void cargarInformacionCliente(File carpetainfo) {
-        System.out.println("LOADING INFO");
+        
+    
+    public void cargarTxTInformacionCliente(File carpetainfo) {
+        System.out.println("LOADING INFO.txt");
         for (final File ficheroEntrada : carpetainfo.listFiles()) {
-            if (ficheroEntrada.isFile() && this.modificar==false ) {
-               //System.out.println("CARgar: "+ficheroEntrada.getName());
+            if (ficheroEntrada.isFile() && this.modificar==false && ficheroEntrada.getName().equals("Info.txt")) {
+               System.out.println("Cargando");
                this.cargarCliente(ficheroEntrada);
             }
-            if (ficheroEntrada.isFile() && this.modificar==true ) {
-               //System.out.println("Modificar: "+ficheroEntrada.getName());
-               this.modificarInformacionCliente(ficheroEntrada);
+            if (ficheroEntrada.isFile() && this.modificar==true && ficheroEntrada.getName().equals("Info.txt")) {
+               System.out.println("Modificando");
+               ficheroEntrada.delete();
+               this.modificarInformacionCliente();
+               this.modificar=false;
             }
         }
     }
@@ -340,7 +340,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         }
                         bw.write("##");
                         bw.newLine();
-                    
+                        bw.close();
               }
         } catch (IOException e) {
         }
@@ -5227,11 +5227,13 @@ public final class Interfaz extends javax.swing.JFrame {
             cliente.setTelFijo(this.bTelFijE.getText());
             cliente.setCuidador(this.bCuidadorE.getText());
             cliente.setCelularCuidador(this.bCelCuidadorE.getText());
-
             this.hashmapClientes.remove(apNombrAnterior);
             this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
-            
+            this.modificar=true;
+            System.out.println("_________________");
             this.extraerArchivosCliente(cliente.getNumCliente());
+            
+            
             //this.actualizarTXTInfoContacto(info, cliente);
             
             this.updateVCliente();
@@ -5261,8 +5263,6 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionarModificarInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfoActionPerformed
       if(this.tablaModificarInformacion.getSelectedValue()!=null){
-          cliente=new Cliente();
-          this.modificar=true;
           cliente=this.hashmapClientes.get(this.tablaModificarInformacion.getSelectedValue());
           this.jLabel13.setText("Seleccionado: "+cliente.getApellidoNombre());
       }    
