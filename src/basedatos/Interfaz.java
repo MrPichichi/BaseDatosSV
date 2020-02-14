@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -151,7 +150,7 @@ public final class Interfaz extends javax.swing.JFrame {
         return ordenesCliente;
     }
     public void cargarCarpetaInformacionCliente(File carpetaCliente) {
-        System.out.println("\nLOADING CARPETA");
+        //System.out.println("\nLOADING CARPETA");
         for (final File ficheroEntrada : carpetaCliente.listFiles()) {
             if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Informacion") ) {
                this.cargarTxTInformacionCliente(ficheroEntrada);
@@ -159,7 +158,7 @@ public final class Interfaz extends javax.swing.JFrame {
         }
     }
        public void modificarInformacionCliente() {
-            System.out.println("Modificando info cliente"+cliente.getNumCliente());
+            //System.out.println("Modificando info cliente"+cliente.getNumCliente());
             File crear_TxTInfo = new File("Clientes/"+cliente.getNumCliente()+"/Informacion/Info.txt");
             try{
             crear_TxTInfo.createNewFile();
@@ -167,21 +166,21 @@ public final class Interfaz extends javax.swing.JFrame {
                 Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
             this.actualizarTXTInfoContacto(crear_TxTInfo,cliente);
-             System.out.println("INFO.txt CREADO");
+             //System.out.println("INFO.txt CREADO");
                this.actualizarTXTInfoContacto(crear_TxTInfo, cliente);
                //this.cargarTXTInfo(ficheroEntrada);
             }
         
     
     public void cargarTxTInformacionCliente(File carpetainfo) {
-        System.out.println("LOADING INFO.txt");
+        //System.out.println("LOADING INFO.txt");
         for (final File ficheroEntrada : carpetainfo.listFiles()) {
             if (ficheroEntrada.isFile() && this.modificar==false && ficheroEntrada.getName().equals("Info.txt")) {
-               System.out.println("Cargando");
+               //System.out.println("Cargando");
                this.cargarCliente(ficheroEntrada);
             }
             if (ficheroEntrada.isFile() && this.modificar==true && ficheroEntrada.getName().equals("Info.txt")) {
-               System.out.println("Modificando");
+               //System.out.println("Modificando");
                ficheroEntrada.delete();
                this.modificarInformacionCliente();
                this.modificar=false;
@@ -214,7 +213,6 @@ public final class Interfaz extends javax.swing.JFrame {
                     }
               
         } catch (IOException e) {
-        
         }
     }
     public void cargarTXTInfo(File doc){
@@ -243,9 +241,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     }
               
         } catch (IOException e) {
-        
     } 
-        
     }
     public void actualizarTXTManoObra(){
           try {
@@ -268,8 +264,6 @@ public final class Interfaz extends javax.swing.JFrame {
               }
         } catch (IOException e) {
         }
-    
-      
     }    
     /**
      * Creates new form Main
@@ -344,8 +338,6 @@ public final class Interfaz extends javax.swing.JFrame {
               }
         } catch (IOException e) {
         }
-    
-      
     }
      public void actualizarTXTOrdenes(){
             try {
@@ -391,7 +383,6 @@ public final class Interfaz extends javax.swing.JFrame {
                         for(int l=0;l<orden.getManoObra().size();l++){
                             bw.newLine();
                             bw.write((String) orden.getManoObra().get(l));
-                           
                         }
                         bw.newLine();
                         bw.write("**");
@@ -403,7 +394,6 @@ public final class Interfaz extends javax.swing.JFrame {
                                 bw.write((String)this.arrayListOrdenesAñadirRepuestosCliente.get(l).getCantidad());
                                 bw.newLine();
                                 bw.write((String)this.arrayListOrdenesAñadirRepuestosCliente.get(l).getNombre());
-                                
                             }
                             bw.newLine();
                             bw.write("***");
@@ -415,7 +405,6 @@ public final class Interfaz extends javax.swing.JFrame {
               }
         } catch (IOException e) {
         }
-      
     }
     public void actualizarTXTOrdenesEliminadas(){
            try {
@@ -461,7 +450,6 @@ public final class Interfaz extends javax.swing.JFrame {
                         for(int l=0;l<orden.getManoObra().size();l++){
                             bw.newLine();
                             bw.write((String) orden.getManoObra().get(l));
-                           
                         }
                         bw.newLine();
                         bw.write("**");
@@ -473,7 +461,6 @@ public final class Interfaz extends javax.swing.JFrame {
                                 bw.write((String)orden.listadoRepuestos.get(l).getCantidad());
                                 bw.newLine();
                                 bw.write((String)orden.listadoRepuestos.get(l).getNombre());
-                                
                             }
                             bw.newLine();
                             bw.write("***");
@@ -526,28 +513,7 @@ public final class Interfaz extends javax.swing.JFrame {
         } catch (IOException e) {
         }
     }
-    public void cargarTxTNumContactos(File f){
-        System.out.println("CARGANDO TXT NUMCONTACTOS");
-            BufferedReader entrada = null; 
-            try { 
-            entrada = new BufferedReader( new FileReader( f ) ); 
-            String linea;
-            linea = entrada.readLine();
-            System.out.println(linea);
-            this.numCliente=parseInt(linea);
-           
-            }catch (IOException e) { 
-                e.printStackTrace(); 
-            } 
-            finally{ 
-                try{ 
-                    entrada.close(); 
-                }
-                catch(IOException e1){} 
-            } 
-            //extrae contactos
-            
-    }
+
     public void crearArchivosContacto( Cliente cliente){
         String dir="Clientes/"+cliente.getNumCliente();
         File crear_CC = new File(dir);
@@ -655,7 +621,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         cl.addEmbarcacion(embarcacion.getMotor(), embarcacion);
                         
                     }
-                    System.out.println(cl.getInformacionClienteVisualizar());
+                    //System.out.println(cl.getInformacionClienteVisualizar());
                     this.hashmapClientes.put(cl.getApellidoNombre(),cl);
                     this.numCliente+=1;
                     this.arrayListContactos.add(cl.getApellidoNombre());
@@ -5179,7 +5145,7 @@ public final class Interfaz extends javax.swing.JFrame {
             //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
             //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
             //this.actualizarTXTInfoContacto();
-            this.actualizarTXTContactosEliminados();
+            //this.actualizarTXTContactosEliminados();
              this.updateVCliente();
               this.updateVOrden();
                this.updateVRepuesto();
@@ -5230,7 +5196,7 @@ public final class Interfaz extends javax.swing.JFrame {
             this.hashmapClientes.remove(apNombrAnterior);
             this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
             this.modificar=true;
-            System.out.println("_________________");
+            //System.out.println("_________________");
             this.extraerArchivosCliente(cliente.getNumCliente());
             
             
