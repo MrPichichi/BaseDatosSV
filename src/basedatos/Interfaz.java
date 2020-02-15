@@ -7,17 +7,22 @@ package basedatos;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.io.IOException;
+import java.io.File; 
+import java.nio.file.CopyOption;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.util.Arrays;
 /**
  *
  * @author Psche
@@ -27,6 +32,9 @@ public final class Interfaz extends javax.swing.JFrame {
     int numCliente=0;
     Embarcacion embarcacion= new Embarcacion();
     Cliente cliente= new Cliente();
+    Cliente clienteModificar= new Cliente();
+    Cliente clienteEliminar= new Cliente();
+    Cliente clienteRecuperar= new Cliente();
     Orden orden= new Orden();
     Repuesto repuesto= new Repuesto();
     Guarderia guarderia=new Guarderia();
@@ -34,9 +42,9 @@ public final class Interfaz extends javax.swing.JFrame {
     HashMap<String ,Cliente> hashmapClientes= new HashMap<>();
     ArrayList<String> arrayListContactos=new ArrayList<>();
     String [] listadoClientes = new String[1000];
-    boolean modificar=false;
+    
     //ELIMINADOS
-    HashMap<String ,Cliente> hashmapClientesBorrados= new HashMap<>();
+    HashMap<String ,Cliente> hashmapClientesEliminados= new HashMap<>();
     ArrayList<String> arrayListContactosEliminados=new ArrayList<>();
     String [] listadoClientesEliminados = new String[1000];	
     
@@ -75,9 +83,12 @@ public final class Interfaz extends javax.swing.JFrame {
     String [] listadoManoObra = new String[1000];
      //Embarcaciones
     
-    
-    
+    boolean cargarCliente=false;
+    boolean modificarCliente=false;
+    boolean eliminarCliente=false;
+    boolean recuperarCliente=false;
     boolean selected=false; 
+    boolean cargarClienteEliminado=false; 
     int totalRepuestos=0,totalManoObra=0;
     
      public Interfaz() {
@@ -89,7 +100,9 @@ public final class Interfaz extends javax.swing.JFrame {
         File crear_CC = new File("Clientes");
         crear_CC.mkdirs();
         carpeta.mkdirs();
+        
         this.cargarTxTClientes();
+        this.cargarTxTClientesEliminados();
         
         this.crearTxTNumContactos();
         System.out.println("sss:"+numCliente);
@@ -120,19 +133,178 @@ public final class Interfaz extends javax.swing.JFrame {
         final File carpeta = new File("Clientes");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isDirectory()) {
+                this.cargarCliente=true;
                this.cargarCarpetaInformacionCliente(ficheroEntrada);
+               this.cargarCliente=false;
                //this.arrayListContactos.add(ficheroEntrada.getName());
             }
         }
         this.actualizarListadoContactos();
         this.setearTablasListadoClientes();
     }
-    public void extraerArchivosCliente(Integer num) {
+    public void cargarTxTClientesEliminados() {
+        this.hashmapClientesEliminados = new HashMap<>();
+        this.arrayListContactosEliminados= new ArrayList<>();
+        final File carpeta = new File("ClientesEliminados");
+        for (final File ficheroEntrada : carpeta.listFiles()) {
+            if (ficheroEntrada.isDirectory()) {
+               this.cargarClienteEliminado=true;
+               this.cargarCarpetaInformacionCliente(ficheroEntrada);
+               this.cargarClienteEliminado=false;
+               //this.arrayListContactos.add(ficheroEntrada.getName());
+            }
+        }
+        this.actualizarListadoContactosEliminados();
+        this.updateVCliente();
+    }
+    public void moverCarpetaOArchivo(String origen, String destino) throws IOException {
+        Path FROM = Paths.get(origen);
+        Path TO = Paths.get(destino);
+        //sobreescribir el fichero de destino, si existe, y copiar
+        // los atributos, incluyendo los permisos rwx
+        CopyOption[] options = new CopyOption[]{
+          StandardCopyOption.REPLACE_EXISTING,
+          StandardCopyOption.COPY_ATTRIBUTES
+        }; 
+        Files.copy(FROM, TO, options);
+    }
+    public void moverCliente(File file) throws IOException{
+        final File carpeta = file;
+        for (final File ficheroEntrada : carpeta.listFiles()) {
+            if(this.eliminarCliente==true){
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Informacion") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Informacion";
+                    String ori="Clientes/"+file.getName()+"/Informacion";
+                    this.moverCarpetaOArchivo(ori,dest);
+                    final File txt = ficheroEntrada;
+                    for (final File doctxt : txt.listFiles()) {
+                        if (doctxt.isFile()){
+                            String destxt="ClientesEliminados/"+file.getName()+"/Informacion/"+doctxt.getName();
+                            String oritxt="Clientes/"+file.getName()+"/Informacion/"+doctxt.getName();
+                            System.out.println("*"+oritxt+"\n*"+destxt);
+                            this.moverCarpetaOArchivo(oritxt,destxt);
+                            doctxt.delete();
+                        }
+                    }
+                    ficheroEntrada.delete();
+                    //this.moverCarpetaOArchivo("Clientes/"+file.getName()+"/"+ficheroEntrada.getName(), "ClientesEliminados/"+file.getName()+"/"+ficheroEntrada.getName());
+                    System.out.println(ori+"\n"+dest);
+                }
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Ordenes") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Ordenes";
+                    String ori="Clientes/"+file.getName()+"/Ordenes";
+                    this.moverCarpetaOArchivo(ori,dest);
+                    //this.moverCarpeta();
+                    //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
+                    //System.out.println("ClientesEliminados/"+file.getName()+"/Ordenes");
+                    ficheroEntrada.delete();
+                }
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Guarderia") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Guarderia";
+                    String ori="Clientes/"+file.getName()+"/Guarderia";
+                    this.moverCarpetaOArchivo(ori,dest);
+                    //this.moverCarpeta();
+                    //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
+                    //System.out.println("ClientesEliminados/"+file.getName()+"/Guarderia");
+                    ficheroEntrada.delete();
+                }
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Embarcaciones") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Embarcaciones";
+                    String ori="Clientes/"+file.getName()+"/Embarcaciones";
+                    this.moverCarpetaOArchivo(ori,dest);
+                    //this.moverCarpeta();
+                    //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
+                    //System.out.println("ClientesEliminados/"+file.getName()+"/Embarcaciones");
+                    ficheroEntrada.delete();
+                }
+            }
+            if(this.recuperarCliente==true){
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Informacion") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Informacion";
+                    String ori="Clientes/"+file.getName()+"/Informacion";
+                    this.moverCarpetaOArchivo(dest,ori);
+                    final File txt = ficheroEntrada;
+                    for (final File doctxt : txt.listFiles()) {
+                        if (doctxt.isFile()){
+                            String destxt="ClientesEliminados/"+file.getName()+"/Informacion/"+doctxt.getName();
+                            String oritxt="Clientes/"+file.getName()+"/Informacion/"+doctxt.getName();
+                            System.out.println("*"+oritxt+"\n*"+destxt);
+                            this.moverCarpetaOArchivo(destxt,oritxt);
+                            doctxt.delete();
+                        }
+                    }
+                    ficheroEntrada.delete();
+                    //this.moverCarpetaOArchivo("Clientes/"+file.getName()+"/"+ficheroEntrada.getName(), "ClientesEliminados/"+file.getName()+"/"+ficheroEntrada.getName());
+                    System.out.println(ori+"\n"+dest);
+                }
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Ordenes") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Ordenes";
+                    String ori="Clientes/"+file.getName()+"/Ordenes";
+                    this.moverCarpetaOArchivo(dest,ori);
+                    //this.moverCarpeta();
+                    //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
+                    //System.out.println("ClientesEliminados/"+file.getName()+"/Ordenes");
+                    ficheroEntrada.delete();
+                }
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Guarderia") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Guarderia";
+                    String ori="Clientes/"+file.getName()+"/Guarderia";
+                    this.moverCarpetaOArchivo(dest,ori);
+                    //this.moverCarpeta();
+                    //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
+                    //System.out.println("ClientesEliminados/"+file.getName()+"/Guarderia");
+                    ficheroEntrada.delete();
+                }
+                if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Embarcaciones") ) {
+                    String dest="ClientesEliminados/"+file.getName()+"/Embarcaciones";
+                    String ori="Clientes/"+file.getName()+"/Embarcaciones";
+                    this.moverCarpetaOArchivo(dest,ori);
+                    //this.moverCarpeta();
+                    //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
+                    //System.out.println("ClientesEliminados/"+file.getName()+"/Embarcaciones");
+                    ficheroEntrada.delete();
+                }
+            }
+        }
+    
+    }
+    public void extraerArchivosCliente(Integer num) throws IOException {
+        System.out.println("EAC: "+this.eliminarCliente+" "+num);
         final File carpeta = new File("Clientes");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals(num.toString())) {
                //System.out.println(ficheroEntrada.getName());
-               this.cargarCarpetaInformacionCliente(ficheroEntrada);
+               if(eliminarCliente==true){
+                System.out.println("Eliominando: "+ficheroEntrada.getAbsolutePath());
+                String dest="ClientesEliminados/"+ficheroEntrada.getName();
+                String ori="Clientes/"+ficheroEntrada.getName();
+                this.moverCarpetaOArchivo(ori,dest);
+                this.moverCliente(ficheroEntrada);
+                ficheroEntrada.delete();
+               }
+              
+               if(this.cargarCliente==true ){
+                this.cargarCarpetaInformacionCliente(ficheroEntrada);
+               }
+                if(this.modificarCliente==true ){
+                    System.out.println("MODIFICANDO");
+                this.modificarInformacionCliente();
+               }
+            }
+        }
+    }
+    public void extraerArchivosClienteEliminado(Integer num) throws IOException {
+        final File carpeta = new File("ClientesEliminados");
+        for (final File ficheroEntrada : carpeta.listFiles()) {
+            if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals(num.toString())) {
+               if(recuperarCliente==true){
+                System.out.println("Recuperando a: "+ficheroEntrada.getName());
+                String dest="ClientesEliminados/"+ficheroEntrada.getName();
+                String ori="Clientes/"+ficheroEntrada.getName();
+                this.moverCarpetaOArchivo(dest,ori);
+                this.moverCliente(ficheroEntrada);
+                ficheroEntrada.delete();
+               }
             }
         }
     }
@@ -159,31 +331,32 @@ public final class Interfaz extends javax.swing.JFrame {
     }
        public void modificarInformacionCliente() {
             //System.out.println("Modificando info cliente"+cliente.getNumCliente());
-            File crear_TxTInfo = new File("Clientes/"+cliente.getNumCliente()+"/Informacion/Info.txt");
+            File crear_TxTInfo = new File("Clientes/"+clienteModificar.getNumCliente()+"/Informacion/Info.txt");
             try{
             crear_TxTInfo.createNewFile();
             } catch (IOException ex) {
                 Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.actualizarTXTInfoContacto(crear_TxTInfo,cliente);
+            this.actualizarTXTInfoContacto(crear_TxTInfo,clienteModificar);
              //System.out.println("INFO.txt CREADO");
-               this.actualizarTXTInfoContacto(crear_TxTInfo, cliente);
+            //this.actualizarTXTInfoContacto(crear_TxTInfo, clienteModificar);
                //this.cargarTXTInfo(ficheroEntrada);
+               this.clienteModificar=null;
             }
         
     
     public void cargarTxTInformacionCliente(File carpetainfo) {
         //System.out.println("LOADING INFO.txt");
         for (final File ficheroEntrada : carpetainfo.listFiles()) {
-            if (ficheroEntrada.isFile() && this.modificar==false && ficheroEntrada.getName().equals("Info.txt")) {
-               //System.out.println("Cargando");
+            System.out.println("___________: "+ficheroEntrada);
+            if (ficheroEntrada.isFile() && (this.cargarCliente==true||this.cargarClienteEliminado) && ficheroEntrada.getName().equals("Info.txt")) {
+               System.out.println("modificar=False: "+ficheroEntrada);
                this.cargarCliente(ficheroEntrada);
             }
-            if (ficheroEntrada.isFile() && this.modificar==true && ficheroEntrada.getName().equals("Info.txt")) {
-               //System.out.println("Modificando");
+            if (ficheroEntrada.isFile() && this.modificarCliente==true && ficheroEntrada.getName().equals("Info.txt")) {
+               System.out.println("Modificar=True"+ficheroEntrada);
                ficheroEntrada.delete();
                this.modificarInformacionCliente();
-               this.modificar=false;
             }
         }
     }
@@ -622,9 +795,24 @@ public final class Interfaz extends javax.swing.JFrame {
                         
                     }
                     //System.out.println(cl.getInformacionClienteVisualizar());
-                    this.hashmapClientes.put(cl.getApellidoNombre(),cl);
-                    this.numCliente+=1;
-                    this.arrayListContactos.add(cl.getApellidoNombre());
+                    if(this.cargarCliente==true){
+                        this.hashmapClientes.put(cl.getApellidoNombre(),cl);
+                        this.numCliente+=1;
+                        this.arrayListContactos.add(cl.getApellidoNombre());
+                    
+                    }
+                    if(this.cargarClienteEliminado==true){
+                        this.hashmapClientesEliminados.put(cl.getApellidoNombre(),cl);
+                        this.numCliente+=1;
+                        this.arrayListContactosEliminados.add(cl.getApellidoNombre());
+                    
+                    }
+                    if(this.recuperarCliente==true){
+                         this.hashmapClientes.put(cl.getApellidoNombre(),cl);
+                         this.numCliente+=1;
+                         this.arrayListContactos.add(cl.getApellidoNombre());
+
+                     }
                     
                 }
                 
@@ -728,7 +916,7 @@ public final class Interfaz extends javax.swing.JFrame {
             FileWriter fw = new FileWriter(file);
               try (BufferedWriter bw = new BufferedWriter(fw)) {
                     for(int f=0;f<this.arrayListContactosEliminados.size();f++){
-                        Cliente cl =this.hashmapClientesBorrados.get(this.arrayListContactosEliminados.get(f));
+                        Cliente cl =this.hashmapClientesEliminados.get(this.arrayListContactosEliminados.get(f));
                         bw.write("#");
                         bw.newLine();
                         for(int l=0;l<cl.getInformacionC().size();l++){
@@ -918,7 +1106,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         linea = entrada.readLine(); 
                         cl.addEmbarcacion(embarcacion.getMotor(), embarcacion);
                         
-                    }this.hashmapClientesBorrados.put(cl.getApellidoNombre(),cl);
+                    }this.hashmapClientesEliminados.put(cl.getApellidoNombre(),cl);
                 }
                 
             } 
@@ -989,11 +1177,13 @@ public final class Interfaz extends javax.swing.JFrame {
         for (Map.Entry<String, Cliente> entry : hashmapClientes.entrySet()) {
             this.arrayListContactos.add(entry.getValue().getApellidoNombre());
         }
+        Collections.sort(Interfaz.this.arrayListContactosEliminados, String::compareTo);
         listadoClientes=new String[this.arrayListContactos.size()];
         for (int g=0;g<this.arrayListContactos.size();g++) {
             listadoClientes[g]=this.arrayListContactos.get(g);
             //System.out.println("\nExistente: "+this.listadoClientes[g]);
         }
+        System.out.println("Contactos Existentes: "+this.arrayListContactos.toString());
     }
     public void actualizarTXTRepuestosEliminados(){
         listadoRepuestosEliminados=new String[1000];
@@ -1009,18 +1199,18 @@ public final class Interfaz extends javax.swing.JFrame {
         //this.contactos.add(cliente.getApellidoNombre());
     }
     public void actualizarListadoContactosEliminados(){
-        listadoClientesEliminados=new String[1000];
-        this.arrayListContactosEliminados=new  ArrayList<>();
-        for (Map.Entry<String, Cliente> entry : hashmapClientesBorrados.entrySet()) {
+        this.arrayListContactosEliminados= new  ArrayList<>();
+        for (Map.Entry<String, Cliente> entry : hashmapClientesEliminados.entrySet()) {
             this.arrayListContactosEliminados.add(entry.getValue().getApellidoNombre());
         }
         Collections.sort(Interfaz.this.arrayListContactosEliminados, String::compareTo);
+        listadoClientesEliminados=new String[this.arrayListContactosEliminados.size()];
         for (int g=0;g<this.arrayListContactosEliminados.size();g++) {
             listadoClientesEliminados[g]=this.arrayListContactosEliminados.get(g);
             //System.out.println("\nEliminado: "+this.listadoClientesEliminados[g]);
         }
         
-         //System.out.println("Contactos Eliminados:"+this.arrayListContactosEliminados.toString());
+         System.out.println("Contactos Eliminados:"+this.arrayListContactosEliminados.toString());
         //this.contactos.add(cliente.getApellidoNombre());
     }
         public void actualizarOrdenesEliminadas(){
@@ -5081,7 +5271,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.vaciarTablasC();
         this.vaciarBarrasC();
         this.actualizarListadoContactos();
-        //this.actualizarListadoContactosEliminados();
+        this.actualizarListadoContactosEliminados();
         this.setearTablasListadoClientes();
         this.repaint();
     
@@ -5133,23 +5323,29 @@ public final class Interfaz extends javax.swing.JFrame {
     private void eliminarEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarEliminarActionPerformed
         
         if(this.tablaContactosEliminar.getSelectedValue()!=null){
-            cliente=new Cliente();
-            cliente=this.hashmapClientes.get(this.tablaContactosEliminar.getSelectedValue());
+            clienteEliminar=new Cliente();
+            clienteEliminar=this.hashmapClientes.get(this.tablaContactosEliminar.getSelectedValue());
         }
-        this.updateVCliente();
         
-        if(cliente!=null){
-            this.hashmapClientesBorrados.put(cliente.getApellidoNombre(),cliente);
-            this.hashmapClientes.remove(cliente.getApellidoNombre(),cliente);
+        if(clienteEliminar!=null){
+            this.hashmapClientesEliminados.put(clienteEliminar.getApellidoNombre(),clienteEliminar);
+            this.hashmapClientes.remove(clienteEliminar.getApellidoNombre(),clienteEliminar);
+            this.eliminarCliente=true;
+            try {
+                this.extraerArchivosCliente(clienteEliminar.getNumCliente());
+            } catch (IOException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.eliminarCliente=false;
             this.updateVCliente();
-            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
-            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
-            //this.actualizarTXTInfoContacto();
-            //this.actualizarTXTContactosEliminados();
-             this.updateVCliente();
-              this.updateVOrden();
-               this.updateVRepuesto();
-            cliente=null;
+            System.out.println("Existentes: "+Arrays.toString(listadoClientes));
+            System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
+            //this.actualizarListadoContactos();
+            //this.actualizarListadoContactosEliminados();
+            //this.updateVCliente();
+            //this.updateVOrden();
+            //his.updateVRepuesto();
+            clienteEliminar=null;
         }
     }//GEN-LAST:event_eliminarEliminarActionPerformed
 
@@ -5159,20 +5355,30 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionBorradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorradoActionPerformed
         if(this.tablacontactosEliminados.getSelectedValue()!=null){
-            cliente=new Cliente();
-            cliente=this.hashmapClientesBorrados.get(this.tablacontactosEliminados.getSelectedValue());
+            clienteRecuperar=this.hashmapClientesEliminados.get(this.tablacontactosEliminados.getSelectedValue());
+            System.out.println("RECUPERAR CArgando:...."+clienteRecuperar.getNombreApellido()+" Num: "+clienteRecuperar.getNumCliente());
+        
         }
-        this.updateVCliente();
-        if(cliente!=null){
-            this.hashmapClientes.put(cliente.getApellidoNombre(),cliente);
-            this.hashmapClientesBorrados.remove(cliente.getApellidoNombre(),cliente);
-            this.updateVCliente(); // TODO add your handling code here:
-            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
-            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
+        if(clienteRecuperar!=null){
+            this.hashmapClientes.put(clienteRecuperar.getApellidoNombre(),clienteRecuperar);
+            this.hashmapClientesEliminados.remove(clienteRecuperar.getApellidoNombre(),clienteRecuperar);
+            this.recuperarCliente=true;
+            try {
+                System.out.println("Tratando de recuperar"+clienteRecuperar.getNumCliente()+"\n"+this.hashmapClientesEliminados.size());
+                this.extraerArchivosClienteEliminado(clienteRecuperar.getNumCliente());
+            } catch (IOException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.recuperarCliente=false;
+            
+            System.out.println("Existentes: "+Arrays.toString(listadoClientes));
+            System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
             //this.actualizarTXTInfoContacto();
-            this.actualizarTXTContactosEliminados();
+            //this.actualizarListadoContactosEliminados();
+            //this.actualizarListadoContactos();
+            this.updateVCliente(); // TODO add your handling code here:
         }
-        cliente=null;
+        clienteRecuperar=null;
     }//GEN-LAST:event_seleccionBorradoActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
@@ -5184,21 +5390,25 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
        if(bNombreE.getText().length()!=0 && bApellidoE.getText().length()!=0 && bCorreoE.getText().length()!=0 && bCelularE.getText().length()!=0 
-            && bTelFijE.getText().length()!=0 && bCuidadorE.getText().length()!=0 && bCelCuidadorE.getText().length()!=0 && cliente!=null){ 
-            String apNombrAnterior=cliente.getApellidoNombre();
-            cliente.setNombe(this.bNombreE.getText());
-            cliente.setApellido(this.bApellidoE.getText());
-            cliente.setCorreo(this.bCorreoE.getText());
-            cliente.setCelular(this.bCelularE.getText());
-            cliente.setTelFijo(this.bTelFijE.getText());
-            cliente.setCuidador(this.bCuidadorE.getText());
-            cliente.setCelularCuidador(this.bCelCuidadorE.getText());
+            && bTelFijE.getText().length()!=0 && bCuidadorE.getText().length()!=0 && bCelCuidadorE.getText().length()!=0 && clienteModificar!=null){ 
+            String apNombrAnterior=clienteModificar.getApellidoNombre();
+            clienteModificar.setNombe(this.bNombreE.getText());
+            clienteModificar.setApellido(this.bApellidoE.getText());
+            clienteModificar.setCorreo(this.bCorreoE.getText());
+            clienteModificar.setCelular(this.bCelularE.getText());
+            clienteModificar.setTelFijo(this.bTelFijE.getText());
+            clienteModificar.setCuidador(this.bCuidadorE.getText());
+            clienteModificar.setCelularCuidador(this.bCelCuidadorE.getText());
             this.hashmapClientes.remove(apNombrAnterior);
-            this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
-            this.modificar=true;
-            //System.out.println("_________________");
-            this.extraerArchivosCliente(cliente.getNumCliente());
-            
+            this.hashmapClientes.put(clienteModificar.getApellidoNombre(), clienteModificar);
+            this.modificarCliente=true;
+           try {
+               //System.out.println("_________________");
+               this.extraerArchivosCliente(clienteModificar.getNumCliente());
+           } catch (IOException ex) {
+               Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            this.modificarCliente=false;
             
             //this.actualizarTXTInfoContacto(info, cliente);
             
@@ -5207,7 +5417,7 @@ public final class Interfaz extends javax.swing.JFrame {
             this.updateVRepuesto();
             //this.actualizarTXTInfoContacto();
        }
-       cliente=null;
+       clienteModificar=null;
        this.jLabel13.setText("Seleccionado: ");
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -5229,19 +5439,19 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionarModificarInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfoActionPerformed
       if(this.tablaModificarInformacion.getSelectedValue()!=null){
-          cliente=this.hashmapClientes.get(this.tablaModificarInformacion.getSelectedValue());
-          this.jLabel13.setText("Seleccionado: "+cliente.getApellidoNombre());
+          clienteModificar=this.hashmapClientes.get(this.tablaModificarInformacion.getSelectedValue());
+          this.jLabel13.setText("Seleccionado: "+clienteModificar.getApellidoNombre());
       }    
       if(this.tablaModificarInformacion.getSelectedValue()!=null){
-            this.bNombreE.setText(cliente.getNombre());
-            this.bApellidoE.setText(cliente.getApellido());
-            this.bCorreoE.setText(cliente.getCorreo());
-            this.bCelularE.setText(cliente.getCelular());
-            this.bTelFijE.setText(cliente.getTelFijo());
-            this.bTelFijoC6.setText(cliente.getTelFijoOficina1());
-            this.bTelFijoC5.setText(cliente.getTelFijoOficina2());
-            this.bCuidadorE.setText(cliente.getCuidador());
-            this.bCelCuidadorE.setText(cliente.getCelularCuidador());
+            this.bNombreE.setText(clienteModificar.getNombre());
+            this.bApellidoE.setText(clienteModificar.getApellido());
+            this.bCorreoE.setText(clienteModificar.getCorreo());
+            this.bCelularE.setText(clienteModificar.getCelular());
+            this.bTelFijE.setText(clienteModificar.getTelFijo());
+            this.bTelFijoC6.setText(clienteModificar.getTelFijoOficina1());
+            this.bTelFijoC5.setText(clienteModificar.getTelFijoOficina2());
+            this.bCuidadorE.setText(clienteModificar.getCuidador());
+            this.bCelCuidadorE.setText(clienteModificar.getCelularCuidador());
         }
       
     }//GEN-LAST:event_seleccionarModificarInfoActionPerformed
