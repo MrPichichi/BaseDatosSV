@@ -5,6 +5,10 @@
  */
 package basedatos;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -31,7 +35,7 @@ public class Cliente {
     public String cuidador="vacio";
     public String celularCuidador="vacio";
     Embarcacion emb;
-    int numCliente;
+    int numCliente=0;
 
     public int getNumCliente() {
         return numCliente;
@@ -42,6 +46,37 @@ public class Cliente {
     }
     public String getTelFijoOficina1() {
         return TelFijoOficina1;
+    }
+    public void crearTxTEmbarcacion(Embarcacion emb){
+    try {   System.out.println("\n Creadno EMbarcacion\n");
+            File file = new File("Clientes/"+this.getNumCliente()+"/Embarcaciones/"+(this.listadoEmbarcaciones.size()-1)+".txt");
+            Cliente cl= this;
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+              try (BufferedWriter bw = new BufferedWriter(fw)) {
+                  bw.write("#");
+                        bw.newLine();
+                        bw.write(emb.codigo);
+                        bw.newLine();
+                        bw.write(emb.tipo);
+                        bw.newLine();
+                        bw.write(emb.marca);
+                        bw.newLine();
+                        bw.write(emb.modelo);
+                        bw.newLine();
+                        bw.write(emb.motor);
+                        bw.newLine();
+                        bw.write(emb.nSerie);
+                        bw.newLine();
+                        bw.write("##");
+                    }
+                    
+        } catch (IOException e) {
+        }
+        
     }
     public void actualizarListadoEmbarcaciones(){
         this.listadoDeembarcaciones=new String[this.listadoEmbarcaciones.size()];
@@ -117,9 +152,11 @@ public class Cliente {
     public String getNombre() {
         return nombre;
     }
-    public void addEmbarcacion(String nom, Embarcacion emb){
-        this.embarcaciones.put(nom,emb);
-        this.listadoEmbarcaciones.add(nom);
+    public void addEmbarcacion(Embarcacion emb){
+        emb.setnSerie(Integer.toString((this.listadoEmbarcaciones.size())));
+        this.embarcaciones.put(emb.getnSerie(),emb);
+        this.listadoEmbarcaciones.add(emb.getnSerie());
+        this.crearTxTEmbarcacion(emb);
     }
     public void setNombe(String nombe) {
         this.nombre = nombe;
@@ -169,6 +206,7 @@ public class Cliente {
     }
     public ArrayList getInformacionC(){
         ArrayList<String> in=new ArrayList<>();
+        in.add(Integer.toString(this.numCliente));
         in.add(this.nombre);
         in.add(this.apellido);
         in.add(this.celular);
@@ -222,22 +260,21 @@ public class Cliente {
             return "NO";
         }
     }
-    public ArrayList getInformacionE(){
+    public ArrayList getInformacionE(String nomEmb){
         ArrayList<String> in=new ArrayList<>();
-        for(int k=0;k<this.listadoEmbarcaciones.size();k++){
-            emb=this.embarcaciones.get(this.listadoEmbarcaciones.get(k));
-            in.add("*");
-            in.add(emb.tipo);
-            in.add(emb.marca);
-            in.add(emb.modelo);
-            in.add(emb.motor);
-            in.add(emb.nSerie);
-            in.add(emb.codigo);
-        }
+        emb=this.embarcaciones.get(nomEmb);
+        in.add(emb.codigo);
+        in.add(emb.tipo);
+        in.add(emb.marca);
+        in.add(emb.modelo);
+        in.add(emb.motor);
+        in.add(emb.nSerie);
+         
+        
         return in;
     }
     public String getInformacionClienteVisualizar(){
-        return ("                                       \n\n  Nombre: "+this.nombre+"\n  Apellido: "+this.apellido+"\n  Correo: "+this.correo+"\n  Celular: "+this.celular+
+        return ("                                       \n\n  Numero Cliente: "+this.numCliente+"\n  Nombre: "+this.nombre+"\n  Apellido: "+this.apellido+"\n  Correo: "+this.correo+"\n  Celular: "+this.celular+
                 "\n  Telefono fijo: "+this.TelFijo+"\n  Telefono fijo Oficina 1: "+this.TelFijoOficina1+"\n  Telefono fijo Oficina 2: "+this.TelFijoOficina2+"\n  Cuidador: "+this.cuidador+"\n  Numero Celular de Cuidador: "+
                 this.celularCuidador+"\n  Guarderia: "+this.getGuarderia()+"\n  Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  Deuda Orden: "+this.getDeudaOrden());
     }

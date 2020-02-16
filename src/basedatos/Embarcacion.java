@@ -25,7 +25,9 @@ public class Embarcacion {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-
+    public String getTipoMarca(){
+        return tipo+" "+marca;
+    }
     public boolean getEnGuarderia() {
         return enGuarderia;
     }
