@@ -1056,13 +1056,22 @@
                                                                       <Component id="jLabel60" alignment="0" min="-2" max="-2" attributes="0"/>
                                                                       <Component id="jLabel56" alignment="0" min="-2" max="-2" attributes="0"/>
                                                                   </Group>
-                                                                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                                      <Component id="tipo" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                                                                      <Component id="nSerie" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                                                                      <Component id="motor" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                                                                      <Component id="modelo" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                                                                      <Component id="marca" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
+                                                                      <Group type="102" alignment="0" attributes="0">
+                                                                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                                                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                                              <Component id="modelo" alignment="0" pref="308" max="32767" attributes="0"/>
+                                                                              <Component id="numeroDeSerie" alignment="0" max="32767" attributes="0"/>
+                                                                              <Component id="motor" alignment="0" max="32767" attributes="0"/>
+                                                                          </Group>
+                                                                      </Group>
+                                                                      <Group type="102" alignment="1" attributes="0">
+                                                                          <EmptySpace max="-2" attributes="0"/>
+                                                                          <Group type="103" groupAlignment="0" attributes="0">
+                                                                              <Component id="tipo" alignment="0" min="-2" pref="308" max="-2" attributes="0"/>
+                                                                              <Component id="marca" min="-2" pref="308" max="-2" attributes="0"/>
+                                                                          </Group>
+                                                                      </Group>
                                                                   </Group>
                                                               </Group>
                                                               <Group type="102" alignment="0" attributes="0">
@@ -1073,6 +1082,11 @@
                                                               </Group>
                                                               <Component id="estado" alignment="0" max="32767" attributes="0"/>
                                                               <Component id="añadiendolanchaa" alignment="0" max="32767" attributes="0"/>
+                                                              <Group type="102" attributes="0">
+                                                                  <Component id="jLabel61" min="-2" max="-2" attributes="0"/>
+                                                                  <EmptySpace max="-2" attributes="0"/>
+                                                                  <Component id="claveEmb" max="32767" attributes="0"/>
+                                                              </Group>
                                                           </Group>
                                                       </Group>
                                                   </Group>
@@ -1123,19 +1137,24 @@
                                                           </Group>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Group type="103" groupAlignment="3" attributes="0">
-                                                              <Component id="nSerie" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="numeroDeSerie" alignment="3" min="-2" max="-2" attributes="0"/>
                                                               <Component id="jLabel60" alignment="3" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="3" attributes="0">
+                                                              <Component id="claveEmb" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jLabel61" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                                                           <Group type="103" groupAlignment="3" attributes="0">
                                                               <Component id="jButton17" alignment="3" min="-2" max="-2" attributes="0"/>
                                                               <Component id="guardarLancha" alignment="3" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                                           <Component id="estado" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace min="0" pref="324" max="32767" attributes="0"/>
+                                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                                       </Group>
-                                                      <Component id="jScrollPane14" max="32767" attributes="0"/>
+                                                      <Component id="jScrollPane14" pref="531" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
@@ -1187,12 +1206,12 @@
                                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="motorActionPerformed"/>
                                           </Events>
                                         </Component>
-                                        <Component class="javax.swing.JTextField" name="nSerie">
+                                        <Component class="javax.swing.JTextField" name="numeroDeSerie">
                                           <Properties>
                                             <Property name="text" type="java.lang.String" value=" "/>
                                           </Properties>
                                           <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nSerieActionPerformed"/>
+                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numeroDeSerieActionPerformed"/>
                                           </Events>
                                         </Component>
                                         <Component class="javax.swing.JLabel" name="jLabel59">
@@ -1280,6 +1299,16 @@
                                           <Properties>
                                             <Property name="text" type="java.lang.String" value="A&#xf1;adiendo Lancha a:  "/>
                                           </Properties>
+                                        </Component>
+                                        <Component class="javax.swing.JLabel" name="jLabel61">
+                                          <Properties>
+                                            <Property name="text" type="java.lang.String" value="Clave lancha:"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="javax.swing.JTextField" name="claveEmb">
+                                          <Events>
+                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="claveEmbActionPerformed"/>
+                                          </Events>
                                         </Component>
                                       </SubComponents>
                                     </Container>

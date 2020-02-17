@@ -49,15 +49,17 @@ public class Cliente {
     }
     public void crearTxTEmbarcacion(Embarcacion emb){
     try {   System.out.println("\n Creadno EMbarcacion\n");
-            File file = new File("Clientes/"+this.getNumCliente()+"/Embarcaciones/"+(this.listadoEmbarcaciones.size()-1)+".txt");
+            File file = new File("Clientes/"+this.getNumCliente()+"/Embarcaciones/"+emb.getCodigo()+".txt");
             Cliente cl= this;
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
             }
+            this.actualizarListadoEmbarcaciones();
+            System.out.println("Antes de crear: "+emb.getInformacion());
             FileWriter fw = new FileWriter(file);
               try (BufferedWriter bw = new BufferedWriter(fw)) {
-                  bw.write("#");
+                        bw.write("#");
                         bw.newLine();
                         bw.write(emb.codigo);
                         bw.newLine();
@@ -70,6 +72,8 @@ public class Cliente {
                         bw.write(emb.motor);
                         bw.newLine();
                         bw.write(emb.nSerie);
+                        bw.newLine();
+                        bw.write(emb.llave);
                         bw.newLine();
                         bw.write("##");
                     }
@@ -153,10 +157,10 @@ public class Cliente {
         return nombre;
     }
     public void addEmbarcacion(Embarcacion emb){
-        emb.setnSerie(Integer.toString((this.listadoEmbarcaciones.size())));
-        this.embarcaciones.put(emb.getnSerie(),emb);
-        this.listadoEmbarcaciones.add(emb.getnSerie());
-        this.crearTxTEmbarcacion(emb);
+        
+        this.embarcaciones.put(emb.getCodigo(),emb);
+        this.listadoEmbarcaciones.add(emb.getCodigo());
+        
     }
     public void setNombe(String nombe) {
         this.nombre = nombe;
@@ -269,6 +273,7 @@ public class Cliente {
         in.add(emb.modelo);
         in.add(emb.motor);
         in.add(emb.nSerie);
+        in.add(emb.llave);
          
         
         return in;
@@ -282,7 +287,9 @@ public class Cliente {
         String infoEmb="\n                             EMBARCACIONES";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.embarcaciones.get(this.listadoEmbarcaciones.get(x));
-            infoEmb+="\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+emb.modelo+"\n  Motor: "+emb.motor+"\n  Numero Serie: "+emb.nSerie+"\n  Codigo: "+emb.codigo;
+            infoEmb+="\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+
+                    emb.modelo+"\n  Motor: "+emb.motor+"\n  Numero Serie: "+emb.nSerie+
+                    "\n  Codigo: "+emb.codigo+"\n  Llave: "+emb.llave;
             infoEmb+="\n";
         }
         return infoEmb;

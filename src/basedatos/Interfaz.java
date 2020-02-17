@@ -36,9 +36,13 @@ public final class Interfaz extends javax.swing.JFrame {
     Cliente clienteModificar= new Cliente();
     Cliente clienteEliminar= new Cliente();
     Cliente clienteRecuperar= new Cliente();
+    String clienteLoadEmbarcacion="";
     Orden orden= new Orden();
     Repuesto repuesto= new Repuesto();
     Guarderia guarderia=new Guarderia();
+    HashMap<String ,String> hashmapClientesCodigo= new HashMap<>();
+    
+    
     //CLIENTES
     HashMap<String ,Cliente> hashmapClientes= new HashMap<>();
     ArrayList<String> arrayListContactos=new ArrayList<>();
@@ -103,8 +107,8 @@ public final class Interfaz extends javax.swing.JFrame {
         carpeta.mkdirs();
         
         //this.crearTxTNumContactos();
-        this.cargarTxTClientes();
-        this.cargarTxTClientesEliminados();
+        this.cargarDatosClientes();
+        this.cargarDatosClientesEliminados();
         
         //
         System.out.println("sss:"+numCliente);
@@ -129,36 +133,30 @@ public final class Interfaz extends javax.swing.JFrame {
         //this.añadirGuarderia("Gamboa Felipe");
     }
 
-    public void cargarTxTClientes() {
+    public void cargarDatosClientes() {
         this.hashmapClientes = new HashMap<>();
         this.arrayListContactos= new ArrayList<>();
         final File carpeta = new File("Clientes");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isDirectory()) {
                this.cargarCliente=true;
-               //this.crearTxTNumContactos();
-               //this.cargarTxTNumContactos();
-               this.cargarCarpetaInformacionCliente(ficheroEntrada);
+               this.cargarCarpetaInformacion(ficheroEntrada);
+               this.cargarCarpetaEmbarcacion(ficheroEntrada);
                this.cargarCliente=false;
-               //this.arrayListContactos.add(ficheroEntrada.getName());
             }
         }
-        this.actualizarListadoContactos();
-        this.setearTablasListadoClientes();
+        this.updateVCliente();
     }
     
-    public void cargarTxTClientesEliminados() {
+    public void cargarDatosClientesEliminados() {
         this.hashmapClientesEliminados = new HashMap<>();
         this.arrayListContactosEliminados= new ArrayList<>();
         final File carpeta = new File("ClientesEliminados");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isDirectory()) {
                this.cargarClienteEliminado=true;
-               //this.crearTxTNumContactos();
-               //this.cargarTxTNumContactos();
-               this.cargarCarpetaInformacionCliente(ficheroEntrada);
+               this.cargarCarpetaInformacion(ficheroEntrada);
                this.cargarClienteEliminado=false;
-               //this.arrayListContactos.add(ficheroEntrada.getName());
             }
         }
         this.actualizarListadoContactosEliminados();
@@ -219,9 +217,17 @@ public final class Interfaz extends javax.swing.JFrame {
                     String dest="ClientesEliminados/"+file.getName()+"/Embarcaciones";
                     String ori="Clientes/"+file.getName()+"/Embarcaciones";
                     this.moverCarpetaOArchivo(ori,dest);
-                    //this.moverCarpeta();
-                    //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
-                    //System.out.println("ClientesEliminados/"+file.getName()+"/Embarcaciones");
+                    final File txt = ficheroEntrada;
+                    for (final File doctxt : txt.listFiles()) {
+                        if (doctxt.isFile()){
+                            String destxt="ClientesEliminados/"+file.getName()+"/Embarcaciones/"+doctxt.getName();
+                            String oritxt="Clientes/"+file.getName()+"/Embarcaciones/"+doctxt.getName();
+                            System.out.println("*"+oritxt+"\n*"+destxt);
+                            this.moverCarpetaOArchivo(oritxt,destxt);
+                            doctxt.delete();
+                        }
+                    }
+                    
                     ficheroEntrada.delete();
                 }
             }
@@ -266,6 +272,16 @@ public final class Interfaz extends javax.swing.JFrame {
                     String dest="ClientesEliminados/"+file.getName()+"/Embarcaciones";
                     String ori="Clientes/"+file.getName()+"/Embarcaciones";
                     this.moverCarpetaOArchivo(dest,ori);
+                    final File txt = ficheroEntrada;
+                    for (final File doctxt : txt.listFiles()) {
+                        if (doctxt.isFile()){
+                            String destxt="ClientesEliminados/"+file.getName()+"/Embarcaciones/"+doctxt.getName();
+                            String oritxt="Clientes/"+file.getName()+"/Embarcaciones/"+doctxt.getName();
+                            System.out.println("*"+oritxt+"\n*"+destxt);
+                            this.moverCarpetaOArchivo(destxt,oritxt);
+                            doctxt.delete();
+                        }
+                    }
                     //this.moverCarpeta();
                     //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
                     //System.out.println("ClientesEliminados/"+file.getName()+"/Embarcaciones");
@@ -291,7 +307,7 @@ public final class Interfaz extends javax.swing.JFrame {
                }
               
                if(this.cargarCliente==true ){
-                this.cargarCarpetaInformacionCliente(ficheroEntrada);
+                this.cargarCarpetaInformacion(ficheroEntrada);
                }
                 if(this.modificarCliente==true ){
                     System.out.println("MODIFICANDO");
@@ -328,14 +344,26 @@ public final class Interfaz extends javax.swing.JFrame {
         System.out.println(ordenesCliente);
         return ordenesCliente;
     }
-    public void cargarCarpetaInformacionCliente(File carpetaCliente) {
+    /*
+    Carga la carpeta con informacion de un cliente
+    */
+    public void cargarCarpetaInformacion(File carpetaCliente) {
         //System.out.println("\nLOADING CARPETA");
         for (final File ficheroEntrada : carpetaCliente.listFiles()) {
             if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Informacion") ) {
-               this.cargarTxTInformacionCliente(ficheroEntrada);
+                //tratamos de gestionar el txt con la informacion
+                this.gestionarTxTInformacionCliente(ficheroEntrada);
             }
+        }
+    }
+    public void cargarCarpetaEmbarcacion(File carpetaCliente) {
+       System.out.println("\nLOADING CARPETA EMBARCCIONES");
+        for (final File ficheroEntrada : carpetaCliente.listFiles()) {
             if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Embarcaciones") ) {
-               //this.cargarTXTEmbarcciones(ficheroEntrada);
+               cliente=this.hashmapClientes.get(this.clienteLoadEmbarcacion);
+               System.out.println("Cliente añadir emb: "+cliente.getApellidoNombre());
+               this.gestionarTxTEmbarcacionesCliente(ficheroEntrada);
+               
             }
         }
     }
@@ -353,25 +381,35 @@ public final class Interfaz extends javax.swing.JFrame {
                //this.cargarTXTInfo(ficheroEntrada);
                this.clienteModificar=null;
             }
-        
-    
-    public void cargarTxTInformacionCliente(File carpetainfo) {
+    public void gestionarTxTInformacionCliente(File carpetainfo) {
         //System.out.println("LOADING INFO.txt");
         for (final File ficheroEntrada : carpetainfo.listFiles()) {
-            System.out.println("___________: "+ficheroEntrada);
+            //System.out.println("___________: "+ficheroEntrada);
             if (ficheroEntrada.isFile() && this.cargarCliente==true && ficheroEntrada.getName().equals("Info.txt")) {
-               System.out.println("modificar=False: "+ficheroEntrada);
+               //System.out.println("modificar=False: "+ficheroEntrada);
                this.cargarCliente(ficheroEntrada);
             }
             if (ficheroEntrada.isFile() && this.cargarClienteEliminado==true && ficheroEntrada.getName().equals("Info.txt")) {
-               System.out.println("modificar=False: "+ficheroEntrada);
+               //System.out.println("modificar=False: "+ficheroEntrada);
                this.cargarCliente(ficheroEntrada);
             }
             if (ficheroEntrada.isFile() && this.modificarCliente==true && ficheroEntrada.getName().equals("Info.txt")) {
-               System.out.println("Modificar=True"+ficheroEntrada);
+               //System.out.println("Modificar=True"+ficheroEntrada);
                ficheroEntrada.delete();
                this.modificarInformacionCliente();
             }
+        }
+    }
+    
+    public void gestionarTxTEmbarcacionesCliente(File carpetaEmb) {
+        //System.out.println("LOADING INFO.txt");
+        for (final File ficheroEntrada : carpetaEmb.listFiles()) {
+            System.out.println(" GESTIONANDO EMBARCACIONES: "+ficheroEntrada);
+            if (ficheroEntrada.isFile()) {
+               System.out.println("Emb encontrada: "+ficheroEntrada.getName());
+               this.cargarEmbarcacion(ficheroEntrada);
+            }
+          
         }
     }
     public void modificarTXTInfo(File doc){
@@ -734,6 +772,51 @@ public final class Interfaz extends javax.swing.JFrame {
         this.actualizarTXTInfoContacto(crear_TxTInfo,cliente);
         
     } 
+    public void cargarEmbarcacion(File f){
+        System.out.println("CARGANDO EMBARCACION"+f.getName());
+            BufferedReader entrada = null; 
+            try { 
+            entrada = new BufferedReader( new FileReader( f ) ); 
+            String linea;
+            Embarcacion embLoad= new Embarcacion();
+            while(entrada.ready()){ 
+                linea = entrada.readLine(); 
+                while(!"##".equals(linea)){
+                    System.out.println(linea);
+                    if("#".equals(linea)){
+                        linea = entrada.readLine();
+                        embLoad.setCodigo(linea);
+                        linea = entrada.readLine();
+                        embLoad.setTipo(linea);
+                        linea = entrada.readLine();
+                        embLoad.setMarca(linea);
+                        linea = entrada.readLine();
+                        embLoad.setModelo(linea);
+                        linea = entrada.readLine();
+                        embLoad.setMotor(linea);
+                        linea = entrada.readLine();
+                        embLoad.setnSerie(linea);
+                        linea = entrada.readLine();
+                        embLoad.setLlave(linea);
+                        linea = entrada.readLine();
+                    }
+                   
+                }
+                 cliente=this.hashmapClientes.get(clienteLoadEmbarcacion);
+                 System.out.println("AÑADIENDO LANCHA A : "+clienteLoadEmbarcacion);
+                 cliente.addEmbarcacion(embLoad);
+            } 
+            }catch (IOException e) { 
+            } 
+            finally{ 
+                try{ 
+                    entrada.close(); 
+                }
+                catch(IOException e1){} 
+            } 
+            //extrae contactos
+            
+    }
     public void cargarCliente(File f){
         System.out.println("CARGANDO");
             BufferedReader entrada = null; 
@@ -800,40 +883,32 @@ public final class Interfaz extends javax.swing.JFrame {
                             cl.setDeudaOrdenNo();
                         }
                         linea = entrada.readLine(); 
-                        //System.out.println(cl.getInformacionClienteVisualizar());
                     }
-                    
-                    //System.out.println("Cliente: "+cl.getNombreApellido()+" NumC: "+cl.getNumCliente());
                     if(this.cargarCliente==true){
                         
+                        clienteLoadEmbarcacion=cl.getApellidoNombre();
+                        System.out.println("CARGANDO TXT de: "+clienteLoadEmbarcacion);
                         this.hashmapClientes.put(cl.getApellidoNombre(),cl);
-                        //this.numCliente+=1;
                         this.arrayListContactos.add(cl.getApellidoNombre());
-                    
+                        
                     }
                      if(this.clienteCrear==true){
                         
                         this.hashmapClientes.put(cl.getApellidoNombre(),cl);
-                        //this.numCliente+=1;
                         this.arrayListContactos.add(cl.getApellidoNombre());
-                    
                     }
                     if(this.cargarClienteEliminado==true){
                         
                         this.hashmapClientesEliminados.put(cl.getApellidoNombre(),cl);
                         //this.numCliente+=1;
                         this.arrayListContactosEliminados.add(cl.getApellidoNombre());
-                    
                     }
                     if(this.recuperarCliente==true){
                          this.hashmapClientes.put(cl.getApellidoNombre(),cl);
                          //this.numCliente+=1;
                          this.arrayListContactos.add(cl.getApellidoNombre());
-
                      }
-                    
                 }
-                
             } 
             }catch (IOException e) { 
             } 
@@ -844,7 +919,6 @@ public final class Interfaz extends javax.swing.JFrame {
                 catch(IOException e1){} 
             } 
             //extrae contactos
-            
     }
     public void cargarRepuestos(){
             File f = new File( "Repuestos.txt" ); 
@@ -922,32 +996,6 @@ public final class Interfaz extends javax.swing.JFrame {
             //extrae contactos
             
     }
-    
-    public void actualizarTXTContactosEliminados(){
-          try {
-            String ruta = "ClientesEliminados.txt";
-            File file = new File(ruta);
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file);
-              try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    for(int f=0;f<this.arrayListContactosEliminados.size();f++){
-                        Cliente cl =this.hashmapClientesEliminados.get(this.arrayListContactosEliminados.get(f));
-                        bw.write("#");
-                        bw.newLine();
-                        for(int l=0;l<cl.getInformacionC().size();l++){
-                            bw.write((String) cl.getInformacionC().get(l));
-                            bw.newLine();
-                        }
-                        bw.write("##");
-                        bw.newLine();
-                    }
-              }
-        } catch (IOException e) {
-        }
-    } 
     public void cargarOrdenes(){
             File f = new File( "Ordenes.txt" ); 
             BufferedReader entrada = null; 
@@ -1046,7 +1094,7 @@ public final class Interfaz extends javax.swing.JFrame {
                this.cargarCliente=true;
                //this.crearTxTNumContactos();
                //this.cargarTxTNumContactos();
-               this.cargarCarpetaInformacionCliente(ficheroEntrada);
+               this.cargarCarpetaInformacion(ficheroEntrada);
                this.cargarCliente=false;
                //this.arrayListContactos.add(ficheroEntrada.getName());
             }
@@ -1315,7 +1363,7 @@ public final class Interfaz extends javax.swing.JFrame {
         modelo = new javax.swing.JTextField();
         jLabel58 = new javax.swing.JLabel();
         motor = new javax.swing.JTextField();
-        nSerie = new javax.swing.JTextField();
+        numeroDeSerie = new javax.swing.JTextField();
         jLabel59 = new javax.swing.JLabel();
         jLabel60 = new javax.swing.JLabel();
         guardarLancha = new javax.swing.JButton();
@@ -1329,6 +1377,8 @@ public final class Interfaz extends javax.swing.JFrame {
         tablaLanchasAgregar = new javax.swing.JList<>();
         estado = new javax.swing.JLabel();
         añadiendolanchaa = new javax.swing.JLabel();
+        jLabel61 = new javax.swing.JLabel();
+        claveEmb = new javax.swing.JTextField();
         modificarLancha = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jTextField16 = new javax.swing.JTextField();
@@ -2253,10 +2303,10 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        nSerie.setText(" ");
-        nSerie.addActionListener(new java.awt.event.ActionListener() {
+        numeroDeSerie.setText(" ");
+        numeroDeSerie.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nSerieActionPerformed(evt);
+                numeroDeSerieActionPerformed(evt);
             }
         });
 
@@ -2309,6 +2359,14 @@ public final class Interfaz extends javax.swing.JFrame {
 
         añadiendolanchaa.setText("Añadiendo Lancha a:  ");
 
+        jLabel61.setText("Clave lancha:");
+
+        claveEmb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                claveEmbActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout agregarLanchaLayout = new javax.swing.GroupLayout(agregarLancha);
         agregarLancha.setLayout(agregarLanchaLayout);
         agregarLanchaLayout.setHorizontalGroup(
@@ -2338,20 +2396,29 @@ public final class Interfaz extends javax.swing.JFrame {
                                     .addComponent(jLabel59)
                                     .addComponent(jLabel60)
                                     .addComponent(jLabel56))
-                                .addGap(40, 40, 40)
                                 .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(nSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(motor, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(agregarLanchaLayout.createSequentialGroup()
+                                        .addGap(32, 32, 32)
+                                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(modelo, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                                            .addComponent(numeroDeSerie)
+                                            .addComponent(motor)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agregarLanchaLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(agregarLanchaLayout.createSequentialGroup()
                                 .addGap(218, 218, 218)
                                 .addComponent(jButton17)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(guardarLancha))
                             .addComponent(estado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(añadiendolanchaa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(añadiendolanchaa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(agregarLanchaLayout.createSequentialGroup()
+                                .addComponent(jLabel61)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(claveEmb)))))
                 .addContainerGap(673, Short.MAX_VALUE))
         );
         agregarLanchaLayout.setVerticalGroup(
@@ -2389,16 +2456,20 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jLabel59))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(numeroDeSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel60))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(claveEmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel61))
+                        .addGap(16, 16, 16)
                         .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton17)
                             .addComponent(guardarLancha))
                         .addGap(18, 18, 18)
                         .addComponent(estado)
-                        .addGap(0, 324, Short.MAX_VALUE))
-                    .addComponent(jScrollPane14))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -5120,8 +5191,9 @@ public final class Interfaz extends javax.swing.JFrame {
                     +cliente.getInformacionEmbarcaciones());
             this.jLabel12.setText("Seleccionado: "+cliente.getApellidoNombre());
             cliente=null;
+        }
     }//GEN-LAST:event_seleccionarVActionPerformed
-    }
+    
     public void vaciarBarrasC(){
         //barras Editar
         this.bNombreE.setText("");
@@ -5133,6 +5205,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.bTelFijoC5.setText("");
         this.bCuidadorE.setText("");
         this.bCelCuidadorE.setText("");
+       
         
         this.t.setText("");
         this.m.setText("");
@@ -5156,8 +5229,8 @@ public final class Interfaz extends javax.swing.JFrame {
         this.marca.setText("");
         this.modelo.setText("");
         this.motor.setText("");
-        this.nSerie.setText("");
-        
+        this.numeroDeSerie.setText("");
+        this.claveEmb.setText("");
     }
     public void vaciarBarrasR(){
         //barras Editar
@@ -5234,6 +5307,7 @@ public final class Interfaz extends javax.swing.JFrame {
             System.out.println("NUM AL CREAR: "+this.numCliente);
             cliente.setNumCliente(numCliente);
             this.hashmapClientes.put(cliente.getApellidoNombre(),cliente);
+            this.hashmapClientesCodigo.put(Integer.toString(cliente.getNumCliente()),cliente.getApellidoNombre());
             System.out.println("Creando: "+cliente.getApellidoNombre()+" Num: "+cliente.getNumCliente());
             this.crearArchivosContacto(cliente);
             cliente= null;
@@ -5441,6 +5515,7 @@ public final class Interfaz extends javax.swing.JFrame {
             embarcacion.setnSerie(nSerie1.getText());
            
             cliente.addEmbarcacion( embarcacion);
+            cliente.crearTxTEmbarcacion(embarcacion);
             this.hashmapClientes.remove(cliente.getApellidoNombre());
             this.hashmapClientes.put(cliente.getApellidoNombre(), cliente);
             //this.actualizarTXTInfoContacto();
@@ -5521,16 +5596,21 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void guardarLanchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarLanchaActionPerformed
         if(tipo.getText().length()!=0 && marca.getText().length()!=0 && modelo.getText().length()!=0 && motor.getText().length()!=0 
-            && nSerie.getText().length()!=0 && cliente!=null){     
+            && numeroDeSerie.getText().length()!=0 && cliente!=null){     
             embarcacion=new Embarcacion();
             embarcacion.setTipo(this.tipo.getText());
             embarcacion.setMarca(this.marca.getText());
             embarcacion.setModelo(this.modelo.getText());
             embarcacion.setMotor(this.motor.getText());
-            embarcacion.setnSerie(this.nSerie.getText());
+            embarcacion.setnSerie(this.numeroDeSerie.getText());
+            embarcacion.setCodigo(Integer.toString(cliente.listadoEmbarcaciones.size()));
+            embarcacion.setLlave(this.claveEmb.getText());
+            //System.out.println("Antes de añadir: "+cliente.getInformacionE(embarcacion.getCodigo())+"/n "+embarcacion.codigo);
             cliente.addEmbarcacion(embarcacion);
+            cliente.crearTxTEmbarcacion(embarcacion);
+            System.out.println("Desopues de añadir: "+cliente.getInformacionE(embarcacion.getCodigo())+"/n "+embarcacion.codigo);
             //cliente.crearTxTEmbarcacion(embarcacion);
-//this.crearTxTEmbarcacion(embarcacion.getTipoMarca());
+            //this.crearTxTEmbarcacion(embarcacion.getTipoMarca());
             this.estado.setText("Lancha: "+embarcacion.getMotor()+" añadida exitosamente");
             //this.actualizarTXTInfoContacto();
             this.updateVCliente();
@@ -5543,9 +5623,9 @@ public final class Interfaz extends javax.swing.JFrame {
 
     }//GEN-LAST:event_guardarLanchaActionPerformed
 
-    private void nSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nSerieActionPerformed
+    private void numeroDeSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numeroDeSerieActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nSerieActionPerformed
+    }//GEN-LAST:event_numeroDeSerieActionPerformed
 
     private void motorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_motorActionPerformed
         // TODO add your handling code here:
@@ -6358,6 +6438,10 @@ public final class Interfaz extends javax.swing.JFrame {
     private void bCelCuidadorCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCelCuidadorCActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bCelCuidadorCActionPerformed
+
+    private void claveEmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_claveEmbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_claveEmbActionPerformed
  
     /**
      * @param args the command line arguments
@@ -6454,6 +6538,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton calcularRepuestos;
     private javax.swing.JButton calcularRepuestos1;
     private javax.swing.JTextField cantidad;
+    private javax.swing.JTextField claveEmb;
     private javax.swing.JButton contactosCrear;
     private javax.swing.JButton contactosCrear1;
     private javax.swing.JButton contactosCrear2;
@@ -6629,6 +6714,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel66;
@@ -6722,10 +6808,10 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField mot3;
     private javax.swing.JTextField motor;
     private javax.swing.JTextField motor3;
-    private javax.swing.JTextField nSerie;
     private javax.swing.JTextField nSerie1;
     private javax.swing.JTextField nSerie6;
     private javax.swing.JTextField nSerie7;
+    private javax.swing.JTextField numeroDeSerie;
     private javax.swing.JTextPane ordenesCrearNota;
     private javax.swing.JTextPane ordenesCrearVarios;
     private javax.swing.JTextField pHTrabajo;

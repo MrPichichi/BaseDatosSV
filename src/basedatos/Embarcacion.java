@@ -16,7 +16,24 @@ public class Embarcacion {
     String motor="vacio";
     String nSerie="vacio";
     String codigo="vacio";
+    String llave="vacio";
     boolean enGuarderia=false;
+
+    public boolean isEnGuarderia() {
+        return enGuarderia;
+    }
+
+    public void setEnGuarderia(boolean enGuarderia) {
+        this.enGuarderia = enGuarderia;
+    }
+
+    public String getLlave() {
+        return llave;
+    }
+
+    public void setLlave(String llave) {
+        this.llave = llave;
+    }
 
     public String getCodigo() {
         return codigo;
@@ -87,7 +104,9 @@ public class Embarcacion {
         this.nSerie = nSerie;
     }
     public String getInformacion(){
-        return ("\nTipo embarcacion: "+this.getTipo()+"\nMarca: "+this.marca+"\nModelo: "+this.modelo+"\nMotor: "+this.motor+"\nNumero serie: "+this.nSerie);
+        return ("\nTipo embarcacion: "+this.getTipo()+"\nMarca: "+this.marca+
+                "\nModelo: "+this.modelo+"\nMotor: "+this.motor+"\nNumero serie: "+
+                this.nSerie+"\nClave Embarcacion: "+this.llave);
 }
     
 }
