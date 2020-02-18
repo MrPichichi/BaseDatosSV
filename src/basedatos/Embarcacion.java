@@ -27,11 +27,11 @@ public class Embarcacion {
         this.enGuarderia = enGuarderia;
     }
 
-    public String getLlave() {
+    public String getClaveLancha() {
         return llave;
     }
 
-    public void setLlave(String llave) {
+    public void setClaveLancha(String llave) {
         this.llave = llave;
     }
 

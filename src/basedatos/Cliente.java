@@ -55,7 +55,7 @@ public class Cliente {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            this.actualizarListadoEmbarcaciones();
+            //this.actualizarListadoEmbarcaciones();
             System.out.println("Antes de crear: "+emb.getInformacion());
             FileWriter fw = new FileWriter(file);
               try (BufferedWriter bw = new BufferedWriter(fw)) {
@@ -126,17 +126,26 @@ public class Cliente {
     public void setListadoDeembarcaciones(String[] listadoDeembarcaciones) {
         this.listadoDeembarcaciones = listadoDeembarcaciones;
     }
-    public void eliminarEmbarcacion(String motor){
-        this.embarcaciones.remove(motor);
-        this.listadoEmbarcaciones.remove(motor);
+    public void eliminarEmbarcacion(Embarcacion emb){
+        this.embarcaciones.remove(emb.getTipoMarca());
+        this.listadoEmbarcaciones.remove(emb.getTipoMarca());
+        final File carpeta = new File("Clientes/"+this.numCliente+"/Embarcaciones");
+        for (final File ficheroEntrada : carpeta.listFiles()) {
+            if (ficheroEntrada.isFile() && ficheroEntrada.getName().equals(emb.getCodigo()+".txt")) {
+                System.out.println("ELIMINANDO TXT EMBARCACION");
+                ficheroEntrada.delete();
+            }
+        }
+        System.out.println(this.listadoEmbarcaciones.toString());
+        this.actualizarListadoEmbarcaciones();
     }
    
 
     public String[] getListadoEmbarcaciones() {
-        this.listadoDeembarcaciones=new String[1000];
+        this.listadoDeembarcaciones=new String[this.listadoEmbarcaciones.size()];
         for (int g=0;g<this.listadoEmbarcaciones.size();g++) {
             listadoDeembarcaciones[g]=this.listadoEmbarcaciones.get(g);
-            //System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
+            System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
         }
         return listadoDeembarcaciones;
     }
@@ -157,9 +166,9 @@ public class Cliente {
         return nombre;
     }
     public void addEmbarcacion(Embarcacion emb){
-        
-        this.embarcaciones.put(emb.getCodigo(),emb);
-        this.listadoEmbarcaciones.add(emb.getCodigo());
+        emb.setCodigo(Integer.toString(listadoEmbarcaciones.size()));
+        this.embarcaciones.put(emb.getTipoMarca(),emb);
+        this.listadoEmbarcaciones.add(emb.getTipoMarca());
         
     }
     public void setNombe(String nombe) {
@@ -287,10 +296,10 @@ public class Cliente {
         String infoEmb="\n                             EMBARCACIONES";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.embarcaciones.get(this.listadoEmbarcaciones.get(x));
-            infoEmb+="\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+
+            infoEmb+="\n----------------------------------------------------------------------"
+                    + "\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+
                     emb.modelo+"\n  Motor: "+emb.motor+"\n  Numero Serie: "+emb.nSerie+
-                    "\n  Codigo: "+emb.codigo+"\n  Llave: "+emb.llave;
-            infoEmb+="\n";
+                    "\n  Numero Embarcacion: "+emb.codigo+"\n  Clave Embarcacion: "+emb.llave+"\n----------------------------------------------------------------------";
         }
         return infoEmb;
     }
