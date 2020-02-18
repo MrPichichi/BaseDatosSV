@@ -2278,12 +2278,8 @@
                                                                       <EmptySpace max="-2" attributes="0"/>
                                                                       <Component id="contactosCrear4" min="-2" max="-2" attributes="0"/>
                                                                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                                          <Component id="jLabel149" min="-2" max="-2" attributes="0"/>
-                                                                          <Component id="jLabel165" min="-2" max="-2" attributes="0"/>
-                                                                      </Group>
+                                                                      <Component id="jLabel165" min="-2" max="-2" attributes="0"/>
                                                                   </Group>
-                                                                  <Component id="jScrollPane49" min="-2" pref="142" max="-2" attributes="0"/>
                                                               </Group>
                                                               <Group type="102" alignment="1" attributes="0">
                                                                   <Component id="seleccionarModificarInfo6" min="-2" pref="26" max="-2" attributes="0"/>
@@ -2292,7 +2288,7 @@
                                                                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                                                               </Group>
                                                           </Group>
-                                                          <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                                                          <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                                                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Component id="jScrollPane53" min="-2" pref="131" max="-2" attributes="0"/>
@@ -2317,6 +2313,11 @@
                                                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                                                               </Group>
                                                           </Group>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="jScrollPane49" min="-2" pref="142" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jLabel149" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                   </Group>
                                                   <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -2384,7 +2385,7 @@
                                       <Component id="contactosCrear1" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="contactosCrear5" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="68" max="32767" attributes="0"/>
+                                  <EmptySpace pref="79" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>

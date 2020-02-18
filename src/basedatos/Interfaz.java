@@ -124,13 +124,10 @@ public final class Interfaz extends javax.swing.JFrame {
         this.updateVRepuesto();
         //actualizamos listas
         this.updateVOrden();  
-        
         //guarderia=new Guarderia();
-        
         //guarderia.agregarLanchaAGuarderia("Yamaha", "300000");
         //this.añadirGuarderia("Gamboa Felipe");
     }
-
     public void cargarDatosClientes() {
         this.hashmapClientes = new HashMap<>();
         this.arrayListContactos= new ArrayList<>();
@@ -145,7 +142,6 @@ public final class Interfaz extends javax.swing.JFrame {
         }
         this.updateVCliente();
     }
-    
     public void cargarDatosClientesEliminados() {
         this.hashmapClientesEliminados = new HashMap<>();
         this.arrayListContactosEliminados= new ArrayList<>();
@@ -288,7 +284,6 @@ public final class Interfaz extends javax.swing.JFrame {
                 }
             }
         }
-    
     }
     public void extraerArchivosCliente(Integer num) throws IOException {
         //System.out.println("Extrallendo archivos cliente: "+this.eliminarCliente+" num: "+num);
@@ -304,7 +299,6 @@ public final class Interfaz extends javax.swing.JFrame {
                 this.moverCliente(ficheroEntrada);
                 ficheroEntrada.delete();
                }
-              
                if(this.cargarCliente==true ){
                 this.cargarCarpetaInformacion(ficheroEntrada);
                }
@@ -3366,16 +3360,13 @@ public final class Interfaz extends javax.swing.JFrame {
                                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                     .addComponent(contactosCrear4)
                                                     .addGap(28, 28, 28)
-                                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel149)
-                                                        .addComponent(jLabel165)))
-                                                .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(jLabel165)))
                                             .addGroup(CrearOrdenLayout.createSequentialGroup()
                                                 .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(62, 62, 62)
                                                 .addComponent(seleccionarModificarInfo13)
                                                 .addGap(43, 43, 43)))
-                                        .addGap(33, 33, 33)
+                                        .addGap(39, 39, 39)
                                         .addComponent(jLabel1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jScrollPane53, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -3395,7 +3386,11 @@ public final class Interfaz extends javax.swing.JFrame {
                                                 .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(seleccionarModificarInfo9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(6, 6, 6)))))
+                                                .addGap(6, 6, 6))))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CrearOrdenLayout.createSequentialGroup()
+                                        .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel149)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(CrearOrdenLayout.createSequentialGroup()
@@ -3443,7 +3438,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(contactosCrear1)
                     .addComponent(contactosCrear5))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         editaraClientes1.addTab("Crear", CrearOrden);
