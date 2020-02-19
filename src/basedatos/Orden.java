@@ -22,6 +22,7 @@ public class Orden {
     String fecha;
     String nota;
     String varios;
+    String numTxT;
     int totalManoObra;
     int totalVarios;
     int total;
@@ -29,9 +30,16 @@ public class Orden {
     boolean cancelado=false;
     ArrayList<String> manoObra = new ArrayList<>();
     ArrayList <Repuesto> listadoRepuestos= new ArrayList<>();
-    HashMap<String ,String> repuestos= new HashMap<>();
     public String getEmbrcacion() {
         return embrcacion;
+    }
+
+    public String getNumTxT() {
+        return numTxT;
+    }
+
+    public void setNumTxT(String numCarpeta) {
+        this.numTxT = numCarpeta;
     }
 
     public void setEmbrcacion(String embrcacion) {
@@ -60,7 +68,14 @@ public class Orden {
             return "NO";
         }
     }
-    
+    public String getDeuda() {
+        if(this.cancelado==true){
+            return "SI";
+        }
+        else{
+            return "NO";
+        }
+    }
     public void setDeudaSi() {
         this.cancelado = true;
     }
@@ -158,16 +173,23 @@ public class Orden {
     public String getRepuestos() {
        String rep="";
        //System.out.println("cant rep: "+this.listadoRepuestos.size());
-       for (Map.Entry<String, String> entry : repuestos.entrySet()) {
-            System.out.println("clave=" + entry.getKey() + ", valor=" + entry.getValue());
-            rep+=" - "+entry.getValue()+" "+entry.getKey()+"\n";
+       for (int f=0; f<this.listadoRepuestos.size();f++) {
+            Repuesto repu=this.listadoRepuestos.get(f);
+            //System.out.println("clave=" + entry.getKey() + ", valor=" + entry.getValue());
+            Double t=repu.cantidad*repu.precio;
+            rep+=" - "+repu.getCantidad()+" "+repu.getNombre()+"   $ "+t+"\n";
         }
+       System.out.println(rep);
         return rep;
     }
-
-    public void addRepuesto(String repuesto, String cant) {
-        System.out.println(" R"+repuesto+"   c: "+cant);
-        this.repuestos.put(repuesto,cant);
+    public String getOrdenID(){
+        String ordEMb=this.fecha+" "+this.embrcacion;
+            
+        return ordEMb;
+    }
+    public void addRepuesto(Repuesto repuesto) {
+        System.out.println("Añadiendo R"+repuesto+"   c: "+repuesto.getCantidad());
+        this.listadoRepuestos.add(repuesto);
         
     }
     

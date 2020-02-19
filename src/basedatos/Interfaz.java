@@ -36,6 +36,7 @@ public final class Interfaz extends javax.swing.JFrame {
     Cliente clienteModificar= new Cliente();
     Cliente clienteEliminar= new Cliente();
     Cliente clienteRecuperar= new Cliente();
+    Cliente clienteCargar= new Cliente();
     String clienteLoadEmbarcacion="";
     Orden orden= new Orden();
     Repuesto repuesto= new Repuesto();
@@ -55,9 +56,7 @@ public final class Interfaz extends javax.swing.JFrame {
     
     
     //ORDENES
-    HashMap<String ,Orden> hashmapOrdenes= new HashMap<>();
-    ArrayList<String> arrayListOrdenes=new ArrayList<>();
-    String [] listadoOrdenes = new String[1000];
+
     
     HashMap<String ,Orden> hashmapOrdenesEliminadas= new HashMap<>();
     ArrayList<String> arrayListOrdenesEliminadas=new ArrayList<>();
@@ -120,7 +119,6 @@ public final class Interfaz extends javax.swing.JFrame {
         this.updateVCliente();
         this.cargarRepuestos();
         
-        this.cargarOrdenes();
         this.updateVRepuesto();
         //actualizamos listas
         this.updateVOrden();  
@@ -137,6 +135,10 @@ public final class Interfaz extends javax.swing.JFrame {
                this.cargarCliente=true;
                this.cargarCarpetaInformacion(ficheroEntrada);
                this.cargarCarpetaEmbarcacion(ficheroEntrada);
+              
+               this.clienteCargar=this.hashmapClientes.get(this.clienteLoadEmbarcacion);
+               System.out.println(this.clienteLoadEmbarcacion+" "+clienteCargar.getApellidoNombre());
+               clienteCargar.loadOrdenes();
                this.cargarCliente=false;
             }
         }
@@ -498,7 +500,7 @@ public final class Interfaz extends javax.swing.JFrame {
         for(int x=0;x<this.arrayListContactos.size();x++){
             cliente=this.hashmapClientes.get(this.arrayListContactos.get(x));
                 for(int r=0;r<cliente.listadoEmbarcaciones.size();r++){
-                    embarcacion=cliente.embarcaciones.get(cliente.listadoEmbarcaciones.get(r));
+                    embarcacion=cliente.hashMapEmbarcaciones.get(cliente.listadoEmbarcaciones.get(r));
                     if(embarcacion.getMotor().equals(emba)){
                         
                         
@@ -513,7 +515,7 @@ public final class Interfaz extends javax.swing.JFrame {
             cliente=this.hashmapClientes.get(this.arrayListContactos.get(x));
             if("SI".equals(cliente.getGuarderia())){
                 for(int r=0;r<cliente.listadoEmbarcaciones.size();r++){
-                    embarcacion=cliente.embarcaciones.get(cliente.listadoEmbarcaciones.get(r));
+                    embarcacion=cliente.hashMapEmbarcaciones.get(cliente.listadoEmbarcaciones.get(r));
                     if(embarcacion.getEnGuarderia()==true){
                         guarderia=new Guarderia();
                         
@@ -549,68 +551,7 @@ public final class Interfaz extends javax.swing.JFrame {
         } catch (IOException e) {
         }
     }
-     public void actualizarTXTOrdenes(){
-            try {
-            String ruta = "Ordenes.txt";
-            File file = new File(ruta);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file);
-              try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    for(int f=0;f<this.hashmapOrdenes.size();f++){
-                        orden=this.hashmapOrdenes.get(this.arrayListOrdenes.get(f));
-                        bw.write("#");
-                        bw.newLine();
-                        bw.write(orden.getNumeroOrden());
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotalManoObra()));
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotalVarios()));
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotalRepuestos()));
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotal()));
-                        bw.newLine();
-                        bw.write(orden.getCliente());
-                        bw.newLine();
-                        bw.write(orden.getEmbrcacion());
-                        bw.newLine();
-                        bw.write(orden.getFecha());
-                        bw.newLine();
-                        bw.write(orden.getCancelado());
-                        bw.newLine();
-                        bw.write(orden.getNota());
-                        bw.newLine();
-                        bw.write("*#");
-                        bw.newLine();
-                        bw.write(orden.getVarios());
-                        bw.newLine();
-                        bw.write("#*");
-                        for(int l=0;l<orden.getManoObra().size();l++){
-                            bw.newLine();
-                            bw.write((String) orden.getManoObra().get(l));
-                        }
-                        bw.newLine();
-                        bw.write("**");
-                        if(!this.arrayListOrdenesAñadirRepuestosCliente.isEmpty()){
-                            for(int l=0;l<this.arrayListOrdenesAñadirRepuestosCliente.size();l++){
-                                bw.newLine();
-                                bw.write((String)this.arrayListOrdenesAñadirRepuestosCliente.get(l).getCantidad());
-                                bw.newLine();
-                                bw.write((String)this.arrayListOrdenesAñadirRepuestosCliente.get(l).getNombre());
-                            }
-                            bw.newLine();
-                            bw.write("***");
-                            bw.newLine();
-                        }
-                        bw.write("##");
-                        bw.newLine();
-                    }
-              }
-        } catch (IOException e) {
-        }
-    }
+     
     public void actualizarTXTOrdenesEliminadas(){
            try {
             String ruta = "OrdenesEliminadas.txt";
@@ -951,90 +892,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 catch(IOException e1){} 
             } 
     }
-    public void cargarOrdenes(){
-            File f = new File( "Ordenes.txt" ); 
-            BufferedReader entrada = null; 
-            try { 
-            entrada = new BufferedReader( new FileReader( f ) ); 
-            String linea;
-            Orden or= new Orden();
-            String cant="";
-            while(entrada.ready()){ 
-                linea = entrada.readLine();
-                while(!"##".equals(cant)&& entrada.ready()){
-                    if("#".equals(linea)){
-                        or= new Orden();
-                        linea = entrada.readLine(); 
-                        or.setNumeroOrden(linea);
-                        linea = entrada.readLine(); 
-                        or.setTotalManoObra(linea);
-                        linea = entrada.readLine(); 
-                        or.setTotalVarios(linea);
-                        linea = entrada.readLine(); 
-                        or.setTotalRepuestos(linea);
-                        linea = entrada.readLine(); 
-                        or.setTotal(linea);
-                        linea = entrada.readLine(); 
-                        or.setCliente(linea);
-                        linea = entrada.readLine(); 
-                        or.setEmbrcacion(linea);
-                        linea = entrada.readLine(); 
-                        or.setFecha(linea);
-                        linea = entrada.readLine();
-                        if("SI".equals(linea)){
-                            or.setDeudaSi();
-                        }
-                        if("NO".equals(linea)){
-                            or.setDeudaNo();
-                        }
-                        linea = entrada.readLine(); 
-                        String nota=""; 
-                        while(!"*#".equals(linea)){
-                            nota+=" "+linea+"\n";
-                            linea = entrada.readLine();
-                        }
-                        or.setNota(nota);
-                        linea = entrada.readLine();
-                        String varios=""; 
-                         while(!"#*".equals(linea)){
-                            varios+=" "+linea+"\n";
-                            linea = entrada.readLine();
-                        }
-                        or.setVarios(varios);
-                    }
-                    if("#*".equals(linea)){
-                        linea = entrada.readLine(); 
-                        or.manoObra=new ArrayList<>();
-                        while(!"**".equals(linea)){
-                            or.addManoObra(linea);
-                            linea = entrada.readLine(); 
-                        }
-                    }
-                    cant=entrada.readLine();
-                    if("##".equals(cant)){
-                        break;
-                    }
-                    while(!"***".equals(cant)){
-                        if(!"***".equals(cant)){
-                            linea = entrada.readLine();
-                            or.addRepuesto(cant,linea);
-                            cant=entrada.readLine();
-                        }
-                    }
-                }
-                this.hashmapOrdenes.put(or.getNumeroOrden(),or);
-                this.arrayListOrdenes.add(or.getNumeroOrden());
-            } 
-            }catch (IOException e) { 
-                e.printStackTrace(); 
-            } 
-            finally{ 
-                try{ 
-                    entrada.close(); 
-                }
-                catch(IOException e1){} 
-            } 
-    }
+    
     public void cargarTXTEmbarcciones(){
         final File carpeta = new File("Clientes/Embarcaciones");
         for (final File ficheroEntrada : carpeta.listFiles()) {
@@ -1048,18 +906,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.actualizarListadoContactos();
         this.setearTablasListadoClientes();
     }
-    public void actualizarListadoOrdenes(){
-        listadoOrdenes=new String[1000];
-        this.arrayListOrdenes=new  ArrayList<>();
-        hashmapOrdenes.entrySet().forEach((Map.Entry<String, Orden> entry) -> {
-            Interfaz.this.arrayListOrdenes.add(entry.getValue().getNumeroOrden());
-            //Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
-        });
-        Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
-        for (int g=0;g<this.arrayListOrdenes.size();g++) {
-            listadoOrdenes[g]=this.arrayListOrdenes.get(g);
-        }
-    }
+
     public void actualizarRepuestosEliminados(){
         listadoRepuestosEliminados=new String[1000];
         this.arrayListRepuestosEliminados=new  ArrayList<>();
@@ -1084,7 +931,7 @@ public final class Interfaz extends javax.swing.JFrame {
         }
     }
     public void actualizarListadoManoObra(){
-        listadoManoObra=new String[1000];
+        listadoManoObra=new String[this.arrayListManoObra.size()];
         Collections.sort(Interfaz.this.arrayListManoObra, String::compareTo);
         for (int g=0;g<this.arrayListManoObra.size();g++) {
             listadoManoObra[g]=this.arrayListManoObra.get(g);
@@ -1154,8 +1001,7 @@ public final class Interfaz extends javax.swing.JFrame {
     public void setearTablasListadoOrdenes(){
         //this.tablacontactosEditarLanchas.setListData(listadoClientes);
         this.tablacontactosEliminados1.setListData(listadoOrdenesEliminadas);
-        this.tablaOrdenesVisualizar.setListData(listadoOrdenes);
-        this.tablacontactosEliminar1.setListData(listadoOrdenes);
+        this.tablaOrdenesVisualizar.setListData(listadoClientes);
         this.tablaOdenCrearAñadirRepuestos.setListData(listadoRepuestos);
         this.tablaOrdenesCrearVPRepuestos.setListData(listadoOrdenesAñadirRepuestosClienteCantidad);
         this.tablaOrdenesCrearManoObra.setListData(listadoManoObra);
@@ -1352,9 +1198,11 @@ public final class Interfaz extends javax.swing.JFrame {
         jScrollPane11 = new javax.swing.JScrollPane();
         visualizarV1 = new javax.swing.JTextArea();
         jLabel15 = new javax.swing.JLabel();
-        seleccionarV2 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
         seleccionarV3 = new javax.swing.JButton();
+        jScrollPane20 = new javax.swing.JScrollPane();
+        tablaOrdenesVisualizar1 = new javax.swing.JList<>();
+        jLabel37 = new javax.swing.JLabel();
+        seleccionarV4 = new javax.swing.JButton();
         CrearOrden = new javax.swing.JPanel();
         dia = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
@@ -1678,7 +1526,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(689, 689, Short.MAX_VALUE))
+                .addGap(1000, 1000, Short.MAX_VALUE))
         );
         visualizarLayout.setVerticalGroup(
             visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1813,7 +1661,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(bCelularC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(bApellidoC, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jLabel24))
-                .addContainerGap(997, Short.MAX_VALUE))
+                .addContainerGap(1308, Short.MAX_VALUE))
         );
         crearLayout.setVerticalGroup(
             crearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1937,7 +1785,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(seleccionBorrado, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel3))))
-                .addContainerGap(695, Short.MAX_VALUE))
+                .addContainerGap(1006, Short.MAX_VALUE))
         );
         eliminarLayout.setVerticalGroup(
             eliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2089,7 +1937,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(infoLayout.createSequentialGroup()
                                 .addComponent(seleccionarModificarInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 41, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 144, Short.MAX_VALUE)
                                 .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2122,7 +1970,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(jButton15)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton9)))
-                        .addContainerGap(626, Short.MAX_VALUE))
+                        .addContainerGap(833, Short.MAX_VALUE))
                     .addGroup(infoLayout.createSequentialGroup()
                         .addComponent(jLabel25)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2341,7 +2189,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(jLabel61)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(claveEmb)))))
-                .addContainerGap(673, Short.MAX_VALUE))
+                .addContainerGap(984, Short.MAX_VALUE))
         );
         agregarLanchaLayout.setVerticalGroup(
             agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2562,14 +2410,14 @@ public final class Interfaz extends javax.swing.JFrame {
                                                 .addGroup(modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(t, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(m, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                .addContainerGap(333, Short.MAX_VALUE))))
+                                .addContainerGap(644, Short.MAX_VALUE))))
                     .addGroup(modificarLanchaLayout.createSequentialGroup()
                         .addComponent(jLabel27)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(931, Short.MAX_VALUE))))
+                        .addContainerGap(1242, Short.MAX_VALUE))))
         );
         modificarLanchaLayout.setVerticalGroup(
             modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2731,7 +2579,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(seleccionBorrado4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(seleccionBorrado5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(seleccionBorrado6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(estado1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE))))
+                            .addComponent(estado1, javax.swing.GroupLayout.DEFAULT_SIZE, 969, Short.MAX_VALUE))))
                 .addGap(186, 186, 186))
         );
         modificarLancha1Layout.setVerticalGroup(
@@ -2784,7 +2632,7 @@ public final class Interfaz extends javax.swing.JFrame {
         editar1.setLayout(editar1Layout);
         editar1Layout.setHorizontalGroup(
             editar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1415, Short.MAX_VALUE)
+            .addGap(0, 1726, Short.MAX_VALUE)
             .addGroup(editar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(editar1Layout.createSequentialGroup()
                     .addComponent(tablaClienteLanchas)
@@ -2831,26 +2679,7 @@ public final class Interfaz extends javax.swing.JFrame {
         visualizarV1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane11.setViewportView(visualizarV1);
 
-        jLabel15.setText("Seleccionado:");
-
-        seleccionarV2.setText("Aceptar");
-        seleccionarV2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                seleccionarV2MouseClicked(evt);
-            }
-        });
-        seleccionarV2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seleccionarV2ActionPerformed(evt);
-            }
-        });
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "N° Orden", "Cliente" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
+        jLabel15.setText("Cliente Seleccionado:");
 
         seleccionarV3.setText("Seleccionar");
         seleccionarV3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2864,6 +2693,27 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        tablaOrdenesVisualizar1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {};
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane20.setViewportView(tablaOrdenesVisualizar1);
+
+        jLabel37.setText("Embarcacion Seleccionada:");
+
+        seleccionarV4.setText("Seleccionar");
+        seleccionarV4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleccionarV4MouseClicked(evt);
+            }
+        });
+        seleccionarV4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seleccionarV4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout VisualizarOrdenLayout = new javax.swing.GroupLayout(VisualizarOrden);
         VisualizarOrden.setLayout(VisualizarOrdenLayout);
         VisualizarOrdenLayout.setHorizontalGroup(
@@ -2872,12 +2722,17 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(VisualizarOrdenLayout.createSequentialGroup()
-                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(seleccionarV2, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(seleccionarV3, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                        .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(VisualizarOrdenLayout.createSequentialGroup()
+                                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seleccionarV3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(VisualizarOrdenLayout.createSequentialGroup()
+                                .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel37, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane20, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seleccionarV4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(VisualizarOrdenLayout.createSequentialGroup()
@@ -2886,8 +2741,8 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(842, 1058, Short.MAX_VALUE))
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(842, 1036, Short.MAX_VALUE))
         );
         VisualizarOrdenLayout.setVerticalGroup(
             VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2897,23 +2752,24 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(jLabel18)
                     .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton14))
-                .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(VisualizarOrdenLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(VisualizarOrdenLayout.createSequentialGroup()
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(13, 13, 13)
-                                .addComponent(seleccionarV2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(seleccionarV3))
-                            .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizarOrdenLayout.createSequentialGroup()
+                            .addComponent(seleccionarV3)
+                            .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel37)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(seleccionarV4)
+                            .addComponent(jScrollPane20)))
+                    .addGroup(VisualizarOrdenLayout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         editaraClientes1.addTab("Visualizar", VisualizarOrden);
@@ -3697,7 +3553,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(contactosCrear2)))
-                .addContainerGap(894, Short.MAX_VALUE))
+                .addContainerGap(1338, Short.MAX_VALUE))
         );
         crear2Layout.setVerticalGroup(
             crear2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3801,7 +3657,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(seleccionBorrado2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel86))))
-                .addContainerGap(562, Short.MAX_VALUE))
+                .addContainerGap(1006, Short.MAX_VALUE))
         );
         eliminar2Layout.setVerticalGroup(
             eliminar2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3937,8 +3793,8 @@ public final class Interfaz extends javax.swing.JFrame {
                                             .addComponent(bRepuestosModCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(bRepuestosModPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(bRepuestosModCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 490, Short.MAX_VALUE))
-                                    .addComponent(estado12, javax.swing.GroupLayout.DEFAULT_SIZE, 875, Short.MAX_VALUE))
+                                        .addGap(0, 937, Short.MAX_VALUE))
+                                    .addComponent(estado12, javax.swing.GroupLayout.DEFAULT_SIZE, 1315, Short.MAX_VALUE))
                                 .addContainerGap())
                             .addGroup(modificarLancha8Layout.createSequentialGroup()
                                 .addGap(331, 331, 331)
@@ -4166,7 +4022,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(bCuidadorC3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bTelFijoC3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bCelularC3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 658, Short.MAX_VALUE))
+                .addGap(0, 1103, Short.MAX_VALUE))
         );
         crear3Layout.setVerticalGroup(
             crear3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4279,7 +4135,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(seleccionBorrado15, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel121))))
-                .addContainerGap(562, Short.MAX_VALUE))
+                .addContainerGap(1006, Short.MAX_VALUE))
         );
         eliminar3Layout.setVerticalGroup(
             eliminar3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4440,7 +4296,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                         .addComponent(bCelularE3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(bApellidoE3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addComponent(jLabel130, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(543, Short.MAX_VALUE))
+                .addContainerGap(998, Short.MAX_VALUE))
         );
         info3Layout.setVerticalGroup(
             info3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4628,7 +4484,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(guardarLancha3))
                             .addComponent(estado9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(añadiendolanchaa3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(528, Short.MAX_VALUE))
+                .addContainerGap(984, Short.MAX_VALUE))
         );
         agregarLancha3Layout.setVerticalGroup(
             agregarLancha3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4995,7 +4851,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(seleccionBorrado17, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(seleccionBorrado18, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(seleccionBorrado19, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(estado11, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))))
+                            .addComponent(estado11, javax.swing.GroupLayout.DEFAULT_SIZE, 969, Short.MAX_VALUE))))
                 .addGap(186, 186, 186))
         );
         modificarLancha7Layout.setVerticalGroup(
@@ -5050,7 +4906,7 @@ public final class Interfaz extends javax.swing.JFrame {
         editar4.setLayout(editar4Layout);
         editar4Layout.setHorizontalGroup(
             editar4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1290, Short.MAX_VALUE)
+            .addGap(0, 1726, Short.MAX_VALUE)
             .addGroup(editar4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editar4Layout.createSequentialGroup()
                     .addComponent(tablaClienteLanchas3)
@@ -5201,8 +5057,9 @@ public final class Interfaz extends javax.swing.JFrame {
     public void updateVOrden(){
         this.vaciarTablasO();
         this.vaciarBarrasO();
-        this.actualizarListadoOrdenes();
-        this.actualizarOrdenesEliminadas();
+        this.actualizarTXTManoObra();
+        this.actualizarListadoManoObra();
+        
         this.setearTablasListadoOrdenes();
         this.repaint();
     }
@@ -5243,6 +5100,7 @@ public final class Interfaz extends javax.swing.JFrame {
             this.crearArchivosContacto(cliente);
             cliente= null;
             this.updateVCliente();
+            this.updateVOrden();
        }
     }//GEN-LAST:event_contactosCrearActionPerformed
 
@@ -5442,7 +5300,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionBorrado3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado3ActionPerformed
         if(this.tablaEmbarcaciones.getSelectedValue()!=null){
-            embarcacion=cliente.embarcaciones.get(this.tablaEmbarcaciones.getSelectedValue());
+            embarcacion=cliente.hashMapEmbarcaciones.get(this.tablaEmbarcaciones.getSelectedValue());
             this.jLabel22.setText("Embarcacion: "+embarcacion.getMotor());
             this.t.setText(embarcacion.getTipo());
             this.m.setText(embarcacion.getMarca());
@@ -5543,7 +5401,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionBorrado5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado5ActionPerformed
         if(this.tablaEE.getSelectedValue()!=null){
-            embarcacion=cliente.embarcaciones.get(this.tablaEE.getSelectedValue());
+            embarcacion=cliente.hashMapEmbarcaciones.get(this.tablaEE.getSelectedValue());
             this.jLabel21.setText("Embarcacion: "+embarcacion.getTipoMarca());
         }  
     }//GEN-LAST:event_seleccionBorrado5ActionPerformed
@@ -5573,20 +5431,20 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_eliminarEliminar1MouseClicked
 
     private void eliminarEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarEliminar1ActionPerformed
-        if(this.tablacontactosEliminar1.getSelectedValue()!=null){
-            orden=new Orden();
-            orden=this.hashmapOrdenes.get(this.tablacontactosEliminar1.getSelectedValue());
-        }
-        if(orden!=null){
-            this.hashmapOrdenesEliminadas.put(orden.getNumeroOrden(),orden);
-            this.hashmapOrdenes.remove(orden.getNumeroOrden(),orden);
-            this.updateVOrden();
-            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
-            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
-            this.actualizarTXTOrdenes();
-            this.actualizarTXTOrdenesEliminadas();
-            repuesto=null;
-        }
+//        if(this.tablacontactosEliminar1.getSelectedValue()!=null){
+//            orden=new Orden();
+//            orden=this.hashmapOrdenes.get(this.tablacontactosEliminar1.getSelectedValue());
+//        }
+//        if(orden!=null){
+//            this.hashmapOrdenesEliminadas.put(orden.getNumeroOrden(),orden);
+//            this.hashmapOrdenes.remove(orden.getNumeroOrden(),orden);
+//            this.updateVOrden();
+//            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
+//            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
+//            this.actualizarTXTOrdenes();
+//            this.actualizarTXTOrdenesEliminadas();
+//            repuesto=null;
+//        }
     }//GEN-LAST:event_eliminarEliminar1ActionPerformed
 
     private void seleccionBorrado1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionBorrado1MouseClicked
@@ -5594,29 +5452,20 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionBorrado1MouseClicked
 
     private void seleccionBorrado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado1ActionPerformed
-         if(this.tablacontactosEliminados1.getSelectedValue()!=null){
-            orden=new Orden();
-            orden=this.hashmapOrdenesEliminadas.get(this.tablacontactosEliminados1.getSelectedValue());
-        }
-        if(orden!=null){
-            this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
-            this.hashmapOrdenesEliminadas.remove(orden.getNumeroOrden(),orden);
-            this.updateVOrden();
-            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
-            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
-            this.actualizarTXTOrdenes();
-            this.actualizarTXTOrdenesEliminadas();
-            repuesto=null;
-        }
+//         if(this.tablacontactosEliminados1.getSelectedValue()!=null){
+//            orden=new Orden();
+//            orden=this.hashmapOrdenesEliminadas.get(this.tablacontactosEliminados1.getSelectedValue());
+//        }
+//        if(orden!=null){
+//            //this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
+//            this.hashmapOrdenesEliminadas.remove(orden.getNumeroOrden(),orden);
+//            this.updateVOrden();
+//            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
+//            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
+//            this.actualizarTXTOrdenesEliminadas();
+//            repuesto=null;
+//        }
     }//GEN-LAST:event_seleccionBorrado1ActionPerformed
-
-    private void seleccionarV2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV2MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_seleccionarV2MouseClicked
-
-    private void seleccionarV2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV2ActionPerformed
-        
-    }//GEN-LAST:event_seleccionarV2ActionPerformed
 
     private void seleccionarV3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV3MouseClicked
         // TODO add your handling code here:
@@ -5624,16 +5473,15 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionarV3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV3ActionPerformed
         if(this.tablaOrdenesVisualizar.getSelectedValue()!=null){
-            orden=new Orden();
-            orden=this.hashmapOrdenes.get(this.tablaOrdenesVisualizar.getSelectedValue());
-            this.visualizarV1.setText(orden.getInformacion());
-            this.jLabel15.setText("Seleccionado: "+orden.getNumeroOrden());
+            cliente=new Cliente();
+            cliente=this.hashmapClientes.get(this.tablaOrdenesVisualizar.getSelectedValue());
+            cliente.actualizarListadoOrdenes();
+            this.tablaOrdenesVisualizar1.setListData(cliente.getListadoOrdenes());
+            this.repaint();
+            
+            this.jLabel15.setText("Seleccionado: "+cliente.getApellidoNombre());
         }
     }//GEN-LAST:event_seleccionarV3ActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void seleccionarV5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV5MouseClicked
         // TODO add your handling code here:
@@ -5939,6 +5787,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 && this.dia.getText().length()!=0 && this.mes.getText().length()!=0 && this.año.getText().length()!=0  ){
             orden=new Orden();
             orden.setNumeroOrden(bFechaOrdenesCrear8.getText());
+            
             orden.setTotalManoObra(this.tManoObra.getText());
             if(this.tVarios.getText().length()!=0 && this.ordenesCrearVarios.getText().length()!=0){
                 orden.setTotalVarios(this.tVarios.getText());
@@ -5950,7 +5799,7 @@ public final class Interfaz extends javax.swing.JFrame {
             orden.setTotalRepuestos(this.tRepuestos.getText());
             orden.setTotal(this.tTotal.getText() );
             orden.setCliente(cliente.getNombre()+" "+cliente.getApellido());
-            orden.setEmbrcacion(embarcacion.getMotor());
+            orden.setEmbrcacion(embarcacion.getTipoMarca());
             String fcha=this.dia.getText()+"/"+this.mes.getText()+"/"+this.año.getText();
             //fecha
             orden.setFecha(fcha);
@@ -5969,14 +5818,15 @@ public final class Interfaz extends javax.swing.JFrame {
             }
             for(int x=0; x<this.arrayListOrdenesAñadirRepuestosCliente.size();x++){
                 repuesto=this.arrayListOrdenesAñadirRepuestosCliente.get(x);
-                orden.addRepuesto(repuesto.getNombre(),repuesto.getCantidad());
+                orden.addRepuesto(repuesto);
             }
             this.visualizarV4.setText(orden.getInformacion());
             //System.out.println(orden.getInformacion());
-            this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
+            //this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
+            // orden.setNumTxT(Integer.toString(cliente.ordenes.size()));
+            cliente.crearTxTOrdenes(orden);
+            cliente.addOrden(orden);
             this.updateVOrden();
-            this.actualizarTXTOrdenes();
-            this.hashmapClientes.get(cliente.getApellidoNombre()).listadoOrdenes.add(orden.getNumeroOrden());
         }
     }//GEN-LAST:event_contactosCrear1ActionPerformed
 
@@ -6212,7 +6062,7 @@ public final class Interfaz extends javax.swing.JFrame {
             orden.setTotalRepuestos(this.tRepuestos.getText());
             orden.setTotal(this.tTotal.getText() );
             orden.setCliente(cliente.getNombre()+" "+cliente.getApellido());
-            orden.setEmbrcacion(embarcacion.getMotor());
+            orden.setEmbrcacion(embarcacion.getTipoMarca());
             String fcha=this.dia.getText()+"/"+this.mes.getText()+"/"+this.año.getText();
             //fecha
             orden.setFecha(fcha);
@@ -6231,7 +6081,7 @@ public final class Interfaz extends javax.swing.JFrame {
             }
             for(int x=0; x<this.arrayListOrdenesAñadirRepuestosCliente.size();x++){
                 repuesto=this.arrayListOrdenesAñadirRepuestosCliente.get(x);
-                orden.addRepuesto(repuesto.getNombre(),repuesto.getCantidad());
+                orden.addRepuesto(repuesto);
             }
             this.visualizarV4.setText(orden.getInformacion());
             //System.out.println(orden.getInformacion());
@@ -6289,8 +6139,8 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionarModificarInfo10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo10ActionPerformed
        if(cliente!=null && this.tablaOrdenesCrear2.getSelectedValue()!=null){
-           embarcacion=cliente.embarcaciones.get(this.tablaOrdenesCrear2.getSelectedValue());
-           this.jLabel36.setText("Embarcacion: "+embarcacion.getMotor());
+           embarcacion=cliente.hashMapEmbarcaciones.get(this.tablaOrdenesCrear2.getSelectedValue());
+           this.jLabel36.setText("Embarcacion: "+embarcacion.getTipoMarca());
            
        }
     }//GEN-LAST:event_seleccionarModificarInfo10ActionPerformed
@@ -6306,6 +6156,15 @@ public final class Interfaz extends javax.swing.JFrame {
     private void claveEmb1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_claveEmb1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_claveEmb1ActionPerformed
+
+    private void seleccionarV4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV4MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seleccionarV4MouseClicked
+
+    private void seleccionarV4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV4ActionPerformed
+       this.visualizarV1.setText(orden.getInformacion());
+       repaint();
+    }//GEN-LAST:event_seleccionarV4ActionPerformed
  
     /**
      * @param args the command line arguments
@@ -6478,7 +6337,6 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -6564,6 +6422,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
@@ -6609,6 +6468,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane18;
     private javax.swing.JScrollPane jScrollPane19;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane20;
     private javax.swing.JScrollPane jScrollPane26;
     private javax.swing.JScrollPane jScrollPane27;
     private javax.swing.JScrollPane jScrollPane28;
@@ -6709,8 +6569,8 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton seleccionarModificarInfo8;
     private javax.swing.JButton seleccionarModificarInfo9;
     private javax.swing.JButton seleccionarV;
-    private javax.swing.JButton seleccionarV2;
     private javax.swing.JButton seleccionarV3;
+    private javax.swing.JButton seleccionarV4;
     private javax.swing.JButton seleccionarV5;
     private javax.swing.JButton seleccionarV6;
     private javax.swing.JTextField t;
@@ -6742,6 +6602,7 @@ public final class Interfaz extends javax.swing.JFrame {
     public javax.swing.JList<String> tablaOrdenesCrearVPRepuestos;
     public javax.swing.JList<String> tablaOrdenesV2;
     public javax.swing.JList<String> tablaOrdenesVisualizar;
+    public javax.swing.JList<String> tablaOrdenesVisualizar1;
     public javax.swing.JList<String> tablaRepuestosEliminados;
     public javax.swing.JList<String> tablaRepuestosEliminar;
     public javax.swing.JList<String> tablaRepuestosModificar;
