@@ -7,8 +7,6 @@ package basedatos;
 
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -52,13 +50,9 @@ public class Orden {
     public void setVarios(String varios) {
         this.varios = varios;
     }
-    
-
     public int getTotalRepuestos() {
         return totalRepuestos;
     }
- 
-    
     public String getCancelado(){
         if(this.cancelado==true){
             return "SI";
@@ -92,22 +86,16 @@ public class Orden {
     public String getFecha() {
         return fecha;
     }
-
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-    
-
     public String getCliente() {
         return cliente;
     }
-
     public void setCliente(String cliente) {
         this.cliente = cliente;
     }
      public ArrayList getManoObra(){
-         
-        
         return this.manoObra;
     }
     public String getInformacion(){
@@ -122,15 +110,12 @@ public class Orden {
                 "\n\n----------------------------------------------------------------------\n";
         return s;
     }
-            
     public String getNumeroOrden() {
         return numeroOrden;
     }
-
     public void setNumeroOrden(String numeroOrden) {
         this.numeroOrden = numeroOrden;
     }
-
     public int getTotalManoObra() {
         return totalManoObra;
     }
@@ -143,20 +128,15 @@ public class Orden {
     public int getTotalVarios() {
         return totalVarios;
     }
-
     public void setTotalVarios(String totalVarios) {
         this.totalVarios = parseInt(totalVarios,10);
     }
-
     public int getTotal() {
         return total;
     }
-
     public void setTotal(String total) {
         this.total = parseInt(total,10);;
     }
-
-
     public String getManoObraVisualizar() {
         String mObra="";
         for(int c=0;c<this.manoObra.size();c++){
@@ -164,11 +144,9 @@ public class Orden {
         }
         return mObra;
     }
-
     public void addManoObra(String mo) {
         this.manoObra.add(mo);
     }
-
     public String getRepuestos() {
        String rep="";
        //System.out.println("cant rep: "+this.listadoRepuestos.size());
@@ -189,7 +167,5 @@ public class Orden {
     public void addRepuesto(Repuesto repuesto) {
         System.out.println("Añadiendo R"+repuesto+"   c: "+repuesto.getCantidad());
         this.listadoRepuestos.add(repuesto);
-        
     }
-    
 }

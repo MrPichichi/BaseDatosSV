@@ -4,9 +4,7 @@
  * and open the template in the editor.
  */
 package basedatos;
-
 import java.util.ArrayList;
-
 /**
  *
  * @author Psche
@@ -31,34 +29,26 @@ public class Repuesto {
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombe) {
         this.nombre = nombe;
     }
-
     public String getCodigo() {
         return codigo;
     }
-
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-
     public String getPrecio() {
         
         return Integer.toString(precio);
     }
-
     public void setPrecio(String precio) {
         this.precio = Integer.parseInt(precio);
     }
-
     public String getCantidad() {
         return Double.toString(cantidad);
     }
-
     public void setCantidad(String cantidad) {
         this.cantidad = Double.parseDouble(cantidad);
     }
-    
 }

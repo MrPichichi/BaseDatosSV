@@ -26,20 +26,15 @@ public class Guarderia {
     public Pago getPago() {
         return pago;
     }
-
     public void setPago(Pago pago) {
         this.pago = pago;
     }
-
     public Cliente getCliente() {
         return cliente;
     }
-
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-
-    
     public void inicializarAñosGuarderia(String precio){
         abonosYTOtal=new HashMap<>();
         int añoInicio=2014;
@@ -57,14 +52,9 @@ public class Guarderia {
             //System.out.println(" Fecha: "+entry.getKey());
             //Collections.sort(Interfaz.this.arrayListOrdenes, String::compareTo);
         });
-        
     }
     public void agregarLanchaAGuarderia(String embarcacion, String precio){
          this.inicializarAñosGuarderia(precio);
         this.embarcacionsYPAgos.put(embarcacion, abonosYTOtal);
-        
     }
-
-
-    
 }

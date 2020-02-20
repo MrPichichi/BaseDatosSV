@@ -22,23 +22,18 @@ public class Embarcacion {
     public boolean isEnGuarderia() {
         return enGuarderia;
     }
-
     public void setEnGuarderia(boolean enGuarderia) {
         this.enGuarderia = enGuarderia;
     }
-
     public String getClaveLancha() {
         return llave;
     }
-
     public void setClaveLancha(String llave) {
         this.llave = llave;
     }
-
     public String getCodigo() {
         return codigo;
     }
-
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
@@ -55,7 +50,6 @@ public class Embarcacion {
         else{
             return "NO";
         }
-        
     }
     public void setEnGuarderiaSI() {
         this.enGuarderia = true;
@@ -63,43 +57,33 @@ public class Embarcacion {
     public void setEnGuarderiaNo() {
         this.enGuarderia = false;
     }
-    
     public String getTipo() {
         return tipo;
     }
-
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
     public String getMarca() {
         return marca;
     }
-
     public void setMarca(String marca) {
         this.marca = marca;
     }
-
     public String getModelo() {
         return modelo;
     }
-
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
-
     public String getMotor() {
         return motor;
     }
-
     public void setMotor(String motor) {
         this.motor = motor;
     }
-
     public String getnSerie() {
         return nSerie;
     }
-
     public void setnSerie(String nSerie) {
         this.nSerie = nSerie;
     }
@@ -108,5 +92,4 @@ public class Embarcacion {
                 "\nModelo: "+this.modelo+"\nMotor: "+this.motor+"\nNumero serie: "+
                 this.nSerie+"\nClave Embarcacion: "+this.llave);
 }
-    
 }
