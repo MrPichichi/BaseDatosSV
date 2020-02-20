@@ -22,7 +22,6 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
-import java.util.Arrays;
 /**
  *
  * @author Psche
@@ -56,8 +55,6 @@ public final class Interfaz extends javax.swing.JFrame {
     
     
     //ORDENES
-
-    
     HashMap<String ,Orden> hashmapOrdenesEliminadas= new HashMap<>();
     ArrayList<String> arrayListOrdenesEliminadas=new ArrayList<>();
     String [] listadoOrdenesEliminadas = new String[1000];
@@ -105,23 +102,14 @@ public final class Interfaz extends javax.swing.JFrame {
         crear_CC.mkdirs();
         carpeta.mkdirs();
         
-        //this.crearTxTNumContactos();
         this.cargarDatosClientes();
         this.cargarDatosClientesEliminados();
-        
-        //
-        //System.out.println("sss:"+numCliente);
-  
         this.cargarManoObra();
-        //this.actualizarListadoManoObra();
-        
-     
         this.updateVCliente();
         this.cargarRepuestos();
-        
         this.updateVRepuesto();
-        //actualizamos listas
         this.updateVOrden();  
+        
         //guarderia=new Guarderia();
         //guarderia.agregarLanchaAGuarderia("Yamaha", "300000");
         //this.añadirGuarderia("Gamboa Felipe");
@@ -346,21 +334,7 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         }
     }
-  
-    public void cargarOrdenesCliente(File ficheroEntrada) {
-        ArrayList<String> ordenesCliente=new ArrayList<>();
-        final File carpeta = ficheroEntrada;
-        for (final File archivo : carpeta.listFiles()) {
-            if(archivo.isFile()) {
-               
-               ordenesCliente.add(archivo.getName());
-               //System.out.println("Orden"+archivo.getName());
-            }
-        }
-        this.clienteCargar.arrayListOrdenes=ordenesCliente;
-        clienteCargar.imprimirOrdenes();
-        //System.out.println(ordenesCliente);
-    }
+
     /*
     Carga la carpeta con informacion de un cliente
     */
@@ -448,7 +422,7 @@ public final class Interfaz extends javax.swing.JFrame {
             //System.out.println(" GESTIONANDO EMBARCACIONES: "+ficheroEntrada);
             if (ficheroEntrada.isFile()) {
                System.out.println("Orden encontrada: "+ficheroEntrada.getName());
-               //this.cargarOrden(ficheroEntrada);
+               this.cargarOrden(ficheroEntrada);
             }
           
         }
@@ -751,7 +725,6 @@ public final class Interfaz extends javax.swing.JFrame {
             while(entrada.ready()){ 
                 linea = entrada.readLine(); 
                 while(!"##".equals(linea)){
-                    
                     if("#".equals(linea)){
                         linea = entrada.readLine();
                         orden.setNumeroOrden(linea);
@@ -816,20 +789,25 @@ public final class Interfaz extends javax.swing.JFrame {
                         while(!"***".equals(linea)){
                             
                             System.out.println("cantidad: "+linea);
-                            //repAdd.setCantidad(linea);
+                            repAdd.setCantidad(linea);
                             linea = entrada.readLine();
-                            //repAdd.setNombre(linea);
+                            repAdd.setNombre(linea);
                             System.out.println("Nombre: "+linea);
                             linea = entrada.readLine();
                             
 //                            if("***".equals(linea)){
 //                                break;
 //                            }
-                            //orden.addRepuesto(repAdd);
-                        } 
+                            orden.addRepuesto(repAdd);
+                        }
+                        System.out.println("ANTES D");
+                        linea = entrada.readLine();
+                          
                     }
                 }
-                if(this.cargarCliente==true){
+                
+            } 
+            if(this.cargarCliente==true){
                  cliente=this.hashmapClientes.get(clienteLoad);
                  //System.out.println("AÑADIENDO LANCHA A : "+clienteLoadEmbarcacion);
                  cliente.addOrden(orden);
@@ -839,7 +817,6 @@ public final class Interfaz extends javax.swing.JFrame {
                  //System.out.println("AÑADIENDO LANCHA A : "+clienteLoadEmbarcacion);
                  cliente.addOrden(orden);
                 }
-            } 
             }catch (IOException e) { 
             } 
             finally{ 
