@@ -33,7 +33,6 @@ public class Orden {
     public String getEmbrcacion() {
         return embrcacion;
     }
-
     public String getNumTxT() {
         return numTxT;
     }

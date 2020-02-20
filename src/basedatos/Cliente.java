@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -137,6 +138,14 @@ public class Cliente {
         }
         this.actualizarListadoOrdenes();
     }
+    public void imprimirOrdenes(){
+    Iterator it = this.hashMapOrdenes.entrySet().iterator();
+    while (it.hasNext()) {
+        Map.Entry e = (Map.Entry)it.next();
+        System.out.println(e.getKey() + " " + e.getValue());
+    }
+    
+    }
     public void cargarOrdenes(File o){
             File f = o; 
             BufferedReader entrada = null; 
@@ -224,8 +233,9 @@ public class Cliente {
                             
                         }
                     }
-                    System.out.println(or.getInformacion());
-                    this.addOrden(or);
+                    //System.out.println(or.getInformacion());
+                    this.hashMapOrdenes.put(or.getOrdenID(),or);
+                    this.actualizarListadoOrdenes();
                 }
                 //this.hashmapOrdenes.put(or.getNumeroOrden(),or);
                 //this.arrayListOrdenes.add(or.getNumeroOrden());
@@ -282,7 +292,7 @@ public class Cliente {
         
     }
     public void crearTxTOrdenes(Orden ord){
-    try {   System.out.println("\n Creadno EMbarcacion\n");
+        try {   
             ord.setNumTxT(Integer.toString(this.arrayListOrdenes.size()));
             File file = new File("Clientes/"+this.getNumCliente()+"/Ordenes/"+ord.getNumTxT()+".txt");
             Cliente cl= this;

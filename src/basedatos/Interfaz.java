@@ -37,7 +37,7 @@ public final class Interfaz extends javax.swing.JFrame {
     Cliente clienteEliminar= new Cliente();
     Cliente clienteRecuperar= new Cliente();
     Cliente clienteCargar= new Cliente();
-    String clienteLoadEmbarcacion="";
+    String clienteLoad="";
     Orden orden= new Orden();
     Repuesto repuesto= new Repuesto();
     Guarderia guarderia=new Guarderia();
@@ -135,10 +135,10 @@ public final class Interfaz extends javax.swing.JFrame {
                this.cargarCliente=true;
                this.cargarCarpetaInformacion(ficheroEntrada);
                this.cargarCarpetaEmbarcacion(ficheroEntrada);
-              
-               this.clienteCargar=this.hashmapClientes.get(this.clienteLoadEmbarcacion);
-               System.out.println(this.clienteLoadEmbarcacion+" "+clienteCargar.getApellidoNombre());
-               clienteCargar.loadOrdenes();
+               this.cargarCarpetaOrdenes(ficheroEntrada);
+               this.clienteCargar=this.hashmapClientes.get(this.clienteLoad);
+               System.out.println(this.clienteLoad+" "+clienteCargar.getApellidoNombre());
+               
                this.cargarCliente=false;
             }
         }
@@ -153,6 +153,7 @@ public final class Interfaz extends javax.swing.JFrame {
                this.cargarClienteEliminado=true;
                this.cargarCarpetaInformacion(ficheroEntrada);
                this.cargarCarpetaEmbarcacion(ficheroEntrada);
+               this.cargarCarpetaOrdenes(ficheroEntrada);
                this.cargarClienteEliminado=false;
             }
         }
@@ -196,7 +197,16 @@ public final class Interfaz extends javax.swing.JFrame {
                     String dest="ClientesEliminados/"+file.getName()+"/Ordenes";
                     String ori="Clientes/"+file.getName()+"/Ordenes";
                     this.moverCarpetaOArchivo(ori,dest);
-                    //this.moverCarpeta();
+                    final File txt = ficheroEntrada;
+                    for (final File doctxt : txt.listFiles()) {
+                        if (doctxt.isFile()){
+                            String destxt="ClientesEliminados/"+file.getName()+"/Ordenes/"+doctxt.getName();
+                            String oritxt="Clientes/"+file.getName()+"/Ordenes/"+doctxt.getName();
+                            //System.out.println("*"+oritxt+"\n*"+destxt);
+                            this.moverCarpetaOArchivo(oritxt,destxt);
+                            doctxt.delete();
+                        }
+                    }
                     //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
                     //System.out.println("ClientesEliminados/"+file.getName()+"/Ordenes");
                     ficheroEntrada.delete();
@@ -251,6 +261,16 @@ public final class Interfaz extends javax.swing.JFrame {
                     String dest="ClientesEliminados/"+file.getName()+"/Ordenes";
                     String ori="Clientes/"+file.getName()+"/Ordenes";
                     this.moverCarpetaOArchivo(dest,ori);
+                    final File txt = ficheroEntrada;
+                    for (final File doctxt : txt.listFiles()) {
+                        if (doctxt.isFile()){
+                            String destxt="ClientesEliminados/"+file.getName()+"/Ordenes/"+doctxt.getName();
+                            String oritxt="Clientes/"+file.getName()+"/Ordenes/"+doctxt.getName();
+                            //System.out.println("*"+oritxt+"\n*"+destxt);
+                            this.moverCarpetaOArchivo(destxt,oritxt);
+                            doctxt.delete();
+                        }
+                    }
                     //this.moverCarpeta();
                     //this.moverCarpeta("Clientes/"+ficheroEntrada.getName(), "ClientesEliminados/"+ficheroEntrada.getName());
                     //System.out.println("ClientesEliminados/"+file.getName()+"/Ordenes");
@@ -327,17 +347,19 @@ public final class Interfaz extends javax.swing.JFrame {
         }
     }
   
-    public ArrayList cargarOrdenesCliente(File ficheroEntrada) {
+    public void cargarOrdenesCliente(File ficheroEntrada) {
         ArrayList<String> ordenesCliente=new ArrayList<>();
         final File carpeta = ficheroEntrada;
         for (final File archivo : carpeta.listFiles()) {
             if(archivo.isFile()) {
+               
                ordenesCliente.add(archivo.getName());
                //System.out.println("Orden"+archivo.getName());
             }
         }
+        this.clienteCargar.arrayListOrdenes=ordenesCliente;
+        clienteCargar.imprimirOrdenes();
         //System.out.println(ordenesCliente);
-        return ordenesCliente;
     }
     /*
     Carga la carpeta con informacion de un cliente
@@ -351,17 +373,35 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         }
     }
+    public void cargarCarpetaOrdenes(File carpetaOrdenes) {
+       //System.out.println("\nLOADING CARPETA EMBARCCIONES");
+        for (final File ficheroEntrada : carpetaOrdenes.listFiles()) {
+            if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Ordenes") ) {
+                if(this.cargarCliente==true){
+                    cliente=this.hashmapClientes.get(this.clienteLoad);
+                    //System.out.println("Cliente añadir emb: "+cliente.getApellidoNombre());
+                    this.gestionarTxTOrdenesCliente(ficheroEntrada);
+                }
+                if(this.cargarClienteEliminado==true){
+                    cliente=this.hashmapClientesEliminados.get(this.clienteLoad);
+                    //System.out.println("Cliente añadir emb: "+cliente.getApellidoNombre());
+                    this.gestionarTxTOrdenesCliente(ficheroEntrada);
+                }
+               
+            }
+        }
+    }
     public void cargarCarpetaEmbarcacion(File carpetaCliente) {
        //System.out.println("\nLOADING CARPETA EMBARCCIONES");
         for (final File ficheroEntrada : carpetaCliente.listFiles()) {
             if (ficheroEntrada.isDirectory() && ficheroEntrada.getName().equals("Embarcaciones") ) {
                 if(this.cargarCliente==true){
-                    cliente=this.hashmapClientes.get(this.clienteLoadEmbarcacion);
+                    cliente=this.hashmapClientes.get(this.clienteLoad);
                     //System.out.println("Cliente añadir emb: "+cliente.getApellidoNombre());
                     this.gestionarTxTEmbarcacionesCliente(ficheroEntrada);
                 }
                 if(this.cargarClienteEliminado==true){
-                    cliente=this.hashmapClientesEliminados.get(this.clienteLoadEmbarcacion);
+                    cliente=this.hashmapClientesEliminados.get(this.clienteLoad);
                     //System.out.println("Cliente añadir emb: "+cliente.getApellidoNombre());
                     this.gestionarTxTEmbarcacionesCliente(ficheroEntrada);
                 }
@@ -402,7 +442,17 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         }
     }
-    
+    public void gestionarTxTOrdenesCliente(File carpetaEmb) {
+        //System.out.println("LOADING INFO.txt");
+        for (final File ficheroEntrada : carpetaEmb.listFiles()) {
+            //System.out.println(" GESTIONANDO EMBARCACIONES: "+ficheroEntrada);
+            if (ficheroEntrada.isFile()) {
+               System.out.println("Orden encontrada: "+ficheroEntrada.getName());
+               //this.cargarOrden(ficheroEntrada);
+            }
+          
+        }
+    }
     public void gestionarTxTEmbarcacionesCliente(File carpetaEmb) {
         //System.out.println("LOADING INFO.txt");
         for (final File ficheroEntrada : carpetaEmb.listFiles()) {
@@ -692,6 +742,113 @@ public final class Interfaz extends javax.swing.JFrame {
         }
         this.actualizarTXTInfoContacto(crear_TxTInfo,cliente);
     } 
+    public void cargarOrden(File f){
+            BufferedReader entrada = null; 
+            try { 
+            entrada = new BufferedReader( new FileReader( f ) ); 
+            String linea;
+            orden= new Orden();
+            while(entrada.ready()){ 
+                linea = entrada.readLine(); 
+                while(!"##".equals(linea)){
+                    
+                    if("#".equals(linea)){
+                        linea = entrada.readLine();
+                        orden.setNumeroOrden(linea);
+                         linea = entrada.readLine();
+                        orden.setTotalManoObra(linea);
+                        linea = entrada.readLine();
+                        orden.setTotalRepuestos(linea);
+                        linea = entrada.readLine();
+                        orden.setTotal(linea);
+                        linea = entrada.readLine();
+                        orden.setCliente(linea);
+                        linea = entrada.readLine();
+                        orden.setEmbrcacion(linea);
+                        linea = entrada.readLine();
+                        orden.setFecha(linea);
+                        linea = entrada.readLine();
+                        if("NO".equals(linea)){
+                            orden.setDeudaNo();
+                        }
+                        if("SI".equals(linea)){
+                            orden.setDeudaSi();
+                        }
+                        linea = entrada.readLine();
+                        String nota="";
+                        while(!"*#".equals(linea)){
+                            nota+=linea;
+                            linea = entrada.readLine();
+                        }
+                        if(nota.length()!=0){
+                            orden.setNota(nota);
+                        }
+                        if(nota.length()!=0){
+                            orden.setNota("Sin anotaciones");
+                        }
+                        linea = entrada.readLine();
+                        String varios="";
+                        while(!"#*".equals(linea)){
+                            varios+=linea;
+                            linea = entrada.readLine();
+                        }
+                        if(varios.length()!=0){
+                            orden.setVarios(nota);
+                        }
+                        if(varios.length()!=0){
+                            orden.setVarios("Sin Varios");
+                        }
+                        linea = entrada.readLine();
+                        //this.arrayListOrdenesAñadirManoObra=new ArrayList<>();
+                        while(!linea.equals("**")){
+                            orden.addManoObra(linea);
+                            linea = entrada.readLine();
+                        } 
+                        System.out.println("Saliendo while: "+linea);
+//                        for(int x=0;x<this.arrayListOrdenesAñadirManoObra.size();x++){
+//                            String mO=this.arrayListOrdenesAñadirManoObra.get(x);
+//                            
+//                        }
+                        linea = entrada.readLine();
+                        //this.arrayListOrdenesAñadirManoObra=new ArrayList<>();
+                        Repuesto repAdd= new Repuesto();
+                        System.out.println("ANTES DE AÑADIR REP: "+linea+"\n");
+                        while(!"***".equals(linea)){
+                            
+                            System.out.println("cantidad: "+linea);
+                            //repAdd.setCantidad(linea);
+                            linea = entrada.readLine();
+                            //repAdd.setNombre(linea);
+                            System.out.println("Nombre: "+linea);
+                            linea = entrada.readLine();
+                            
+//                            if("***".equals(linea)){
+//                                break;
+//                            }
+                            //orden.addRepuesto(repAdd);
+                        } 
+                    }
+                }
+                if(this.cargarCliente==true){
+                 cliente=this.hashmapClientes.get(clienteLoad);
+                 //System.out.println("AÑADIENDO LANCHA A : "+clienteLoadEmbarcacion);
+                 cliente.addOrden(orden);
+                }
+                 if(this.cargarClienteEliminado==true){
+                 cliente=this.hashmapClientesEliminados.get(clienteLoad);
+                 //System.out.println("AÑADIENDO LANCHA A : "+clienteLoadEmbarcacion);
+                 cliente.addOrden(orden);
+                }
+            } 
+            }catch (IOException e) { 
+            } 
+            finally{ 
+                try{ 
+                    entrada.close(); 
+                }
+                catch(IOException e1){} 
+            } 
+    }
     public void cargarEmbarcacion(File f){
         //System.out.println("CARGANDO EMBARCACION: "+f.getName());
             BufferedReader entrada = null; 
@@ -722,12 +879,12 @@ public final class Interfaz extends javax.swing.JFrame {
                     }
                 }
                 if(this.cargarCliente==true){
-                 cliente=this.hashmapClientes.get(clienteLoadEmbarcacion);
+                 cliente=this.hashmapClientes.get(clienteLoad);
                  //System.out.println("AÑADIENDO LANCHA A : "+clienteLoadEmbarcacion);
                  cliente.addEmbarcacion(embLoad);
                 }
                  if(this.cargarClienteEliminado==true){
-                 cliente=this.hashmapClientesEliminados.get(clienteLoadEmbarcacion);
+                 cliente=this.hashmapClientesEliminados.get(clienteLoad);
                  //System.out.println("AÑADIENDO LANCHA A : "+clienteLoadEmbarcacion);
                  cliente.addEmbarcacion(embLoad);
                 }
@@ -802,7 +959,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         this.actualizarListadoContactos();
                     }
                     if(this.cargarCliente==true){
-                        clienteLoadEmbarcacion=cl.getApellidoNombre();
+                        clienteLoad=cl.getApellidoNombre();
                         this.hashmapClientes.put(cl.getApellidoNombre(),cl);
                         this.arrayListContactos.add(cl.getApellidoNombre());
                         this.actualizarListadoContactos();
@@ -812,7 +969,7 @@ public final class Interfaz extends javax.swing.JFrame {
                          this.arrayListContactos.add(cl.getApellidoNombre());
                      }
                     if(this.cargarClienteEliminado==true){
-                        clienteLoadEmbarcacion=cl.getApellidoNombre();
+                        clienteLoad=cl.getApellidoNombre();
                         this.hashmapClientesEliminados.put(cl.getApellidoNombre(),cl);
                         this.arrayListContactosEliminados.add(cl.getApellidoNombre());
                         this.actualizarListadoContactosEliminados();
