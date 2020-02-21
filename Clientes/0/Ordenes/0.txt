@@ -1,18 +1,17 @@
 #
-1124
-110000
-0
+4545
+79200
+15000
 32000
-142000
+126200
 Francisco Gamboa
-Moto Yamaha
-12/12/12
+Lancha Sea Ray
+23/02/20
 NO
-  Sin Nota
+Nota
 *#
-  Sin Varios
+Varios
 #*
-Aseo
 CAmbiar Bujías
 **
 4.0

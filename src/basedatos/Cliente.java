@@ -52,7 +52,7 @@ public class Cliente {
         public void actualizarListadoOrdenes(){
             this.arrayListOrdenes=new  ArrayList<>();
             hashMapOrdenes.entrySet().forEach((Map.Entry<String, Orden> entry) -> {
-                this.arrayListOrdenes.add(entry.getValue().getNumeroOrden());
+                this.arrayListOrdenes.add(entry.getValue().getOrdenID());
             });
             Collections.sort(this.arrayListOrdenes, String::compareTo);
             listadoOrdenes=new String[arrayListOrdenes.size()];
@@ -126,18 +126,7 @@ public class Cliente {
     public int getNumCliente() {
         return numCliente;
     }
-    public void loadOrdenes(){
-         final File carpeta = new File("Clientes/"+this.getNumCliente()+"/Ordenes");
-         System.out.println("Clientes/"+this.getNumCliente()+"/Ordenes");
-        for (final File ficheroEntrada : carpeta.listFiles()) {
-            if (ficheroEntrada.isFile()) {
-                System.out.println("\nTrtando de cargar: "+ficheroEntrada.getName());
-                this.cargarOrdenes(ficheroEntrada);
-                
-            }
-        }
-        this.actualizarListadoOrdenes();
-    }
+  
     public void imprimirOrdenes(){
     Iterator it = this.hashMapOrdenes.entrySet().iterator();
     while (it.hasNext()) {
@@ -146,110 +135,7 @@ public class Cliente {
     }
     
     }
-    public void cargarOrdenes(File o){
-            File f = o; 
-            BufferedReader entrada = null; 
-            try { 
-            entrada = new BufferedReader( new FileReader( f ) ); 
-            String linea;
-            Orden or= new Orden();
-            while(entrada.ready()){ 
-                linea = entrada.readLine();
-                while(!"##".equals(linea)&& entrada.ready()){
-                    System.out.println(linea);
-                    if("#".equals(linea)){
-                        or= new Orden();
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setNumeroOrden(linea);
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setTotalManoObra(linea);
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setTotalVarios(linea);
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setTotalRepuestos(linea);
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setTotal(linea);
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setCliente(linea);
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setEmbrcacion(linea);
-                        linea = entrada.readLine(); 
-                        System.out.println(linea);
-                        or.setFecha(linea);
-                        linea = entrada.readLine();
-                        System.out.println(linea);
-                        if("SI".equals(linea)){
-                            or.setDeudaSi();
-                        }
-                        if("NO".equals(linea)){
-                            or.setDeudaNo();
-                        }
-                        linea = entrada.readLine(); 
-                        String nota=""; 
-                        while(!"*#".equals(linea)){
-                            nota+=" "+linea+"\n";
-                            linea = entrada.readLine();
-                        }
-                        or.setNota(nota);
-                        linea = entrada.readLine();
-                        String varios=""; 
-                         while(!"#*".equals(linea)){
-                            varios+=" "+linea+"\n";
-                            linea = entrada.readLine();
-                        }
-                        or.setVarios(varios);
-                    }
-                    if("#*".equals(linea)){
-                        linea = entrada.readLine(); 
-                        or.manoObra=new ArrayList<>();
-                        while(!"**".equals(linea)){
-                            or.addManoObra(linea);
-                            linea = entrada.readLine(); 
-                        }
-                    }
-                    String cant=entrada.readLine();
-                    if("##".equals(cant)){
-                        break;
-                    }
-                    while(!"***".equals(cant)){
-                        System.out.println("Linea 1: "+cant);
-                        Repuesto rep=new Repuesto();
-                        if(!"***".equals(cant)){
-                            linea = entrada.readLine();
-                             System.out.println("Linea 2: "+linea);
-                            //rep.setCantidad(cant);
-                            //rep.setPrecio(linea);
-                            //or.addRepuesto(rep);
-                            System.out.println(or.listadoRepuestos.toString());
-                            cant=entrada.readLine();
-                            
-                            
-                        }
-                    }
-                    //System.out.println(or.getInformacion());
-                    this.hashMapOrdenes.put(or.getOrdenID(),or);
-                    this.actualizarListadoOrdenes();
-                }
-                //this.hashmapOrdenes.put(or.getNumeroOrden(),or);
-                //this.arrayListOrdenes.add(or.getNumeroOrden());
-            } 
-            }catch (IOException e) { 
-                e.printStackTrace(); 
-            } 
-            finally{ 
-                try{ 
-                    entrada.close(); 
-                }
-                catch(IOException e1){} 
-            } 
-    }
+    
     public void setNumCliente(int numCliente) {
         this.numCliente = numCliente;
     }
@@ -568,6 +454,7 @@ public class Cliente {
         return in;
     }
     public void addOrden(Orden ord){
+        System.out.println("ID: "+ord.getOrdenID());
         this.hashMapOrdenes.put(ord.getOrdenID(), ord);
         this.actualizarListadoOrdenes();
     }

@@ -160,7 +160,7 @@ public class Orden {
         return rep;
     }
     public String getOrdenID(){
-        String ordEMb=this.fecha+" "+this.embrcacion;
+        String ordEMb=this.embrcacion+" "+this.numeroOrden+" "+this.fecha;
             
         return ordEMb;
     }
