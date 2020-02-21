@@ -61,78 +61,15 @@ public class Cliente {
                 listadoOrdenes[g]=this.arrayListOrdenes.get(g);
         }
     }
-    public void actualizarTXTOrden(Orden or){
-            try {
-            String ruta = "Ordenes.txt";
-            File file = new File(ruta);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file);
-              try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    for(int f=0;f<this.hashMapOrdenes.size();f++){
-                        Orden orden=this.hashMapOrdenes.get(this.arrayListOrdenes.get(f));
-                        bw.write("#");
-                        bw.newLine();
-                        bw.write(orden.getNumeroOrden());
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotalManoObra()));
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotalVarios()));
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotalRepuestos()));
-                        bw.newLine();
-                        bw.write(Integer.toString(orden.getTotal()));
-                        bw.newLine();
-                        bw.write(orden.getCliente());
-                        bw.newLine();
-                        bw.write(orden.getEmbrcacion());
-                        bw.newLine();
-                        bw.write(orden.getFecha());
-                        bw.newLine();
-                        bw.write(orden.getCancelado());
-                        bw.newLine();
-                        bw.write(orden.getNota());
-                        bw.newLine();
-                        bw.write("*#");
-                        bw.newLine();
-                        bw.write(orden.getVarios());
-                        bw.newLine();
-                        bw.write("#*");
-                        for(int l=0;l<orden.getManoObra().size();l++){
-                            bw.newLine();
-                            bw.write((String) orden.getManoObra().get(l));
-                        }
-                        bw.newLine();
-                        bw.write("**");
-                        if(!or.listadoRepuestos.isEmpty()){
-                            for(int l=0;l<or.listadoRepuestos.size();l++){
-                                bw.newLine();
-                                bw.write((String)or.listadoRepuestos.get(l).getCantidad());
-                                bw.newLine();
-                                bw.write((String)or.listadoRepuestos.get(l).getNombre());
-                            }
-                            bw.newLine();
-                            bw.write("***");
-                            bw.newLine();
-                        }
-                        bw.write("##");
-                        bw.newLine();
-                    }
-              }
-        } catch (IOException e) {
-        }
-    }
+
     public int getNumCliente() {
         return numCliente;
     }
   
     public void imprimirOrdenes(){
-    Iterator it = this.hashMapOrdenes.entrySet().iterator();
-    while (it.hasNext()) {
-        Map.Entry e = (Map.Entry)it.next();
-        System.out.println(e.getKey() + " " + e.getValue());
-    }
+        for (Map.Entry e : this.hashMapOrdenes.entrySet()) {
+            System.out.println(e.getKey() + " " + e.getValue());
+        }
     
     }
     
@@ -226,9 +163,14 @@ public class Cliente {
                         if(!ord.listadoRepuestos.isEmpty()){
                             for(int l=0;l<ord.listadoRepuestos.size();l++){
                                 bw.newLine();
-                                bw.write((String)ord.listadoRepuestos.get(l).getCantidad());
-                                bw.newLine();
                                 bw.write((String)ord.listadoRepuestos.get(l).getNombre());
+                                bw.newLine();
+                                bw.write((String)ord.listadoRepuestos.get(l).getCodigo());
+                                bw.newLine();
+                                bw.write((String)ord.listadoRepuestos.get(l).getPrecio());
+                                bw.newLine();
+                                bw.write((String)ord.listadoRepuestos.get(l).getCantidad());
+                                
                             }
                             bw.newLine();
                             bw.write("***");

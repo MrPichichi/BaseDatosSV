@@ -740,7 +740,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             orden.setNota(nota);
                         }
                         if(nota.length()!=0){
-                            orden.setNota("Sin anotaciones");
+                            orden.setNota(" - Sin anotaciones");
                         }
                         linea = entrada.readLine();
                         String varios="";
@@ -752,7 +752,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             orden.setVarios(nota);
                         }
                         if(varios.length()!=0){
-                            orden.setVarios("Sin Varios");
+                            orden.setVarios(" - Sin Varios");
                         }
                         linea = entrada.readLine();
                         //this.arrayListOrdenesAñadirManoObra=new ArrayList<>();
@@ -768,20 +768,19 @@ public final class Interfaz extends javax.swing.JFrame {
                         linea = entrada.readLine();
                         //this.arrayListOrdenesAñadirManoObra=new ArrayList<>();
                         Repuesto repAdd= new Repuesto();
-                        System.out.println("ANTES DE AÑADIR REP: "+linea+"\n");
+                        System.out.println("_________________-");
                         while(!"***".equals(linea)){
-                            
-                            System.out.println("cantidad: "+linea);
-                            repAdd.setCantidad(linea);
-                            linea = entrada.readLine();
                             repAdd.setNombre(linea);
-                            System.out.println("Nombre: "+linea);
                             linea = entrada.readLine();
-                            double price=((repAdd.cantidad)*(this.hashmapRepuestos.get(repAdd.getNombre()).precio));
-                            repAdd.setPrecio(Integer.toString((int)price));
-
+                            repAdd.setCodigo(linea);
+                            linea = entrada.readLine();
+                            repAdd.setPrecio(linea);
+                            linea = entrada.readLine();
+                            repAdd.setCantidad(linea);   
                             orden.addRepuesto(repAdd);
+                            linea = entrada.readLine();
                         }
+                        System.out.println("_________________-");
                         System.out.println("ANTES D");
                         linea = entrada.readLine();
                           
@@ -2858,7 +2857,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(842, 1036, Short.MAX_VALUE))
+                .addGap(842, 1040, Short.MAX_VALUE))
         );
         VisualizarOrdenLayout.setVerticalGroup(
             VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3193,46 +3192,45 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane50, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel31)
-                                .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                            .addGap(1, 1, 1)
-                                            .addComponent(jLabel154))
-                                        .addComponent(jLabel150, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane51, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane2))
-                                    .addGap(13, 13, 13)
-                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(seleccionarModificarInfo8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cantidad)
-                                        .addComponent(seleccionarModificarInfo9, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
-                                    .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addGap(12, 12, 12)
-                                    .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(seleccionarModificarInfo13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                    .addGap(1, 1, 1)
-                                    .addComponent(bFechaOrdenesCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(seleccionarModificarInfo5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel149, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel31)
                             .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                .addComponent(jLabel158)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel154))
+                                    .addComponent(jLabel150, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane51, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2))
+                                .addGap(13, 13, 13)
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(seleccionarModificarInfo8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cantidad)
+                                    .addComponent(seleccionarModificarInfo9, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(bFechaOrdenesCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seleccionarModificarInfo5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel152)
-                                            .addComponent(jLabel1))
+                                        .addComponent(jScrollPane49, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                        .addComponent(jLabel149, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8, 8, 8)))
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                                    .addComponent(seleccionarModificarInfo13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(4, 4, 4)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                        .addComponent(jLabel1)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
@@ -3258,7 +3256,12 @@ public final class Interfaz extends javax.swing.JFrame {
                                     .addComponent(calcularRepuestos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel157, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(tVarios, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(21, 21, 21)))
+                                .addGap(21, 21, 21))
+                            .addGroup(CrearOrdenLayout.createSequentialGroup()
+                                .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel158)
+                                    .addComponent(jLabel152))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel151)
                             .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3302,7 +3305,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(jLabel148)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CrearOrdenLayout.createSequentialGroup()
+                            .addGroup(CrearOrdenLayout.createSequentialGroup()
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(CrearOrdenLayout.createSequentialGroup()
                                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -3344,12 +3347,9 @@ public final class Interfaz extends javax.swing.JFrame {
                                                             .addComponent(contactosCrear4)
                                                             .addGap(28, 28, 28)
                                                             .addComponent(jLabel165)))
-                                                    .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                                        .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(62, 62, 62)
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addComponent(seleccionarModificarInfo13)
-                                                        .addGap(43, 43, 43))
-                                                    .addComponent(jScrollPane52, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(jScrollPane52, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                 .addGap(39, 39, 39)
                                                 .addComponent(jLabel1)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -3392,11 +3392,12 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addGroup(CrearOrdenLayout.createSequentialGroup()
                                 .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(CrearOrdenLayout.createSequentialGroup()
-                                        .addGap(170, 170, 170)
+                                        .addComponent(seleccionarModificarInfo6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(144, 144, 144)
                                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(bFechaOrdenesCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(seleccionarModificarInfo5)
-                                            .addComponent(tManoObra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(tManoObra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(seleccionarModificarInfo5))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel150))
                                     .addComponent(jScrollPane50))
@@ -3498,7 +3499,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(seleccionBorrado1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel34))))
-                .addContainerGap(1023, Short.MAX_VALUE))
+                .addContainerGap(1011, Short.MAX_VALUE))
         );
         EliminarOrdenLayout.setVerticalGroup(
             EliminarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5642,6 +5643,7 @@ public final class Interfaz extends javax.swing.JFrame {
             repuesto.setCantidad(bCuidadorC2.getText());
             this.hashmapRepuestos.put(repuesto.getNombre(),repuesto);
             this.updateVRepuesto();
+            this.updateVOrden();
             this.actualizarTXTRepuestos();
        }
     }//GEN-LAST:event_contactosCrear2ActionPerformed
@@ -5941,6 +5943,8 @@ public final class Interfaz extends javax.swing.JFrame {
             }
             for(int x=0; x<this.arrayListOrdenesAñadirRepuestosCliente.size();x++){
                 repuesto=this.arrayListOrdenesAñadirRepuestosCliente.get(x);
+                System.out.println("Añadiendo: "+Integer.toString((int)(repuesto.cantidad*repuesto.precio)));
+                //repuesto.setPrecio(Integer.toString((int)(repuesto.cantidad*repuesto.precio)));
                 orden.addRepuesto(repuesto);
             }
             this.visualizarV4.setText(orden.getInformacion());
@@ -6204,6 +6208,7 @@ public final class Interfaz extends javax.swing.JFrame {
             }
             for(int x=0; x<this.arrayListOrdenesAñadirRepuestosCliente.size();x++){
                 repuesto=this.arrayListOrdenesAñadirRepuestosCliente.get(x);
+                repuesto.setPrecio(Integer.toString((int)(repuesto.cantidad*repuesto.precio)));
                 orden.addRepuesto(repuesto);
             }
             this.visualizarV4.setText(orden.getInformacion());

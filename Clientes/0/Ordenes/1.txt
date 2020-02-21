@@ -1,22 +1,22 @@
 #
-4545
-79200
-15000
-39000
-133200
+4785
+99000
+30000
+24000
+153000
 Franco Gamboa
 Lancha Sea Ray
-121/02/20
+12/12/20
 NO
-  Sin Nota
+- Agua en estanque
 *#
-  Sin Varios
+- Conectar a computador
 #*
 CAmbiar Bujías
 **
-4.0
 Bujía
-7.0
-Lubeal
+BPRF
+24000
+4.0
 ***
 ##

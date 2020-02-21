@@ -99,14 +99,14 @@ public class Orden {
         return this.manoObra;
     }
     public String getInformacion(){
-        String s="----------------------------------------------------------------------\n                                   DETALLES\n                                   ---------------\n\n"+
-                "  N° Orden: "+this.numeroOrden+"\n  Cliente: "+this.cliente+"\n  Embarcacion: "+this.embrcacion+"\n  Fecha: "+this.getFecha()+"\n  Cancelada: "+this.getCancelado()+
-                "\n\n                                MANO DE OBRA\n                                ----------------------\n\n"+this.getManoObraVisualizar()+
-                "\n\n                                   REPUESTOS\n                                   ------------------\n\n"+this.getRepuestos()+
-                "\n\n                                        VARIOS\n                                        -----------\n\n"+" "+this.getVarios()+
-                "\n\n                                          NOTA\n                                          --------\n\n"+this.getNota()+
-                "\n\n                                         COSTE\n                                         ----------\n\n  Mano de obra: "+Integer.toString(this.getTotalManoObra())+"\n  Repuestos: "+Integer.toString(this.getTotalRepuestos())+
-                "\n  Varios: "+Integer.toString(this.getTotalVarios())+"\n  TOTAL: "+Integer.toString(this.getTotal())+
+        String s="----------------------------------------------------------------------\n                                   DETALLES\n----------------------------------------------------------------------\n\n"+
+                "N° Orden: "+this.numeroOrden+"\nCliente: "+this.cliente+"\nEmbarcacion: "+this.embrcacion+"\nFecha: "+this.getFecha()+"\nCancelada: "+this.getCancelado()+
+                "\n\nMANO DE OBRA"+this.getManoObraVisualizar()+
+                "\n\nREPUESTOS"+this.getRepuestos()+
+                "\n\nVARIOS\n "+this.getVarios()+
+                "\n\nNOTA\n"+this.getNota()+
+                "\n\nCOSTE\n   Mano de obra: $ "+Integer.toString(this.getTotalManoObra())+"\n   Repuestos: $ "+Integer.toString(this.getTotalRepuestos())+
+                "\n   Varios: $ "+Integer.toString(this.getTotalVarios())+"\n   TOTAL: $ "+Integer.toString(this.getTotal())+
                 "\n\n----------------------------------------------------------------------\n";
         return s;
     }
@@ -140,7 +140,7 @@ public class Orden {
     public String getManoObraVisualizar() {
         String mObra="";
         for(int c=0;c<this.manoObra.size();c++){
-            mObra+=" - "+this.manoObra.get(c)+"\n";
+            mObra+="\n - "+this.manoObra.get(c);
         }
         return mObra;
     }
@@ -154,7 +154,7 @@ public class Orden {
             Repuesto repu=this.listadoRepuestos.get(f);
             //System.out.println("clave=" + entry.getKey() + ", valor=" + entry.getValue());
             Double t=repu.cantidad*repu.precio;
-            rep+=" - "+repu.getCantidad()+" "+repu.getNombre()+"   $ "+t+"\n";
+            rep+="\n - "+repu.getCantidad()+" "+repu.getNombre()+"   $ "+repu.getPrecio();
         }
        System.out.println(rep);
         return rep;
@@ -165,7 +165,8 @@ public class Orden {
         return ordEMb;
     }
     public void addRepuesto(Repuesto repuesto) {
-        System.out.println("Añadiendo R"+repuesto+"   c: "+repuesto.getCantidad());
+        //System.out.println("Añadiendo Repuesto: "+repuesto.getNombre()+"  Codigo: "+repuesto.getCodigo()+"  Precio: "+repuesto.getPrecio()+"   cantidad: "+repuesto.getCantidad());
+        System.out.println(repuesto.getInfoParaTxT());
         this.listadoRepuestos.add(repuesto);
     }
 }

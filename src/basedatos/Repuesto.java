@@ -18,6 +18,10 @@ public class Repuesto {
         String s="\n Repuesto: "+this.nombre+"\n Precio: "+this.getPrecio()+"\n Codigo: "+this.getCodigo()+"\n Disponibles: "+this.getCantidad();
         return s;
     }
+     public String getInfoParaTxT(){
+        String s=this.nombre+"\n"+this.getCodigo()+"\n"+this.getPrecio()+"\n"+this.getCantidad();
+        return s;
+    }
     public ArrayList getInformacionR(){
         ArrayList<String> in=new ArrayList<>();
         in.add(this.nombre);

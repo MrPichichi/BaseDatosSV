@@ -1,20 +1,22 @@
 #
-4545
-79200
-15000
-32000
-126200
-Francisco Gamboa
+88888
+176000
+8888
+1800
+186688
+Franco Gamboa
 Lancha Sea Ray
-23/02/20
+8/8/88
 NO
-Nota
+  Sin Nota
 *#
-Varios
+  Sin Varios
 #*
-CAmbiar Bujías
+Aseo
 **
-4.0
-Bujía
+Grasa
+23
+1800
+1.0
 ***
 ##
