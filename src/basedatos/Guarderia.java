@@ -18,21 +18,20 @@ public class Guarderia {
     ArrayList<String> listadoEmbarcaciones=new ArrayList<>();
     HashMap<String ,HashMap> embarcacionsYPAgos=new HashMap<>();
     ArrayList<String> año=new ArrayList<>();
-    //<embarcacion><HasMap<año><pagos>>
+
     HashMap<String ,Pago> abonosYTOtal=new HashMap<>();
     HashMap<String ,Integer> PrecioDeembarcaciones=new HashMap<>();
-    Cliente cliente;
-
+    String cliente;
     public Pago getPago() {
         return pago;
     }
     public void setPago(Pago pago) {
         this.pago = pago;
     }
-    public Cliente getCliente() {
+    public String getCliente() {
         return cliente;
     }
-    public void setCliente(Cliente cliente) {
+    public void setCliente(String cliente) {
         this.cliente = cliente;
     }
     public void inicializarAñosGuarderia(String precio){

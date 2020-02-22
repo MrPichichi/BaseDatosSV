@@ -25,7 +25,7 @@ public class Cliente {
     
     HashMap<String ,Embarcacion> hashMapEmbarcaciones= new HashMap<>();
     ArrayList<String> listadoEmbarcaciones =new ArrayList<>();
-    String [] listadoDeembarcaciones=new String[1000];
+    String [] listadoDeembarcaciones=new String[1];
     
     boolean guarderia=false; 
     boolean deudaOrden=false;
@@ -64,9 +64,9 @@ public class Cliente {
     }
   
     public void imprimirOrdenes(){
-        for (Map.Entry e : this.hashMapOrdenes.entrySet()) {
+        this.hashMapOrdenes.entrySet().forEach((e) -> {
             System.out.println(e.getKey() + " " + e.getValue());
-        }
+        });
     
     }
     
@@ -167,7 +167,6 @@ public class Cliente {
                                 bw.write((String)ord.listadoRepuestos.get(l).getPrecio());
                                 bw.newLine();
                                 bw.write((String)ord.listadoRepuestos.get(l).getCantidad());
-                                
                             }
                             bw.newLine();
                             bw.write("***");
@@ -176,10 +175,8 @@ public class Cliente {
                         bw.write("##");
                         bw.newLine();
                     }
-                    
         } catch (IOException e) {
         }
-        
     }
     public void actualizarListadoEmbarcaciones(){
         this.listadoDeembarcaciones=new String[this.listadoEmbarcaciones.size()];
@@ -187,12 +184,6 @@ public class Cliente {
             listadoDeembarcaciones[x]=this.listadoEmbarcaciones.get(x);
         }
     }
-//    public void actualizarListadoOrdenes(){
-//        this.listadoOrdenes=new String[this.arrayListOrdenes.size()];
-//        for(int x=0;x<this.arrayListOrdenes.size();x++ ){
-//            listadoOrdenes[x]=this.arrayListOrdenes.get(x);
-//        }
-//    }
     public void setTelFijoOficina1(String TelFijoOficina1) {
         this.TelFijoOficina1 = TelFijoOficina1;
     }
@@ -244,8 +235,6 @@ public class Cliente {
         System.out.println(this.listadoEmbarcaciones.toString());
         this.actualizarListadoEmbarcaciones();
     }
-   
-
     public String[] getListadoEmbarcaciones() {
         this.listadoDeembarcaciones=new String[this.listadoEmbarcaciones.size()];
         for (int g=0;g<this.listadoEmbarcaciones.size();g++) {
@@ -254,7 +243,6 @@ public class Cliente {
         }
         return listadoDeembarcaciones;
     }
-    
     public void setListadoEmbarcaciones(ArrayList<String> listadoEmbarcaciones) {
         this.listadoEmbarcaciones = listadoEmbarcaciones;
     }
@@ -388,8 +376,6 @@ public class Cliente {
         in.add(emb.motor);
         in.add(emb.nSerie);
         in.add(emb.llave);
-         
-        
         return in;
     }
     public void addOrden(Orden ord){
@@ -416,5 +402,4 @@ public class Cliente {
     public void setCelularCuidador(String celularCuidador) {
         this.celularCuidador = celularCuidador;
     }
-   
 }

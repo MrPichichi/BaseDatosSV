@@ -51,37 +51,37 @@ public final class Interfaz extends javax.swing.JFrame {
     //ELIMINADOS
     HashMap<String ,Cliente> hashmapClientesEliminados= new HashMap<>();
     ArrayList<String> arrayListContactosEliminados=new ArrayList<>();
-    String [] listadoClientesEliminados = new String[1000];	
+    String [] listadoClientesEliminados = new String[1];	
     
     
     //ORDENES
     HashMap<String ,Orden> hashmapOrdenesEliminadas= new HashMap<>();
     ArrayList<String> arrayListOrdenesEliminadas=new ArrayList<>();
-    String [] listadoOrdenesEliminadas = new String[1000];
+    String [] listadoOrdenesEliminadas = new String[1];
     //Crear ORden
     ArrayList<Repuesto> arrayListOrdenesAñadirRepuestosCliente=new ArrayList<>();
-    String [] listadoOrdenesAñadirRepuestosCliente = new String[1000];
-    String [] listadoOrdenesAñadirRepuestosClienteCantidad = new String[1000];
+    String [] listadoOrdenesAñadirRepuestosCliente = new String[1];
+    String [] listadoOrdenesAñadirRepuestosClienteCantidad = new String[1];
     //MANO OBRA
     ArrayList<String> arrayListOrdenesAñadirManoObra=new ArrayList<>();
-    String [] listadoOrdenesAñadirManoObra= new String[1000];
-    
+    String [] listadoOrdenesAñadirManoObra= new String[1];
+    //Clientes Guarderia
     HashMap<String ,Guarderia> hashmapClientesGuarderia= new HashMap<>();
     ArrayList<String> arrayListContactosGuarderia=new ArrayList<>();
-    String [] listadoClientesGuarderia = new String[1000];
+    String [] listadoClientesGuarderia = new String[1];
     
     
     //REPUESTOS
     HashMap<String ,Repuesto> hashmapRepuestos= new HashMap<>();
     ArrayList<String> arrayListRepuestos=new ArrayList<>();
-    String [] listadoRepuestos = new String[1000];
+    String [] listadoRepuestos = new String[1];
         //ELIINADOS
     HashMap<String ,Repuesto> hashmapRepuestosEliminados= new HashMap<>();
     ArrayList<String> arrayListRepuestosEliminados=new ArrayList<>();
-    String [] listadoRepuestosEliminados = new String[1000];
+    String [] listadoRepuestosEliminados = new String[1];
     //Mano obra
     ArrayList<String> arrayListManoObra=new ArrayList<>();
-    String [] listadoManoObra = new String[1000];
+    String [] listadoManoObra = new String[1];
      //Embarcaciones
     boolean clienteCrear = false;
     boolean cargarCliente=false;
@@ -514,7 +514,7 @@ public final class Interfaz extends javax.swing.JFrame {
     public void añadirGuarderia(String nombreApellido){
         this.actualizarListadoContactos();
         guarderia=new Guarderia();
-        guarderia.setCliente(this.hashmapClientes.get(nombreApellido));
+        guarderia.setCliente(nombreApellido);
         this.hashmapClientesGuarderia.put(nombreApellido, guarderia);
         
      }
@@ -543,7 +543,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     if(embarcacion.getEnGuarderia()==true){
                         guarderia=new Guarderia();
                         
-                        guarderia.setCliente(cliente);
+                        guarderia.setCliente(cliente.getApellidoNombre());
                         
                         //this.hashmapClientesGuarderia.put(cliente.getNombre(),);
                     }
@@ -1124,7 +1124,7 @@ public final class Interfaz extends javax.swing.JFrame {
         this.tablaOrdenesCrear.setListData(listadoClientes);
     }
     public void vaciarTablasO(){
-        String [] vacio = new String[1000];
+        String [] vacio = new String[1];
         this.tablaOrdenesVisualizar.setListData(vacio);
         this.tablacontactosEliminar1.setListData(vacio);
         this.tablaOdenCrearAñadirRepuestos.setListData(vacio);
@@ -1132,17 +1132,17 @@ public final class Interfaz extends javax.swing.JFrame {
         this.tablacontactosEliminados1.setListData(vacio);
         this.tablaOrdenesCrear.setListData(vacio);
         this.tablaOrdenesCrear2.setListData(vacio);
-    }
+    }                              
     public void vaciarTablasC(){
-        String [] vacio = new String[1000];
-        this.tablacontactosVisualizar.setListData(vacio);
+        String [] vacio = new String[1];
+        this.tablacontactosVisualizar.setListData    (vacio);
         this.tablaModificarInformacion.setListData(vacio);
         this.tablaContactosEliminar.setListData(vacio);
         this.tablaEmbarcaciones.setListData(vacio);
         this.tablaLanchasAgregar.setListData(vacio);
     }
     public void vaciarTablasR(){
-        String [] vacio = new String[1000];
+        String [] vacio = new String[1];
         this.tablaRepuestosVisualizar.setListData(vacio);
         this.tablaRepuestosEliminar.setListData(vacio);
         this.tablaRepuestosEliminados.setListData(vacio);
@@ -5555,20 +5555,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_eliminarEliminar1MouseClicked
 
     private void eliminarEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarEliminar1ActionPerformed
-//        if(this.tablacontactosEliminar1.getSelectedValue()!=null){
-//            orden=new Orden();
-//            orden=this.hashmapOrdenes.get(this.tablacontactosEliminar1.getSelectedValue());
-//        }
-//        if(orden!=null){
-//            this.hashmapOrdenesEliminadas.put(orden.getNumeroOrden(),orden);
-//            this.hashmapOrdenes.remove(orden.getNumeroOrden(),orden);
-//            this.updateVOrden();
-//            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
-//            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
-//            this.actualizarTXTOrdenes();
-//            this.actualizarTXTOrdenesEliminadas();
-//            repuesto=null;
-//        }
+
     }//GEN-LAST:event_eliminarEliminar1ActionPerformed
 
     private void seleccionBorrado1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionBorrado1MouseClicked
@@ -5576,19 +5563,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionBorrado1MouseClicked
 
     private void seleccionBorrado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionBorrado1ActionPerformed
-//         if(this.tablacontactosEliminados1.getSelectedValue()!=null){
-//            orden=new Orden();
-//            orden=this.hashmapOrdenesEliminadas.get(this.tablacontactosEliminados1.getSelectedValue());
-//        }
-//        if(orden!=null){
-//            //this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
-//            this.hashmapOrdenesEliminadas.remove(orden.getNumeroOrden(),orden);
-//            this.updateVOrden();
-//            //System.out.println("Existentes: "+Arrays.toString(listadoClientes));
-//            //System.out.println("Eliminados: "+Arrays.toString(listadoClientesEliminados));
-//            this.actualizarTXTOrdenesEliminadas();
-//            repuesto=null;
-//        }
+
     }//GEN-LAST:event_seleccionBorrado1ActionPerformed
 
     private void seleccionarV3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV3MouseClicked
@@ -6311,23 +6286,18 @@ public final class Interfaz extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Interfaz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
+        
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Interfaz().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Interfaz().setVisible(true);
         });
     }
 
