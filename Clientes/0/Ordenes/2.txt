@@ -1,0 +1,23 @@
+#
+4127
+88000
+30000
+15000
+133000
+Francisco Gamboa
+Lancha Sea Ray
+22/02/20
+NO
+- Agua en estanque
+*#
+- Conectar a computador
+#*
+Cambiar Impeller
+cambio foco proa
+**
+Impeller
+9384
+15000
+1.0
+***
+##

@@ -11,7 +11,7 @@ Aceite Pata
 100.0
 ##
 #
-Bujía
+Bujía BPRFS8
 BPRF
 6000
 30.0
