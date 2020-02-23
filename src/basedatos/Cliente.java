@@ -65,7 +65,7 @@ public class Cliente {
   
     public void imprimirOrdenes(){
         this.hashMapOrdenes.entrySet().forEach((e) -> {
-            System.out.println(e.getKey() + " " + e.getValue());
+            //System.out.println(e.getKey() + " " + e.getValue());
         });
     
     }
@@ -77,7 +77,7 @@ public class Cliente {
         return TelFijoOficina1;
     }
     public void crearTxTEmbarcacion(Embarcacion emb){
-    try {   System.out.println("\n Creadno EMbarcacion\n");
+    try {   //System.out.println("\n Creadno EMbarcacion\n");
             File file = new File("Clientes/"+Integer.toString(this.getNumCliente())+"/Embarcaciones/"+emb.getCodigo()+".txt");
             Cliente cl= this;
             // Si el archivo no existe es creado
@@ -85,7 +85,7 @@ public class Cliente {
                 file.createNewFile();
             }
             //this.actualizarListadoEmbarcaciones();
-            System.out.println("Antes de crear: "+emb.getInformacion());
+            //System.out.println("Antes de crear: "+emb.getInformacion());
             FileWriter fw = new FileWriter(file);
               try (BufferedWriter bw = new BufferedWriter(fw)) {
                         bw.write("#");
@@ -228,18 +228,18 @@ public class Cliente {
         final File carpeta = new File("Clientes/"+this.numCliente+"/Embarcaciones");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isFile() && ficheroEntrada.getName().equals(emb.getCodigo()+".txt")) {
-                System.out.println("ELIMINANDO TXT EMBARCACION");
+                //System.out.println("ELIMINANDO TXT EMBARCACION");
                 ficheroEntrada.delete();
             }
         }
-        System.out.println(this.listadoEmbarcaciones.toString());
+        //System.out.println(this.listadoEmbarcaciones.toString());
         this.actualizarListadoEmbarcaciones();
     }
     public String[] getListadoEmbarcaciones() {
         this.listadoDeembarcaciones=new String[this.listadoEmbarcaciones.size()];
         for (int g=0;g<this.listadoEmbarcaciones.size();g++) {
             listadoDeembarcaciones[g]=this.listadoEmbarcaciones.get(g);
-            System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
+            //System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
         }
         return listadoDeembarcaciones;
     }
@@ -268,7 +268,7 @@ public class Cliente {
         this.nombre = nombe;
     }
     public void imprimirnombre(){
-        System.out.println(this.nombre);
+        //System.out.println(this.nombre);
     }
     public String getCelular() {
         return celular;
@@ -379,7 +379,7 @@ public class Cliente {
         return in;
     }
     public void addOrden(Orden ord){
-        System.out.println("ID: "+ord.getOrdenID());
+        //System.out.println("ID: "+ord.getOrdenID());
         this.hashMapOrdenes.put(ord.getOrdenID(), ord);
         this.actualizarListadoOrdenes();
     }

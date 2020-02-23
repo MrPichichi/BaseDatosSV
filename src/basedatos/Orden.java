@@ -156,7 +156,7 @@ public class Orden {
             Double t=repu.cantidad*repu.precio;
             rep+="\n  - "+repu.getCantidad()+" "+repu.getNombre()+"   $ "+repu.getPrecio();
         }
-       System.out.println(rep);
+       //System.out.println(rep);
         return rep;
     }
     public String getOrdenID(){
@@ -166,7 +166,7 @@ public class Orden {
     }
     public void addRepuesto(Repuesto repuesto) {
         //System.out.println("Añadiendo Repuesto: "+repuesto.getNombre()+"  Codigo: "+repuesto.getCodigo()+"  Precio: "+repuesto.getPrecio()+"   cantidad: "+repuesto.getCantidad());
-        System.out.println(repuesto.getInfoParaTxT());
+        //System.out.println(repuesto.getInfoParaTxT());
         this.listadoRepuestos.add(repuesto);
     }
 }
