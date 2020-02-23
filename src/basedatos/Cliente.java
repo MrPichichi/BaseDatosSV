@@ -384,18 +384,17 @@ public class Cliente {
         this.actualizarListadoOrdenes();
     }
     public String getInformacionClienteVisualizar(){
-        return ("                                       \n\n  Numero Cliente: "+this.numCliente+"\n  Nombre: "+this.nombre+"\n  Apellido: "+this.apellido+"\n  Correo: "+this.correo+"\n  Celular: "+this.celular+
-                "\n  Telefono fijo: "+this.TelFijo+"\n  Telefono fijo Oficina 1: "+this.TelFijoOficina1+"\n  Telefono fijo Oficina 2: "+this.TelFijoOficina2+"\n  Cuidador: "+this.cuidador+"\n  Numero Celular de Cuidador: "+
-                this.celularCuidador+"\n  Guarderia: "+this.getGuarderia()+"\n  Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  Deuda Orden: "+this.getDeudaOrden());
+        return ("\n  - N°Cliente: "+this.numCliente+"\n  - Nombre: "+this.nombre+"\n  - Apellido: "+this.apellido+"\n  - Correo: "+this.correo+"\n  - Celular: "+this.celular+
+                "\n  - Telefono fijo: "+this.TelFijo+"\n  - Telefono fijo Oficina 1: "+this.TelFijoOficina1+"\n  - Telefono fijo Oficina 2: "+this.TelFijoOficina2+"\n  - Cuidador: "+this.cuidador+"\n  - Celular Cuidador: "+
+                this.celularCuidador+"\n  - Guarderia: "+this.getGuarderia()+"\n  - Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  - Deuda Orden: "+this.getDeudaOrden());
     }
     public String getInformacionEmbarcaciones(){
-        String infoEmb="\n                             EMBARCACIONES";
+        String infoEmb="\n\n  ===================================\n  EMBARCACIONES\n  ===================================";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.hashMapEmbarcaciones.get(this.listadoEmbarcaciones.get(x));
-            infoEmb+="\n----------------------------------------------------------------------"
-                    + "\n  Tipo: "+emb.tipo+"\n  Marca: "+emb.marca+"\n  Modelo: "+
-                    emb.modelo+"\n  Motor: "+emb.motor+"\n  Numero Serie: "+emb.nSerie+
-                    "\n  Numero Embarcacion: "+emb.codigo+"\n  Clave Embarcacion: "+emb.llave+"\n----------------------------------------------------------------------";
+            infoEmb+="\n  - Tipo: "+emb.tipo+"\n  - Marca: "+emb.marca+"\n  - Modelo: "+
+                    emb.modelo+"\n  - Motor: "+emb.motor+"\n  - Numero Serie: "+emb.nSerie+
+                    "\n  - Numero Embarcacion: "+emb.codigo+"\n  - Clave Embarcacion: "+emb.llave;
         }
         return infoEmb;
     }

@@ -1,0 +1,32 @@
+#
+1212
+132000
+30000
+45800
+207800
+Sergio Mingo
+Lancha Sea Ray
+12/12/20
+NO
+- Agua en estanque
+*#
+- Conectar al computador
+#*
+Aseo
+Cambiar Impeller
+Lubricar Piola
+**
+Impeller
+9384
+15000
+1.0
+Grasa
+23
+1800
+1.0
+Aceite Pata
+345
+29000
+2.0
+***
+##

@@ -11,5 +11,8 @@ Cambiar Impeller
 Lubricar Piola
 ##
 #
+Lubricar Piola Corta
+##
+#
 cambio foco proa
 ##
