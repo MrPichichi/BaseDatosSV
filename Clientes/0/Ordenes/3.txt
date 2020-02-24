@@ -1,12 +1,12 @@
 #
-1254
-22000
+4444
+154000
 0
-15000
-37000
+105000
+259000
 Francisco Gamboa
 Lancha Sea Ray
-12/02/20
+4/4/44
 NO
   Sin Nota
 *#
@@ -16,7 +16,7 @@ Cambiar Impeller
 **
 Impeller
 9384
-15000
-1.0
+105000
+7.0
 ***
 ##

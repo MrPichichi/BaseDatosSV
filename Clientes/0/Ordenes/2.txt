@@ -1,23 +1,22 @@
 #
-4127
-88000
-30000
-15000
-133000
+2222
+103400
+0
+130500
+233900
 Francisco Gamboa
 Lancha Sea Ray
-22/02/20
+12/12/12
 NO
-- Agua en estanque
+  Sin Nota
 *#
-- Conectar a computador
+  Sin Varios
 #*
-Cambiar Impeller
-cambio foco proa
+Aseo
 **
-Impeller
-9384
-15000
-1.0
+Aceite Pata
+345
+130500
+4.5
 ***
 ##

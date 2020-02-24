@@ -69,6 +69,14 @@ public class Cliente {
         });
     
     }
+    public ArrayList<Orden> getOrdenesNoCanceladas(){
+        ArrayList<Orden> ordenesNoCanceladas= new ArrayList();
+        this.hashMapOrdenes.entrySet().forEach((Map.Entry<String, Orden> e) -> {
+            Orden getOr= e.getValue();
+            ordenesNoCanceladas.add(getOr);
+        });
+        return ordenesNoCanceladas;
+    }
     
     public void setNumCliente(int numCliente) {
         this.numCliente = numCliente;
@@ -389,7 +397,7 @@ public class Cliente {
                 this.celularCuidador+"\n  - Guarderia: "+this.getGuarderia()+"\n  - Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  - Deuda Orden: "+this.getDeudaOrden());
     }
     public String getInformacionEmbarcaciones(){
-        String infoEmb="\n\n  ===================================\n  EMBARCACIONES\n  ===================================";
+        String infoEmb="\n\n  ==============\n  EMBARCACIONES\n  ==============";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.hashMapEmbarcaciones.get(this.listadoEmbarcaciones.get(x));
             infoEmb+="\n  - Tipo: "+emb.tipo+"\n  - Marca: "+emb.marca+"\n  - Modelo: "+
