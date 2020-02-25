@@ -99,7 +99,7 @@ public class Orden {
         return this.manoObra;
     }
     public String getInformacion(){
-        String s="===================================\n  DETALLES\n===================================\n\n"+
+        String s="======================\n  DETALLES\n======================\n\n"+
                 "  N° Orden: "+this.numeroOrden+"\n  Cliente: "+this.cliente+"\n  Embarcacion: "+this.embrcacion+"\n  Fecha: "+this.getFecha()+"\n  Cancelada: "+this.getCancelado()+
                 "\n\n  MANO DE OBRA"+this.getManoObraVisualizar()+
                 "\n\n  REPUESTOS"+this.getRepuestos()+
@@ -107,7 +107,7 @@ public class Orden {
                 "\n\n  NOTA\n "+this.getNota()+
                 "\n\n  COSTE\n  Mano de obra: $ "+Integer.toString(this.getTotalManoObra())+"\n  Repuestos: $ "+Integer.toString(this.getTotalRepuestos())+
                 "\n  Varios: $ "+Integer.toString(this.getTotalVarios())+"\n  TOTAL: $ "+Integer.toString(this.getTotal())+
-                "\n\n===================================\n";
+                "\n\n======================\n";
         return s;
     }
     public String getNumeroOrden() {
