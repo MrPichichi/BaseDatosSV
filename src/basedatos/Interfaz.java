@@ -2135,11 +2135,11 @@ public final class Interfaz extends javax.swing.JFrame {
 
         jLabel30.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel30.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel30.setText("Tel. Fijo Oficina 1:");
+        jLabel30.setText("Tel. Fijo Ofi 1:");
 
         jLabel35.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel35.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel35.setText("Tel. Fijo Oficina 2:");
+        jLabel35.setText("Tel. Fijo Ofi 2:");
 
         bTelFijoC5.setFont(new java.awt.Font("Lucida Bright", 0, 14)); // NOI18N
         bTelFijoC5.setText(" ");
@@ -2170,10 +2170,10 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(seleccionarModificarInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 18, Short.MAX_VALUE)
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                             .addComponent(jLabel44, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -2183,7 +2183,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                     .addComponent(jLabel35, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel45, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel48, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel48, javax.swing.GroupLayout.Alignment.LEADING))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(infoLayout.createSequentialGroup()
@@ -2203,7 +2203,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(bCelCuidadorE, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(bTelFijE, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap(508, Short.MAX_VALUE))
+                        .addContainerGap(524, Short.MAX_VALUE))
                     .addGroup(infoLayout.createSequentialGroup()
                         .addComponent(jLabel25)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -3100,7 +3100,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(seleccionarV4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane20, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
+                            .addComponent(jScrollPane20, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
                         .addGap(86, 86, 86))
                     .addGroup(VisualizarOrdenLayout.createSequentialGroup()
                         .addComponent(jScrollPane11)
@@ -3215,7 +3215,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(eliminarEliminar1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
                     .addComponent(jScrollPane18))
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
 
         eliminarEliminar1.getAccessibleContext().setAccessibleName("");
