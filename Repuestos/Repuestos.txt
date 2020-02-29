@@ -11,16 +11,10 @@ Aceite Pata
 3.0
 ##
 #
-Bujía BPRFS8
-BPRF
-6000
-30.0
-##
-#
 Golillas Tapón Pata
 89347
-1500
-100.0
+3000
+2.0
 ##
 #
 Grasa
@@ -33,4 +27,16 @@ Impeller
 9384
 15000
 1.0
+##
+#
+Lubeal
+8837
+2500
+700.0
+##
+#
+Perno
+9432
+400
+1000.0
 ##

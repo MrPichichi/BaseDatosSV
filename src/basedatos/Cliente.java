@@ -22,6 +22,8 @@ public class Cliente {
     HashMap<String ,Orden> hashMapOrdenes= new HashMap<>();
     ArrayList<String> arrayListOrdenes=new ArrayList<>();
     String[] listadoOrdenes =new String[1];
+    ArrayList<String> arrayListOrdeneNoCanceladas=new ArrayList<>();
+    String[] listadoOrdenesNoCanceladas =new String[1];
     
     HashMap<String ,Embarcacion> hashMapEmbarcaciones= new HashMap<>();
     ArrayList<String> listadoEmbarcaciones =new ArrayList<>();
@@ -58,7 +60,14 @@ public class Cliente {
                 listadoOrdenes[g]=this.arrayListOrdenes.get(g);
         }
     }
-
+    public void addOrdenNoCancelada(String orden){
+        arrayListOrdeneNoCanceladas=new ArrayList<>();
+        listadoOrdenesNoCanceladas =new String[1];
+        
+        this.arrayListOrdeneNoCanceladas.add(orden);
+        
+        
+    }
     public int getNumCliente() {
         return numCliente;
     }
@@ -69,13 +78,21 @@ public class Cliente {
         });
     
     }
-    public ArrayList<Orden> getOrdenesNoCanceladas(){
-        ArrayList<Orden> ordenesNoCanceladas= new ArrayList();
+    public String [] getOrdenesNoCanceladas(){
+        ArrayList<String> ordenesNoCanceladas= new ArrayList();
         this.hashMapOrdenes.entrySet().forEach((Map.Entry<String, Orden> e) -> {
             Orden getOr= e.getValue();
-            ordenesNoCanceladas.add(getOr);
+            if(e.getValue().cancelado==false){
+                System.out.println("DEUDA");
+              ordenesNoCanceladas.add(e.getValue().getOrdenID());
+            }
         });
-        return ordenesNoCanceladas;
+         listadoOrdenesNoCanceladas =new String[ordenesNoCanceladas.size()];
+        for (int g=0;g<ordenesNoCanceladas.size();g++) {
+             listadoOrdenesNoCanceladas[g]=ordenesNoCanceladas.get(g);
+            //System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
+        }
+        return listadoOrdenesNoCanceladas;
     }
     
     public void setNumCliente(int numCliente) {

@@ -1,19 +1,23 @@
 #
-1254
-22000
-0
-15000
-37000
-Francisco Gamboa
+2223
+110000
+25000
+18000
+153000
+Rodrigo Abarca
 Lancha Sea Ray
-12/02/20
+12/12/20
 NO
-  Sin Nota
+- falla en trim
 *#
-  Sin Varios
+- conectar a computador
 #*
 Cambiar Impeller
 **
+Golillas Tapón Pata
+89347
+3000
+2.0
 Impeller
 9384
 15000
