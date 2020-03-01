@@ -17,7 +17,27 @@ public class Embarcacion {
     String nSerie="vacio";
     String codigo="vacio";
     String llave="vacio";
+    String horas="vacio";
     boolean enGuarderia=false;
+
+    public Embarcacion() {
+    }
+
+    public String getLlave() {
+        return llave;
+    }
+
+    public void setLlave(String llave) {
+        this.llave = llave;
+    }
+
+    public String getHoras() {
+        return horas;
+    }
+
+    public void setHoras(String horas) {
+        this.horas = horas;
+    }
 
     public boolean isEnGuarderia() {
         return enGuarderia;
@@ -90,6 +110,6 @@ public class Embarcacion {
     public String getInformacion(){
         return ("\nTipo embarcacion: "+this.getTipo()+"\nMarca: "+this.marca+
                 "\nModelo: "+this.modelo+"\nMotor: "+this.motor+"\nNumero serie: "+
-                this.nSerie+"\nClave Embarcacion: "+this.llave);
+                this.nSerie+"\nClave Embarcacion: "+this.llave+"\nHoras: "+this.horas);
 }
 }

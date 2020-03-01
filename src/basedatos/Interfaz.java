@@ -23,6 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Psche
@@ -84,6 +85,8 @@ public final class Interfaz extends javax.swing.JFrame {
     ArrayList<String> arrayListManoObra=new ArrayList<>();
     String [] listadoManoObra = new String[1];
      //Embarcaciones
+     boolean ordenC = false;
+    boolean ordenNC = false;
     boolean clienteCrear = false;
     boolean cargarCliente=false;
     boolean modificarCliente=false;
@@ -843,6 +846,8 @@ public final class Interfaz extends javax.swing.JFrame {
                         linea = entrada.readLine();
                         embLoad.setClaveLancha(linea);
                         linea = entrada.readLine();
+                        embLoad.setHoras(linea);
+                        linea = entrada.readLine();
                     }
                 }
                 if(this.cargarCliente==true){
@@ -1275,6 +1280,8 @@ public final class Interfaz extends javax.swing.JFrame {
         añadiendolanchaa = new javax.swing.JLabel();
         jLabel61 = new javax.swing.JLabel();
         claveEmb = new javax.swing.JTextField();
+        horasAE = new javax.swing.JTextField();
+        jLabel65 = new javax.swing.JLabel();
         modificarLancha = new FondoPanel("sa.jpg");
         jLabel27 = new javax.swing.JLabel();
         jTextField16 = new javax.swing.JTextField();
@@ -1353,6 +1360,11 @@ public final class Interfaz extends javax.swing.JFrame {
         seleccionarV9 = new javax.swing.JButton();
         seleccionarV10 = new javax.swing.JButton();
         seleccionarV11 = new javax.swing.JButton();
+        jLabel51 = new javax.swing.JLabel();
+        jScrollPane24 = new javax.swing.JScrollPane();
+        tablaOrdenesVisualizar4 = new javax.swing.JList<>();
+        seleccionarV12 = new javax.swing.JButton();
+        seleccionarV13 = new javax.swing.JButton();
         CrearOrden = new FondoPanel("3.jpg");
         dia = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
@@ -1679,17 +1691,16 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(visualizarLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField12))
-                    .addGroup(visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(visualizarLayout.createSequentialGroup()
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(seleccionarV, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(visualizarLayout.createSequentialGroup()
-                            .addGap(4, 4, 4)
+                        .addComponent(seleccionarV, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(visualizarLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addGroup(visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(visualizarLayout.createSequentialGroup()
+                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField12))
                             .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGroup(visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(visualizarLayout.createSequentialGroup()
@@ -2201,11 +2212,12 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(infoLayout.createSequentialGroup()
-                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(seleccionarModificarInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(infoLayout.createSequentialGroup()
+                                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seleccionarModificarInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 18, Short.MAX_VALUE)
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2310,7 +2322,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        tablaClienteLanchas.addTab("mODIFICAR Datos", info);
+        tablaClienteLanchas.addTab("mODIFICAR Datos Cliente", info);
 
         eliminarLanchaa.setFont(new java.awt.Font("Perpetua Titling MT", 1, 12)); // NOI18N
 
@@ -2427,7 +2439,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
         añadiendolanchaa.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         añadiendolanchaa.setForeground(new java.awt.Color(255, 255, 255));
-        añadiendolanchaa.setText("Añadiendo Lancha a:  ");
+        añadiendolanchaa.setText("DATOS DE EMBARCACION");
 
         jLabel61.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel61.setForeground(new java.awt.Color(255, 255, 255));
@@ -2439,6 +2451,17 @@ public final class Interfaz extends javax.swing.JFrame {
                 claveEmbActionPerformed(evt);
             }
         });
+
+        horasAE.setFont(new java.awt.Font("Lucida Bright", 0, 14)); // NOI18N
+        horasAE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                horasAEActionPerformed(evt);
+            }
+        });
+
+        jLabel65.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
+        jLabel65.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel65.setText("Horas:");
 
         javax.swing.GroupLayout agregarLanchaLayout = new javax.swing.GroupLayout(agregarLancha);
         agregarLancha.setLayout(agregarLanchaLayout);
@@ -2486,8 +2509,13 @@ public final class Interfaz extends javax.swing.JFrame {
                                         .addGroup(agregarLanchaLayout.createSequentialGroup()
                                             .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(guardarLancha, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
-                .addContainerGap(462, Short.MAX_VALUE))
+                                            .addComponent(guardarLancha, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agregarLanchaLayout.createSequentialGroup()
+                                .addComponent(jLabel65)
+                                .addGap(38, 38, 38)
+                                .addComponent(horasAE, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(91, 91, 91)))))
+                .addContainerGap(461, Short.MAX_VALUE))
         );
         agregarLanchaLayout.setVerticalGroup(
             agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2531,10 +2559,14 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jLabel61)
                             .addComponent(claveEmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel65)
+                            .addComponent(horasAE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(guardarLancha, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(estado))
                     .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(105, Short.MAX_VALUE))
@@ -2692,7 +2724,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
         añadiendolanchaa1.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         añadiendolanchaa1.setForeground(new java.awt.Color(255, 255, 255));
-        añadiendolanchaa1.setText("Modificado Lancha a:  ");
+        añadiendolanchaa1.setText("DATOS DE EMBARCACION");
 
         javax.swing.GroupLayout modificarLanchaLayout = new javax.swing.GroupLayout(modificarLancha);
         modificarLancha.setLayout(modificarLanchaLayout);
@@ -2802,7 +2834,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addContainerGap(107, Short.MAX_VALUE))
         );
 
-        eliminarLanchaa.addTab("Modificar EMBARCACIÓN", modificarLancha);
+        eliminarLanchaa.addTab("Modificar Datos EMBARCACIÓN", modificarLancha);
 
         jLabel28.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel28.setForeground(new java.awt.Color(255, 255, 255));
@@ -2976,7 +3008,7 @@ public final class Interfaz extends javax.swing.JFrame {
             .addComponent(eliminarLanchaa, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
-        tablaClienteLanchas.addTab("MODIFICAR EmbarcaciÓn", lanch);
+        tablaClienteLanchas.addTab("EmbarcaciÓn", lanch);
 
         javax.swing.GroupLayout ModificarCLayout = new javax.swing.GroupLayout(ModificarC);
         ModificarC.setLayout(ModificarCLayout);
@@ -3128,7 +3160,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(jLabel15)
                     .addComponent(jLabel37))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(VisualizarOrdenLayout.createSequentialGroup()
                         .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3138,11 +3170,9 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(VisualizarOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(seleccionarV4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane20, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
-                        .addGap(86, 86, 86))
-                    .addGroup(VisualizarOrdenLayout.createSequentialGroup()
-                        .addComponent(jScrollPane11)
-                        .addGap(85, 85, 85))))
+                            .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane11))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         editaraClientes1.addTab("VER INFO oRDEN", VisualizarOrden);
@@ -3201,7 +3231,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jLabel49.setText("Orden Seleccionada:");
 
         seleccionarV8.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        seleccionarV8.setText("Seleccionar");
+        seleccionarV8.setText("Cargar Orden");
         seleccionarV8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         seleccionarV8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -3216,10 +3246,10 @@ public final class Interfaz extends javax.swing.JFrame {
 
         jLabel50.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel50.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel50.setText("Ordenes Impagas");
+        jLabel50.setText("No Canceladas");
 
         seleccionarV9.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        seleccionarV9.setText("Cancelar");
+        seleccionarV9.setText("Cancelar Orden");
         seleccionarV9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         seleccionarV9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -3233,7 +3263,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
 
         seleccionarV10.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        seleccionarV10.setText("Deshacer");
+        seleccionarV10.setText("No Cancelada");
         seleccionarV10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         seleccionarV10.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -3247,7 +3277,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
 
         seleccionarV11.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        seleccionarV11.setText("Guardar");
+        seleccionarV11.setText("Guardar Cambios");
         seleccionarV11.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         seleccionarV11.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -3257,6 +3287,46 @@ public final class Interfaz extends javax.swing.JFrame {
         seleccionarV11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seleccionarV11ActionPerformed(evt);
+            }
+        });
+
+        jLabel51.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
+        jLabel51.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel51.setText("Canceladas");
+
+        tablaOrdenesVisualizar4.setFont(new java.awt.Font("Lucida Bright", 0, 14)); // NOI18N
+        tablaOrdenesVisualizar4.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {};
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane24.setViewportView(tablaOrdenesVisualizar4);
+
+        seleccionarV12.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
+        seleccionarV12.setText("Cargar Orden");
+        seleccionarV12.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        seleccionarV12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleccionarV12MouseClicked(evt);
+            }
+        });
+        seleccionarV12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seleccionarV12ActionPerformed(evt);
+            }
+        });
+
+        seleccionarV13.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
+        seleccionarV13.setText("Cancelar Cambios");
+        seleccionarV13.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        seleccionarV13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                seleccionarV13MouseClicked(evt);
+            }
+        });
+        seleccionarV13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seleccionarV13ActionPerformed(evt);
             }
         });
 
@@ -3272,29 +3342,38 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(1281, Short.MAX_VALUE))
                     .addGroup(OrdInpagasLayout.createSequentialGroup()
                         .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(OrdInpagasLayout.createSequentialGroup()
+                                .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                                    .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(seleccionarV7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(seleccionarV8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(seleccionarV12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
-                            .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(seleccionarV8, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(seleccionarV7, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane24, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel51, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel49, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane22, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(seleccionarV9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(seleccionarV10, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(seleccionarV11, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(804, Short.MAX_VALUE))
+                            .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(seleccionarV9, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(seleccionarV10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(seleccionarV11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(seleccionarV13, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                        .addContainerGap(774, Short.MAX_VALUE))))
         );
         OrdInpagasLayout.setVerticalGroup(
             OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3309,28 +3388,35 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(jLabel41)
                     .addComponent(jLabel49))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(OrdInpagasLayout.createSequentialGroup()
                         .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(seleccionarV7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel50)
+                            .addGroup(OrdInpagasLayout.createSequentialGroup()
+                                .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(seleccionarV7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel50)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(seleccionarV8, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(OrdInpagasLayout.createSequentialGroup()
+                                .addComponent(seleccionarV9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seleccionarV10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seleccionarV11, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(seleccionarV13, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel51)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(seleccionarV8, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane23, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
-                        .addGap(86, 86, 86))
-                    .addGroup(OrdInpagasLayout.createSequentialGroup()
-                        .addComponent(jScrollPane22)
-                        .addGap(85, 85, 85))
-                    .addGroup(OrdInpagasLayout.createSequentialGroup()
-                        .addComponent(seleccionarV9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(seleccionarV10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(seleccionarV11, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane24, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(seleccionarV12, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane22))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         editaraClientes1.addTab("ver ordenes impagas", OrdInpagas);
@@ -3685,7 +3771,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
         jLabel36.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel36.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel36.setText("Embarcacion: ");
+        jLabel36.setText("...");
 
         javax.swing.GroupLayout CrearOrdenLayout = new javax.swing.GroupLayout(CrearOrden);
         CrearOrden.setLayout(CrearOrdenLayout);
@@ -3807,9 +3893,9 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(bFechaOrdenesCrear8)
                                 .addGap(31, 31, 31))))
                     .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(CrearOrdenLayout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CrearOrdenLayout.createSequentialGroup()
                             .addComponent(contactosCrear5, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(18, 18, 18)
                             .addComponent(contactosCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane26, javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CrearOrdenLayout.createSequentialGroup()
@@ -3919,7 +4005,9 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(seleccionarModificarInfo10, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(contactosCrear5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(CrearOrdenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(contactosCrear5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(contactosCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(68, 68, 68))
                     .addGroup(CrearOrdenLayout.createSequentialGroup()
                         .addComponent(jLabel151)
@@ -3943,8 +4031,6 @@ public final class Interfaz extends javax.swing.JFrame {
                                     .addComponent(jLabel166, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(calcularRepuestos1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(500, 500, 500)
-                        .addComponent(contactosCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -5690,7 +5776,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private void seleccionarVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarVActionPerformed
         if(this.tablacontactosVisualizar.getSelectedValue()!=null){
             cliente=this.hashmapClientes.get(this.tablacontactosVisualizar.getSelectedValue());
-            this.TablaContactosVsualizar.setText("  ==============\n  INFORMACION\n  =============="
+            this.TablaContactosVsualizar.setText("  ============================\n                         INFORMACION\n  ============================"
                     +cliente.getInformacionClienteVisualizar()
                     +cliente.getInformacionEmbarcaciones());
             this.jLabel12.setText("Seleccionado: "+cliente.getApellidoNombre());
@@ -5810,10 +5896,12 @@ public final class Interfaz extends javax.swing.JFrame {
             this.hashmapClientesCodigo.put(Integer.toString(cliente.getNumCliente()),cliente.getApellidoNombre());
             //System.out.println("Creando: "+cliente.getApellidoNombre()+" Num: "+cliente.getNumCliente());
             this.crearArchivosContacto(cliente);
+            JOptionPane.showMessageDialog(null,"Cliente: "+cliente.getNombreApellido()+" añadido exitosamente");
             cliente= null;
-            jLabel40.setText("Estado: Cliente Creado");
+            jLabel40.setText("Estado: Esperando ingreso de datos");
             this.updateVCliente();
             this.updateVOrden();
+            
        }
     }//GEN-LAST:event_contactosCrearActionPerformed
 
@@ -5842,6 +5930,7 @@ public final class Interfaz extends javax.swing.JFrame {
             }
             this.eliminarCliente=false;
             this.updateVCliente();
+             JOptionPane.showMessageDialog(null,"Cliente: "+cliente.getNombreApellido()+" eliminado exitosamente");
             clienteEliminar=null;
         }
     }//GEN-LAST:event_eliminarEliminarActionPerformed
@@ -5865,6 +5954,7 @@ public final class Interfaz extends javax.swing.JFrame {
             }
             this.recuperarCliente=false;
             this.updateVCliente(); // TODO add your handling code here:
+            JOptionPane.showMessageDialog(null,"Cliente: "+clienteRecuperar.getNombreApellido()+" recuperado exitosamente");
         }
         clienteRecuperar=null;
     }//GEN-LAST:event_seleccionBorradoActionPerformed
@@ -5879,6 +5969,7 @@ public final class Interfaz extends javax.swing.JFrame {
        if(bNombreE.getText().length()!=0 && bApellidoE.getText().length()!=0 && bCorreoE.getText().length()!=0 && bCelularE.getText().length()!=0 
             && bTelFijE.getText().length()!=0 && bCuidadorE.getText().length()!=0 && bCelCuidadorE.getText().length()!=0 && clienteModificar!=null){ 
             String apNombrAnterior=clienteModificar.getApellidoNombre();
+            Cliente aux=this.hashmapClientes.get(this.tablaModificarInformacion.getSelectedValue());
             clienteModificar.setNombe(this.bNombreE.getText());
             clienteModificar.setApellido(this.bApellidoE.getText());
             clienteModificar.setCorreo(this.bCorreoE.getText());
@@ -5886,18 +5977,26 @@ public final class Interfaz extends javax.swing.JFrame {
             clienteModificar.setTelFijo(this.bTelFijE.getText());
             clienteModificar.setCuidador(this.bCuidadorE.getText());
             clienteModificar.setCelularCuidador(this.bCelCuidadorE.getText());
-            this.hashmapClientes.remove(apNombrAnterior);
-            this.hashmapClientes.put(clienteModificar.getApellidoNombre(), clienteModificar);
-            this.modificarCliente=true;
-           try {
-               this.extraerArchivosCliente(clienteModificar.getNumCliente());
-           } catch (IOException ex) {
-               Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-           }
-            this.modificarCliente=false;
-            this.updateVCliente();
-            this.updateVOrden();
-            this.updateVRepuesto();
+            System.out.println("1: "+this.hashmapClientes.get(this.tablaModificarInformacion.getSelectedValue()).getInformacionC());
+            System.out.println("2: "+aux.getInformacionC());
+            if(this.hashmapClientes.get(this.tablaModificarInformacion.getSelectedValue()).getInformacionC()!=clienteModificar.getInformacionC()){
+                this.hashmapClientes.remove(apNombrAnterior);
+                JOptionPane.showMessageDialog(null,"Cliente: "+clienteModificar.getNombreApellido()+" modificado exitosamente");
+                this.hashmapClientes.put(clienteModificar.getApellidoNombre(), clienteModificar);
+                this.modificarCliente=true;
+                try {
+                   this.extraerArchivosCliente(clienteModificar.getNumCliente());
+               } catch (IOException ex) {
+                   Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+               }
+                this.modificarCliente=false;
+
+                this.updateVCliente();
+                this.updateVOrden();
+                this.updateVRepuesto();
+                
+            }
+            
        }
        clienteModificar=null;
        this.jLabel13.setText("Seleccionado: ");
@@ -6053,8 +6152,8 @@ public final class Interfaz extends javax.swing.JFrame {
             this.seleccionadoAgregar1.setText("Seleccionado: "+cliente.getApellidoNombre());
         }
         if(cliente!=null){
-            this.añadiendolanchaa.setText("Añadiendo Lancha a: "+cliente.getApellidoNombre());
-            this.estado.setText("Estado: Editando");
+           // this.añadiendolanchaa.setText("Añadiendo Lancha a: "+cliente.getApellidoNombre());
+            this.estado.setText("Estado: Editando ");
         }
     }//GEN-LAST:event_seleccionarLanchaAgregarActionPerformed
 
@@ -6081,11 +6180,13 @@ public final class Interfaz extends javax.swing.JFrame {
             embarcacion.setnSerie(this.numeroDeSerie.getText());
             embarcacion.setCodigo(Integer.toString(cliente.listadoEmbarcaciones.size()));
             embarcacion.setClaveLancha(this.claveEmb.getText());
+            embarcacion.setHoras(this.horasAE.getText());
             cliente.addEmbarcacion(embarcacion);
             cliente.crearTxTEmbarcacion(embarcacion);
             //System.out.println("Desopues de añadir: "+cliente.getInformacionE(embarcacion.getTipoMarca())+"/n "+embarcacion.codigo);
             this.estado.setText("Lancha: "+embarcacion.getMotor()+" añadida exitosamente");
             this.updateVCliente();  
+            JOptionPane.showMessageDialog(null,"Embarcacion: "+embarcacion.getTipoMarca()+" añadida exitosamente");
         }   
         this.vaciarBarrasC();
         this.seleccionadoAgregar1.setText("  Seleccionado: ");
@@ -6566,7 +6667,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private void seleccionarModificarInfo10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarModificarInfo10ActionPerformed
         if(cliente!=null && this.tablaOrdenesCrear2.getSelectedValue()!=null){
             embarcacion=cliente.hashMapEmbarcaciones.get(this.tablaOrdenesCrear2.getSelectedValue());
-            this.jLabel36.setText("Embarcacion: "+embarcacion.getTipoMarca());
+            this.jLabel36.setText(embarcacion.getTipoMarca());
 
         }
     }//GEN-LAST:event_seleccionarModificarInfo10ActionPerformed
@@ -6628,10 +6729,13 @@ public final class Interfaz extends javax.swing.JFrame {
                 orden.setNota(this.ordenesCrearNota.getText());
             }
             else{
-                orden.setNota("  Sin Nota");
+                orden.setNota(" - Sin Nota");
             }
             if(this.ordenesCrearVarios.getText().length()!=0){
                 orden.setVarios(this.ordenesCrearVarios.getText());
+            }
+             else{
+                orden.setVarios(" - Sin Varios");
             }
             for(int x=0; x<this.arrayListOrdenesAñadirManoObra.size();x++){
                 String mO=this.arrayListOrdenesAñadirManoObra.get(x);
@@ -6811,7 +6915,7 @@ public final class Interfaz extends javax.swing.JFrame {
             && this.dia.getText().length()!=0 && this.mes.getText().length()!=0 && this.año.getText().length()!=0  ){
             orden=new Orden();
             orden.setNumeroOrden(bFechaOrdenesCrear8.getText());
-
+            
             orden.setTotalManoObra(this.tManoObra.getText());
             if(this.tVarios.getText().length()!=0 && this.ordenesCrearVarios.getText().length()!=0){
                 orden.setTotalVarios(this.tVarios.getText());
@@ -6848,11 +6952,12 @@ public final class Interfaz extends javax.swing.JFrame {
             }
             this.visualizarV4.setText(orden.getInformacion());
             //System.out.println(orden.getInformacion());
-            //this.hashmapOrdenes.put(orden.getNumeroOrden(),orden);
+            //this.hashMapOrdenes.put(orden.getNumeroOrden(),orden);
             // orden.setNumTxT(Integer.toString(cliente.ordenes.size()));
             cliente.crearTxTOrdenes(orden);
             cliente.addOrden(orden);
-            
+            cliente.setDeudaOrdenSi();
+             JOptionPane.showMessageDialog(null,"Orden:"+orden.getOrdenID()+"añadida exitosamente");
             this.vaciarTablasO();
             this.vaciarBarrasO();
             this.updateVOrden();
@@ -6873,6 +6978,7 @@ public final class Interfaz extends javax.swing.JFrame {
             cliente=this.hashmapClientes.get(this.tablaOrdenesVisualizar2.getSelectedValue());
             cliente.actualizarListadoOrdenes();
             this.tablaOrdenesVisualizar3.setListData(cliente.getOrdenesNoCanceladas());
+            this.tablaOrdenesVisualizar4.setListData(cliente.getOrdenesCanceladas());
             this.repaint();
             
             //this.jLabel15.setText("Seleccionado: "+cliente.getApellidoNombre());
@@ -6887,6 +6993,8 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionarV8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV8ActionPerformed
         orden=cliente.hashMapOrdenes.get(this.tablaOrdenesVisualizar3.getSelectedValue());
+        this.ordenNC=true;
+        this.ordenC=false;
         jLabel49.setText("Orden Seleccionada: "+orden.getOrdenID());
         this.visualizarV5.setText(orden.getInformacion());
         repaint();
@@ -6898,13 +7006,14 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void seleccionarV9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV9ActionPerformed
         //orden.setCancelado();
-        ordenAux=cliente.hashMapOrdenes.get(orden.getOrdenID());
-        orden=cliente.hashMapOrdenes.get(orden.getOrdenID());
-        orden.setCancelado();
-        cliente.hashMapOrdenes.get(orden.getOrdenID()).setCancelado();
+        //ordenAux=cliente.hashMapOrdenes.get(orden.getOrdenID());
+        //orden=cliente.hashMapOrdenes.get(orden.getOrdenID());
+        cliente.hashMapOrdenes.get(orden.getOrdenID()).setCanceladoTrue();
+        //orden.setCanceladoTrue();
         cliente.actualizarListadoOrdenes();
         this.tablaOrdenesVisualizar3.setListData(cliente.getOrdenesNoCanceladas());
-        //this.visualizarV5.setText(orden.getInformacion());
+        this.tablaOrdenesVisualizar4.setListData(cliente.getOrdenesCanceladas());
+        this.visualizarV5.setText(cliente.hashMapOrdenes.get(orden.getOrdenID()).getInformacion());
         repaint();
         
     }//GEN-LAST:event_seleccionarV9ActionPerformed
@@ -6914,9 +7023,12 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarV10MouseClicked
 
     private void seleccionarV10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV10ActionPerformed
-        cliente.hashMapOrdenes.put(this.ordenAux.getOrdenID(),this.ordenAux);
+        //cliente.hashMapOrdenes.put(this.ordenAux.getOrdenID(),this.ordenAux);
+        cliente.hashMapOrdenes.get(orden.getOrdenID()).setCanceladoFalse();
         cliente.actualizarListadoOrdenes();
         this.tablaOrdenesVisualizar3.setListData(cliente.getOrdenesNoCanceladas());
+        this.tablaOrdenesVisualizar4.setListData(cliente.getOrdenesCanceladas());
+        this.visualizarV5.setText(cliente.hashMapOrdenes.get(orden.getOrdenID()).getInformacion());
         repaint();
         
         
@@ -6928,14 +7040,57 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_seleccionarV11MouseClicked
 
     private void seleccionarV11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV11ActionPerformed
-       cliente.hashMapOrdenes.put(this.orden.getOrdenID(),this.ordenAux);
-        cliente.actualizarListadoOrdenes();
-        this.tablaOrdenesVisualizar3.setListData(cliente.getOrdenesNoCanceladas());
-        File file = new File("Clientes/"+cliente.getNumCliente()+"/Ordenes/"+orden.getNumTxT()+".txt");
-        file.delete();
-        repaint();
-        
+        //cliente.hashMapOrdenes.put(this.orden.getOrdenID(),this.ordenAux);
+        //cliente.actualizarListadoOrdenes();
+        //this.tablaOrdenesVisualizar3.setListData(cliente.getOrdenesNoCanceladas());
+        System.out.println(cliente.hashMapOrdenes.get(orden.getOrdenID()).cancelado+"  "+orden.cancelado);
+        if(true==ordenC && cliente.hashMapOrdenes.get(orden.getOrdenID()).cancelado==false){
+            File file = new File("Clientes/"+cliente.getNumCliente()+"/Ordenes/"+cliente.hashMapOrdenes.get(orden.getOrdenID()).getNumeroOrden()+".txt");
+            System.out.println("Clientes/"+cliente.getNumCliente()+"/Ordenes/"+cliente.hashMapOrdenes.get(orden.getOrdenID()).getNumeroOrden()+".txt");
+            file.delete();
+            cliente.crearTxTOrdenes(cliente.hashMapOrdenes.get(orden.getOrdenID()));
+            repaint();
+            JOptionPane.showMessageDialog(null,"Cambios guardados exitosamente");
+            ordenC=false;
+        }
+        if(true==ordenNC && cliente.hashMapOrdenes.get(orden.getOrdenID()).cancelado==true){
+            File file = new File("Clientes/"+cliente.getNumCliente()+"/Ordenes/"+cliente.hashMapOrdenes.get(orden.getOrdenID()).getNumeroOrden()+".txt");
+            System.out.println("Clientes/"+cliente.getNumCliente()+"/Ordenes/"+cliente.hashMapOrdenes.get(orden.getOrdenID()).getNumeroOrden()+".txt");
+            file.delete();
+            cliente.crearTxTOrdenes(cliente.hashMapOrdenes.get(orden.getOrdenID()));
+            repaint();
+            JOptionPane.showMessageDialog(null,"Cambios guardados exitosamente");
+            ordenC=false;
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"No hay cambios que guardar");
+        }
     }//GEN-LAST:event_seleccionarV11ActionPerformed
+
+    private void seleccionarV12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV12MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seleccionarV12MouseClicked
+
+    private void seleccionarV12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV12ActionPerformed
+        this.ordenNC=false;
+        this.ordenC=true;
+        orden=cliente.hashMapOrdenes.get(this.tablaOrdenesVisualizar4.getSelectedValue());
+        jLabel49.setText("Orden Seleccionada: "+orden.getOrdenID());
+        this.visualizarV5.setText(orden.getInformacion());
+        repaint();
+    }//GEN-LAST:event_seleccionarV12ActionPerformed
+
+    private void seleccionarV13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_seleccionarV13MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seleccionarV13MouseClicked
+
+    private void seleccionarV13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarV13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_seleccionarV13ActionPerformed
+
+    private void horasAEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horasAEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_horasAEActionPerformed
  
     /**
      * @param args the command line arguments
@@ -7070,6 +7225,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton guardarLancha;
     private javax.swing.JButton guardarLancha3;
     private javax.swing.JTextField hTrabajo;
+    private javax.swing.JTextField horasAE;
     private javax.swing.JPanel info;
     private javax.swing.JPanel info3;
     private javax.swing.JButton jButton11;
@@ -7211,6 +7367,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
@@ -7221,6 +7378,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel68;
@@ -7251,6 +7409,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane21;
     private javax.swing.JScrollPane jScrollPane22;
     private javax.swing.JScrollPane jScrollPane23;
+    private javax.swing.JScrollPane jScrollPane24;
     private javax.swing.JScrollPane jScrollPane26;
     private javax.swing.JScrollPane jScrollPane27;
     private javax.swing.JScrollPane jScrollPane28;
@@ -7354,6 +7513,8 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton seleccionarV;
     private javax.swing.JButton seleccionarV10;
     private javax.swing.JButton seleccionarV11;
+    private javax.swing.JButton seleccionarV12;
+    private javax.swing.JButton seleccionarV13;
     private javax.swing.JButton seleccionarV3;
     private javax.swing.JButton seleccionarV4;
     private javax.swing.JButton seleccionarV5;
@@ -7393,6 +7554,7 @@ public final class Interfaz extends javax.swing.JFrame {
     public javax.swing.JList<String> tablaOrdenesVisualizar1;
     public javax.swing.JList<String> tablaOrdenesVisualizar2;
     public javax.swing.JList<String> tablaOrdenesVisualizar3;
+    public javax.swing.JList<String> tablaOrdenesVisualizar4;
     public javax.swing.JList<String> tablaRepuestosEliminados;
     public javax.swing.JList<String> tablaRepuestosEliminar;
     public javax.swing.JList<String> tablaRepuestosModificar;

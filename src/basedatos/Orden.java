@@ -42,10 +42,10 @@ public class Orden {
     public void setEmbrcacion(String embrcacion) {
         this.embrcacion = embrcacion;
     }
-    public void setCancelado(){
+    public void setCanceladoTrue(){
         cancelado=true;
     }
-    public void setPendientePago(){
+    public void setCanceladoFalse(){
         cancelado=false;
     }
     public String getVarios() {

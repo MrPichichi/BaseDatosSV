@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +26,7 @@ public class Cliente {
     String[] listadoOrdenes =new String[1];
     ArrayList<String> arrayListOrdeneNoCanceladas=new ArrayList<>();
     String[] listadoOrdenesNoCanceladas =new String[1];
-    
+    String[] listadoOrdenesCanceladas =new String[1];
     HashMap<String ,Embarcacion> hashMapEmbarcaciones= new HashMap<>();
     ArrayList<String> listadoEmbarcaciones =new ArrayList<>();
     String [] listadoDeembarcaciones=new String[1];
@@ -94,7 +96,22 @@ public class Cliente {
         }
         return listadoOrdenesNoCanceladas;
     }
-    
+    public String [] getOrdenesCanceladas(){
+        ArrayList<String> ordenesCanceladas= new ArrayList();
+        this.hashMapOrdenes.entrySet().forEach((Map.Entry<String, Orden> e) -> {
+            Orden getOr= e.getValue();
+            if(e.getValue().cancelado==true){
+                System.out.println("DEUDA");
+              ordenesCanceladas.add(e.getValue().getOrdenID());
+            }
+        });
+         listadoOrdenesCanceladas =new String[ordenesCanceladas.size()];
+        for (int g=0;g<ordenesCanceladas.size();g++) {
+             listadoOrdenesCanceladas[g]=ordenesCanceladas.get(g);
+            //System.out.println("\nExistente: "+this.listadoDeembarcaciones[g]);
+        }
+        return listadoOrdenesCanceladas;
+    }
     public void setNumCliente(int numCliente) {
         this.numCliente = numCliente;
     }
@@ -129,6 +146,8 @@ public class Cliente {
                         bw.newLine();
                         bw.write(emb.llave);
                         bw.newLine();
+                        bw.write(emb.horas);
+                        bw.newLine();
                         bw.write("##");
                     }
                     
@@ -138,15 +157,21 @@ public class Cliente {
     }
     public void crearTxTOrdenes(Orden ord){
         try {   
-            ord.setNumTxT(Integer.toString(this.arrayListOrdenes.size()));
-            File file = new File("Clientes/"+this.getNumCliente()+"/Ordenes/"+ord.getNumTxT()+".txt");
-            Cliente cl= this;
-            // Si el archivo no existe es creado
+            //ord.setNumTxT(Integer.toString(this.arrayListOrdenes.size()));
+            
+            File file = new File("Clientes/"+this.getNumCliente()+"/Ordenes/"+ord.getNumeroOrden()+".txt");
+            System.out.println("CREANDO TXT ORDEN: "+"Clientes/"+this.getNumCliente()+"/Ordenes/"+ord.getNumeroOrden()+".txt");
+            try{
+                file.createNewFile();
+
+            } catch (IOException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+            }
             if (!file.exists()) {
                 file.createNewFile();
             }
             //this.actualizarListadoEmbarcaciones();
-            //System.out.println("Antes de crear: "+emb.getInformacion());
+            System.out.println("CREANDO TXT ORDEN");
             FileWriter fw = new FileWriter(file);
               try (BufferedWriter bw = new BufferedWriter(fw)) {
                         bw.write("#");
@@ -401,11 +426,13 @@ public class Cliente {
         in.add(emb.motor);
         in.add(emb.nSerie);
         in.add(emb.llave);
+        in.add(emb.horas);
         return in;
     }
     public void addOrden(Orden ord){
         //System.out.println("ID: "+ord.getOrdenID());
         this.hashMapOrdenes.put(ord.getOrdenID(), ord);
+        File txt = new File("Clientes/"+this.numCliente+"/Ordenes/"+ord.getOrdenID());
         this.actualizarListadoOrdenes();
     }
     public String getInformacionClienteVisualizar(){
@@ -414,12 +441,12 @@ public class Cliente {
                 this.celularCuidador+"\n  - Guarderia: "+this.getGuarderia()+"\n  - Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  - Deuda Orden: "+this.getDeudaOrden());
     }
     public String getInformacionEmbarcaciones(){
-        String infoEmb="\n\n  ==============\n  EMBARCACIONES\n  ==============";
+        String infoEmb="\n\n  ============================\n                      EMBARCACIONES\n  ============================\n";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.hashMapEmbarcaciones.get(this.listadoEmbarcaciones.get(x));
-            infoEmb+="\n  - Tipo: "+emb.tipo+"\n  - Marca: "+emb.marca+"\n  - Modelo: "+
+            infoEmb+="\n    ==[ "+emb.getTipoMarca()+" ]==\n  - Tipo: "+emb.tipo+"\n  - Marca: "+emb.marca+"\n  - Modelo: "+
                     emb.modelo+"\n  - Motor: "+emb.motor+"\n  - Numero Serie: "+emb.nSerie+
-                    "\n  - Numero Embarcacion: "+emb.codigo+"\n  - Clave Embarcacion: "+emb.llave;
+                    "\n  - Numero Embarcacion: "+emb.codigo+"\n  - Clave Embarcacion: "+emb.llave+"\n  - Horas: "+emb.horas+"\n\n";
         }
         return infoEmb;
     }
