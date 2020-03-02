@@ -444,7 +444,7 @@ public class Cliente {
         String infoEmb="\n\n  ============================\n                      EMBARCACIONES\n  ============================\n";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.hashMapEmbarcaciones.get(this.listadoEmbarcaciones.get(x));
-            infoEmb+="\n    ==[ "+emb.getTipoMarca()+" ]==\n  - Tipo: "+emb.tipo+"\n  - Marca: "+emb.marca+"\n  - Modelo: "+
+            infoEmb+="\n    -=[ "+emb.getTipoMarca()+" ]=-\n  - Tipo: "+emb.tipo+"\n  - Marca: "+emb.marca+"\n  - Modelo: "+
                     emb.modelo+"\n  - Motor: "+emb.motor+"\n  - Numero Serie: "+emb.nSerie+
                     "\n  - Numero Embarcacion: "+emb.codigo+"\n  - Clave Embarcacion: "+emb.llave+"\n  - Horas: "+emb.horas+"\n\n";
         }
