@@ -90,9 +90,9 @@ public final class Interfaz extends javax.swing.JFrame {
     ArrayList<String> arrayListManoObra=new ArrayList<>();
     String [] listadoManoObra = new String[1];
      //Embarcaciones
-     boolean ordenC = false;
+    boolean ordenC = false;
     boolean ordenNC = false;
-    boolean clienteCrear = false;
+    boolean crearCliente = false;
     boolean cargarCliente=false;
     boolean modificarCliente=false;
     boolean eliminarCliente=false;
@@ -100,7 +100,6 @@ public final class Interfaz extends javax.swing.JFrame {
     boolean selected=false; 
     boolean cargarClienteEliminado=false; 
     int totalRepuestos=0,totalManoObra=0;
-    public Image fondoMetal;
     
      public Interfaz() throws IOException {
          
@@ -977,7 +976,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         }
                         linea = entrada.readLine(); 
                     }
-                     if(this.clienteCrear==true){
+                     if(this.crearCliente==true){
                         this.hashmapClientes.put(cl.getApellidoNombre(),cl);
                         this.arrayListContactos.add(cl.getApellidoNombre());
                         this.actualizarListadoContactos();
@@ -1067,15 +1066,15 @@ public final class Interfaz extends javax.swing.JFrame {
             }catch (IOException e) { 
             } 
             finally{ 
-                try{ 
+                try{    
                     entrada.close(); 
                 }
                 catch(IOException e1){} 
             } 
     }
     
-    public void cargarTXTEmbarcciones(){
-        final File carpeta = new File("Clientes/Embarcaciones");
+    public void cargarTXTEmbarcciones(String direccion){
+        final File carpeta = new File("Clientes/ClientesActivos/Embarcaciones");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isFile()) {
                //System.out.println("Emb: "+ficheroEntrada.getName());
@@ -1791,15 +1790,12 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(visualizarLayout.createSequentialGroup()
-                                .addGap(260, 260, 260)
-                                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(visualizarLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(516, Short.MAX_VALUE))
         );
         visualizarLayout.setVerticalGroup(
             visualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3104,7 +3100,7 @@ public final class Interfaz extends javax.swing.JFrame {
         );
         DistribuidoresLayout.setVerticalGroup(
             DistribuidoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(editaraClientes4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+            .addComponent(editaraClientes4, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         editaraClientes5.addTab("Distribuidores ", Distribuidores);
