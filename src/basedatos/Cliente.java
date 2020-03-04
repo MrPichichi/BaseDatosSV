@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Psche
  */
-public class Cliente {
+public class Cliente extends Contactos{
     HashMap<String ,Orden> hashMapOrdenes= new HashMap<>();
     ArrayList<String> arrayListOrdenes=new ArrayList<>();
     String[] listadoOrdenes =new String[1];
@@ -34,17 +34,10 @@ public class Cliente {
     boolean guarderia=false; 
     boolean deudaOrden=false;
     boolean deudaGuarderia=false;
-    public String nombre="vacio";
-    public String apellido="vacio";
-    public String celular="vacio";
-    public String TelFijo="vacio";
-    public String TelFijoOficina1="vacio";
-    public String TelFijoOficina2="vacio";
-    public String correo="vacio";
     public String cuidador="vacio";
     public String celularCuidador="vacio";
     Embarcacion emb;
-    int numCliente=0;
+    
     Interfaz interfaz;
 
     public String[] getListadoOrdenes() {

@@ -1,9 +1,9 @@
 #
-1
-Cristian
-Abello
-9789959278
-vacio
+0
+Rodrigo
+Abarca
+993450421
+333333
 vacio
 vacio
 vacio
@@ -11,5 +11,5 @@ vacio
 vacio
 NO
 NO
-NO
+SI
 ##
