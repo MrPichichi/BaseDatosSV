@@ -113,7 +113,7 @@ public class Cliente extends Contactos{
     }
     public void crearTxTEmbarcacion(Embarcacion emb){
     try {   //System.out.println("\n Creadno EMbarcacion\n");
-            File file = new File("Clientes/"+Integer.toString(this.getNumCliente())+"/Embarcaciones/"+emb.getCodigo()+".txt");
+            File file = new File("Contactos/Clientes/ClientesActivos/"+Integer.toString(this.getNumCliente())+"/Embarcaciones/"+emb.getCodigo()+".txt");
             Cliente cl= this;
             // Si el archivo no existe es creado
             if (!file.exists()) {
@@ -146,6 +146,11 @@ public class Cliente extends Contactos{
                     
         } catch (IOException e) {
         }
+        
+    }
+    public void eliminarTxTEmbarcación(String numEmbarcacion){
+        File file = new File("Contactos/Clientes/ClientesActivos"+this.getNumCliente()+"/Embarcaciones/"+numEmbarcacion+".txt");
+        file.delete();
         
     }
     public void crearTxTOrdenes(Orden ord){
@@ -268,7 +273,7 @@ public class Cliente extends Contactos{
     public void eliminarEmbarcacion(Embarcacion emb){
         this.hashMapEmbarcaciones.remove(emb.getTipoMarca());
         this.listadoEmbarcaciones.remove(emb.getTipoMarca());
-        final File carpeta = new File("Clientes/"+this.numCliente+"/Embarcaciones");
+        final File carpeta = new File("Contactos/Clientes/ClientesActivos/"+this.numCliente+"/Embarcaciones");
         for (final File ficheroEntrada : carpeta.listFiles()) {
             if (ficheroEntrada.isFile() && ficheroEntrada.getName().equals(emb.getCodigo()+".txt")) {
                 //System.out.println("ELIMINANDO TXT EMBARCACION");
