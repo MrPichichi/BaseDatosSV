@@ -592,6 +592,29 @@ public final class Interfaz extends javax.swing.JFrame {
             }
         }
     }
+        public void actualizarTXTInfoDistribuidor(File info, Distribuidor dist){
+          try {
+            File file = info;
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+              try (BufferedWriter bw = new BufferedWriter(fw)) {
+                        Distribuidor di=dist;
+                        bw.write("#");
+                        bw.newLine();
+                        for(int l=0;l<di.getInformacionDistribuidor().size();l++){
+                            bw.write((String) di.getInformacionDistribuidor().get(l));
+                            bw.newLine();
+                        }
+                        bw.write("##");
+                        bw.newLine();
+                        bw.close();
+              }
+        } catch (IOException e) {
+        }
+    }
     public void actualizarTXTInfoContacto(File info, Cliente cliente){
           try {
             File file = info;
@@ -615,6 +638,7 @@ public final class Interfaz extends javax.swing.JFrame {
         } catch (IOException e) {
         }
     }
+    
      
     public void actualizarTXTOrdenesEliminadas(){
            try {
@@ -756,7 +780,7 @@ public final class Interfaz extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.actualizarTXTInfoContacto(crear_TxTInfo,cliente);
+        this.actualizarTXTInfoDistribuidor(crear_TxTInfo,distribuidor);
     }
     public void cargarOrden(File f){
             BufferedReader entrada = null; 
@@ -997,6 +1021,71 @@ public final class Interfaz extends javax.swing.JFrame {
                         this.arrayListContactosEliminados.add(cl.getApellidoNombre());
                         this.actualizarListadoContactosEliminados();
                     }
+                }
+            } 
+            }catch (IOException e) { 
+            } 
+            finally{ 
+                try{ 
+                    entrada.close(); 
+                }
+                catch(IOException e1){} 
+            } 
+    }
+    public void cargarDistribuidor(File f){
+        //System.out.println("CARGANDO");
+            BufferedReader entrada = null; 
+            try { 
+            entrada = new BufferedReader( new FileReader( f ) ); 
+            String linea;
+            Distribuidor dis= new Distribuidor();
+            while(entrada.ready()){ 
+                linea = entrada.readLine(); 
+                while(!"##".equals(linea)){
+                    if("#".equals(linea)){
+                        linea = entrada.readLine(); 
+                        dis.setNumCliente(Integer.parseInt(linea));
+                        linea = entrada.readLine(); 
+                        dis.setNombre(linea);
+                        linea = entrada.readLine(); 
+                        dis.setApellido(linea);
+                        linea = entrada.readLine(); 
+                        dis.setCelular(linea);
+                        linea = entrada.readLine(); 
+                        dis.setTelFijo(linea);
+                        linea = entrada.readLine(); 
+                        dis.setTelFijoOficina1(linea);
+                        linea = entrada.readLine(); 
+                        dis.setTelFijoOficina2(linea);
+                        linea = entrada.readLine(); 
+                        dis.setCorreo(linea);
+                        linea = entrada.readLine(); 
+                        dis.setEmpresa(linea);
+                        linea = entrada.readLine(); 
+                        dis.setCuentaDeposito(linea);
+                        linea = entrada.readLine(); 
+                    }
+//                    if(this.crearDistribuidor==true){
+//                        this.hashmapClientes.put(cl.getApellidoNombre(),cl);
+//                        this.arrayListContactos.add(cl.getApellidoNombre());
+//                        this.actualizarListadoContactos();
+//                    }
+//                    if(this.cargarDistribuidor==true){
+//                        clienteLoad=cl.getApellidoNombre();
+//                        this.hashmapClientes.put(cl.getApellidoNombre(),cl);
+//                        this.arrayListContactos.add(cl.getApellidoNombre());
+//                        this.actualizarListadoContactos();
+//                    }
+//                    if(this.recuperarCliente==true){
+//                         this.hashmapClientes.put(cl.getApellidoNombre(),cl);
+//                         this.arrayListContactos.add(cl.getApellidoNombre());
+//                     }
+//                    if(this.cargarClienteEliminado==true){
+//                        clienteLoad=cl.getApellidoNombre();
+//                        this.hashmapClientesEliminados.put(cl.getApellidoNombre(),cl);
+//                        this.arrayListContactosEliminados.add(cl.getApellidoNombre());
+//                        this.actualizarListadoContactosEliminados();
+//                    }
                 }
             } 
             }catch (IOException e) { 
@@ -1329,10 +1418,10 @@ public final class Interfaz extends javax.swing.JFrame {
         jLabel71 = new javax.swing.JLabel();
         bCorreoC1 = new javax.swing.JTextField();
         jLabel72 = new javax.swing.JLabel();
-        bCuidadorC1 = new javax.swing.JTextField();
+        bEmpresaC1 = new javax.swing.JTextField();
         jLabel73 = new javax.swing.JLabel();
         jLabel74 = new javax.swing.JLabel();
-        bCelCuidadorC1 = new javax.swing.JTextField();
+        bNumCuentaC1 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         contactosCrear6 = new javax.swing.JButton();
         jLabel75 = new javax.swing.JLabel();
@@ -1456,7 +1545,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jLabel181 = new javax.swing.JLabel();
         bTelFijoC15 = new javax.swing.JTextField();
         bTelFijoC16 = new javax.swing.JTextField();
-        lanch = new FondoPanel("7.jpg");
+        lanch = new FondoPanel("6.jpg");
         eliminarLanchaa = new javax.swing.JTabbedPane();
         agregarLancha = new FondoPanel("7.jpg");
         jLabel56 = new javax.swing.JLabel();
@@ -1529,7 +1618,7 @@ public final class Interfaz extends javax.swing.JFrame {
         sel = new javax.swing.JLabel();
         seleccionBorrado6 = new javax.swing.JButton();
         estado1 = new javax.swing.JLabel();
-        Ordenes = new FondoPanel("7.jpg");
+        Ordenes = new FondoPanel("6.jpg");
         editaraClientes1 = new javax.swing.JTabbedPane();
         VisualizarOrden = new FondoPanel("7.jpg");
         jScrollPane10 = new javax.swing.JScrollPane();
@@ -1569,7 +1658,7 @@ public final class Interfaz extends javax.swing.JFrame {
         tablaOrdenesVisualizar4 = new javax.swing.JList<>();
         seleccionarV12 = new javax.swing.JButton();
         seleccionarV13 = new javax.swing.JButton();
-        CrearOrden = new FondoPanel("0.jpg");
+        CrearOrden = new FondoPanel("7.jpg");
         dia = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         contactosCrear1 = new javax.swing.JButton();
@@ -1645,7 +1734,7 @@ public final class Interfaz extends javax.swing.JFrame {
         tablacontactosEliminados1 = new javax.swing.JList<>();
         seleccionBorrado1 = new javax.swing.JButton();
         jLabel34 = new javax.swing.JLabel();
-        Repuestos =  new FondoPanel("7.jpg");
+        Repuestos =  new FondoPanel("6.jpg");
         editaraClientes2 = new javax.swing.JTabbedPane();
         visualizar2 =  new FondoPanel("7.jpg");
         jScrollPane27 = new javax.swing.JScrollPane();
@@ -1699,9 +1788,9 @@ public final class Interfaz extends javax.swing.JFrame {
         bRepuestosModCantidad = new javax.swing.JTextField();
         bRepuestosModPrecio = new javax.swing.JTextField();
         estado12 = new javax.swing.JLabel();
-        Guarderias = new FondoPanel("7.jpg");
+        Guarderias = new FondoPanel("6.jpg");
         editaraClientes3 = new javax.swing.JTabbedPane();
-        visualizar3 = new javax.swing.JPanel();
+        visualizar3 = new FondoPanel("7.jpg");
         jScrollPane38 = new javax.swing.JScrollPane();
         tablaOrdenesV2 = new javax.swing.JList<>();
         jLabel112 = new javax.swing.JLabel();
@@ -1725,10 +1814,12 @@ public final class Interfaz extends javax.swing.JFrame {
         Main.setRequestFocusEnabled(false);
 
         editaraClientes5.setBackground(new java.awt.Color(255, 255, 255));
+        editaraClientes5.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         editaraClientes5.setFont(new java.awt.Font("Perpetua Titling MT", 1, 12)); // NOI18N
         editaraClientes5.setPreferredSize(new java.awt.Dimension(1270, 762));
 
         editaraClientes.setBackground(new java.awt.Color(255, 255, 255));
+        editaraClientes.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         editaraClientes.setFont(new java.awt.Font("Perpetua Titling MT", 1, 12)); // NOI18N
         editaraClientes.setMaximumSize(new java.awt.Dimension(1270, 32767));
         editaraClientes.setPreferredSize(new java.awt.Dimension(1270, 762));
@@ -1899,7 +1990,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
 
         contactosCrear.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        contactosCrear.setText("Crear");
+        contactosCrear.setText("Agregar");
         contactosCrear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         contactosCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2389,7 +2480,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addGroup(infoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout ModificarCLayout = new javax.swing.GroupLayout(ModificarC);
@@ -2402,9 +2493,9 @@ public final class Interfaz extends javax.swing.JFrame {
         );
         ModificarCLayout.setVerticalGroup(
             ModificarCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 671, Short.MAX_VALUE)
+            .addGap(0, 699, Short.MAX_VALUE)
             .addGroup(ModificarCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(info, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE))
+                .addComponent(info, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE))
         );
 
         editaraClientes.addTab("Modificar CLIENTE", ModificarC);
@@ -2417,7 +2508,7 @@ public final class Interfaz extends javax.swing.JFrame {
         );
         ClientesLayout.setVerticalGroup(
             ClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(editaraClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
+            .addComponent(editaraClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
         );
 
         editaraClientes5.addTab("CLIENTES", Clientes);
@@ -2511,7 +2602,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(seleccionarV1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane25, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
                     .addComponent(jScrollPane29))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         editaraClientes4.addTab("VER INFO Distribuidor", visualizar1);
@@ -2568,7 +2659,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jLabel72.setForeground(new java.awt.Color(255, 255, 255));
         jLabel72.setText("Correo: ");
 
-        bCuidadorC1.setFont(new java.awt.Font("Lucida Bright", 0, 14)); // NOI18N
+        bEmpresaC1.setFont(new java.awt.Font("Lucida Bright", 0, 14)); // NOI18N
 
         jLabel73.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel73.setForeground(new java.awt.Color(255, 255, 255));
@@ -2578,10 +2669,10 @@ public final class Interfaz extends javax.swing.JFrame {
         jLabel74.setForeground(new java.awt.Color(255, 255, 255));
         jLabel74.setText("N° Cuenta");
 
-        bCelCuidadorC1.setFont(new java.awt.Font("Lucida Bright", 0, 14)); // NOI18N
-        bCelCuidadorC1.addActionListener(new java.awt.event.ActionListener() {
+        bNumCuentaC1.setFont(new java.awt.Font("Lucida Bright", 0, 14)); // NOI18N
+        bNumCuentaC1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bCelCuidadorC1ActionPerformed(evt);
+                bNumCuentaC1ActionPerformed(evt);
             }
         });
 
@@ -2595,7 +2686,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
 
         contactosCrear6.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        contactosCrear6.setText("Crear");
+        contactosCrear6.setText("Agregar");
         contactosCrear6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         contactosCrear6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2651,9 +2742,9 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(bTelFijoC9, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bTelFijoC8, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(crear1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(bCelCuidadorC1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                .addComponent(bNumCuentaC1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                                 .addComponent(bCorreoC1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                .addComponent(bCuidadorC1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                .addComponent(bEmpresaC1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                                 .addComponent(bNombreC1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                                 .addComponent(bTelFijoC7, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                                 .addComponent(bCelularC1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
@@ -2699,11 +2790,11 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(jLabel72))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(crear1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bCuidadorC1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bEmpresaC1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel73))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(crear1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bCelCuidadorC1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bNumCuentaC1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel74))
                 .addGap(10, 10, 10)
                 .addComponent(jLabel83)
@@ -2711,7 +2802,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addGroup(crear1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(contactosCrear6, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(321, Short.MAX_VALUE))
+                .addContainerGap(366, Short.MAX_VALUE))
         );
 
         editaraClientes4.addTab("agregar distribuidor", crear1);
@@ -2830,7 +2921,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(eliminarEliminar4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
                     .addComponent(jScrollPane32))
-                .addGap(0, 24, Short.MAX_VALUE))
+                .addGap(0, 48, Short.MAX_VALUE))
         );
 
         editaraClientes4.addTab("Eliminar distribuidor", eliminar1);
@@ -3086,7 +3177,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addGroup(info1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton21, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout ModificarC1Layout = new javax.swing.GroupLayout(ModificarC1);
@@ -3097,7 +3188,7 @@ public final class Interfaz extends javax.swing.JFrame {
         );
         ModificarC1Layout.setVerticalGroup(
             ModificarC1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(info1, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+            .addComponent(info1, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
         );
 
         editaraClientes4.addTab("Modificar datos distribuidor", ModificarC1);
@@ -3110,7 +3201,7 @@ public final class Interfaz extends javax.swing.JFrame {
         );
         DistribuidoresLayout.setVerticalGroup(
             DistribuidoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(editaraClientes4, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
+            .addComponent(editaraClientes4, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
         );
 
         editaraClientes5.addTab("Distribuidores ", Distribuidores);
@@ -3288,7 +3379,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
 
         contactosCrear7.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        contactosCrear7.setText("Crear");
+        contactosCrear7.setText("Agregar");
         contactosCrear7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         contactosCrear7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3526,7 +3617,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addGroup(eliminar4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jScrollPane37, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
                             .addComponent(jScrollPane36))
-                        .addContainerGap(24, Short.MAX_VALUE))))
+                        .addContainerGap(50, Short.MAX_VALUE))))
         );
 
         editaraClientes6.addTab("Eliminar Contacto", eliminar4);
@@ -3793,7 +3884,7 @@ public final class Interfaz extends javax.swing.JFrame {
         );
         ModificarC2Layout.setVerticalGroup(
             ModificarC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 685, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
             .addGroup(ModificarC2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(ModificarC2Layout.createSequentialGroup()
                     .addComponent(info2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3810,7 +3901,7 @@ public final class Interfaz extends javax.swing.JFrame {
         );
         MisContactosLayout.setVerticalGroup(
             MisContactosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(editaraClientes6, javax.swing.GroupLayout.PREFERRED_SIZE, 701, Short.MAX_VALUE)
+            .addComponent(editaraClientes6, javax.swing.GroupLayout.PREFERRED_SIZE, 729, Short.MAX_VALUE)
         );
 
         editaraClientes5.addTab("mis contactos", MisContactos);
@@ -3821,11 +3912,11 @@ public final class Interfaz extends javax.swing.JFrame {
             Clientes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Clientes2Layout.createSequentialGroup()
                 .addComponent(editaraClientes5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGap(0, 516, Short.MAX_VALUE))
         );
         Clientes2Layout.setVerticalGroup(
             Clientes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(editaraClientes5, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+            .addComponent(editaraClientes5, javax.swing.GroupLayout.DEFAULT_SIZE, 755, Short.MAX_VALUE)
         );
 
         Main.addTab("Contactos", Clientes2);
@@ -3890,7 +3981,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jLabel60.setText("N° Serie:");
 
         guardarLancha.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        guardarLancha.setText("Guardar");
+        guardarLancha.setText("Agregar");
         guardarLancha.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         guardarLancha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -4018,7 +4109,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                     .addGap(55, 55, 55)
                                     .addComponent(guardarLancha, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addComponent(añadiendolanchaa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(482, Short.MAX_VALUE))
+                .addContainerGap(984, Short.MAX_VALUE))
         );
         agregarLanchaLayout.setVerticalGroup(
             agregarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4118,7 +4209,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jScrollPane16.setViewportView(tablaEmbarcaciones);
 
         seleccionBorrado3.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        seleccionBorrado3.setText("Seleccionar");
+        seleccionBorrado3.setText("Cargar");
         seleccionBorrado3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         seleccionBorrado3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -4152,7 +4243,7 @@ public final class Interfaz extends javax.swing.JFrame {
         });
 
         jButton12.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        jButton12.setText("Guardar");
+        jButton12.setText("Guardar Cambios");
         jButton12.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -4286,10 +4377,10 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(horasAE1, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, modificarLanchaLayout.createSequentialGroup()
                                     .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(55, 55, 55)
-                                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addGap(41, 41, 41)
+                                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(añadiendolanchaa1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(475, Short.MAX_VALUE))
+                .addContainerGap(977, Short.MAX_VALUE))
         );
         modificarLanchaLayout.setVerticalGroup(
             modificarLanchaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4349,7 +4440,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(estado2)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         eliminarLanchaa.addTab("Modificar Datos EMBARCACIÓN", modificarLancha);
@@ -4363,7 +4454,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jButton28.setText("Buscar");
 
         jButton29.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        jButton29.setText("Seleccionar");
+        jButton29.setText("Eliminar");
         jButton29.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton29.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -4452,20 +4543,17 @@ public final class Interfaz extends javax.swing.JFrame {
             modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(modificarLancha1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(modificarLancha1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(modificarLancha1Layout.createSequentialGroup()
-                        .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sel, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(modificarLancha1Layout.createSequentialGroup()
-                                .addComponent(jLabel28)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, modificarLancha1Layout.createSequentialGroup()
+                        .addComponent(jLabel28)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField17))
+                    .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(sel, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(modificarLancha1Layout.createSequentialGroup()
+                            .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(modificarLancha1Layout.createSequentialGroup()
@@ -4479,7 +4567,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(seleccionBorrado5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(seleccionBorrado4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)))
-                        .addContainerGap(220, Short.MAX_VALUE))
+                        .addContainerGap(721, Short.MAX_VALUE))
                     .addGroup(modificarLancha1Layout.createSequentialGroup()
                         .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -4492,14 +4580,14 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(jLabel28)
                     .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton28))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(modificarLancha1Layout.createSequentialGroup()
-                        .addComponent(sel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(23, 23, 23)
                         .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(modificarLancha1Layout.createSequentialGroup()
-                        .addComponent(jLabel21)
+                        .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel21)
+                            .addComponent(sel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(modificarLancha1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(modificarLancha1Layout.createSequentialGroup()
@@ -4512,7 +4600,7 @@ public final class Interfaz extends javax.swing.JFrame {
                                 .addComponent(estado1))
                             .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane19))))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         eliminarLanchaa.addTab("Eliminar EMBARCACIÓN", modificarLancha1);
@@ -4521,11 +4609,11 @@ public final class Interfaz extends javax.swing.JFrame {
         lanch.setLayout(lanchLayout);
         lanchLayout.setHorizontalGroup(
             lanchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(eliminarLanchaa, javax.swing.GroupLayout.DEFAULT_SIZE, 1278, Short.MAX_VALUE)
+            .addComponent(eliminarLanchaa, javax.swing.GroupLayout.DEFAULT_SIZE, 1786, Short.MAX_VALUE)
         );
         lanchLayout.setVerticalGroup(
             lanchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(eliminarLanchaa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+            .addComponent(eliminarLanchaa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         Main.addTab("Embarcaciones", lanch);
@@ -4829,25 +4917,23 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(OrdInpagasLayout.createSequentialGroup()
-                        .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
-                            .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)))
+                        .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel41, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                            .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                            .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(seleccionarV7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(seleccionarV8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(seleccionarV12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane24, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel51, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                    .addComponent(jLabel51, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(OrdInpagasLayout.createSequentialGroup()
                         .addComponent(jLabel38)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField18)))
+                        .addComponent(jTextField18))
+                    .addComponent(jScrollPane24, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(OrdInpagasLayout.createSequentialGroup()
@@ -4863,7 +4949,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(seleccionarV10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(seleccionarV11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(seleccionarV13, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
-                        .addContainerGap(264, Short.MAX_VALUE))))
+                        .addContainerGap(261, Short.MAX_VALUE))))
         );
         OrdInpagasLayout.setVerticalGroup(
             OrdInpagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4906,7 +4992,7 @@ public final class Interfaz extends javax.swing.JFrame {
                             .addComponent(seleccionarV12, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane24, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane22))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         editaraClientes1.addTab("cANCELAR orden", OrdInpagas);
@@ -5543,7 +5629,7 @@ public final class Interfaz extends javax.swing.JFrame {
         jScrollPane12.setViewportView(tablacontactosEliminar1);
 
         eliminarEliminar1.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
-        eliminarEliminar1.setText("Seleccionar");
+        eliminarEliminar1.setText("Eliminar");
         eliminarEliminar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         eliminarEliminar1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -5738,7 +5824,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visualizar2Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addComponent(jScrollPane28, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         editaraClientes2.addTab("VER INFO REPUESTO", visualizar2);
@@ -5839,7 +5925,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addGroup(crear2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(contactosCrear2))
-                .addContainerGap(563, Short.MAX_VALUE))
+                .addContainerGap(587, Short.MAX_VALUE))
         );
 
         editaraClientes2.addTab("cREAR REPUESTO", crear2);
@@ -5944,7 +6030,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     .addComponent(eliminarEliminar2)
                     .addComponent(jScrollPane30, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
                     .addComponent(jScrollPane31))
-                .addGap(0, 142, Short.MAX_VALUE))
+                .addGap(0, 166, Short.MAX_VALUE))
         );
 
         editaraClientes2.addTab("Eliminar REPUESTO", eliminar2);
@@ -6209,7 +6295,7 @@ public final class Interfaz extends javax.swing.JFrame {
                         .addComponent(jLabel113)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(visualizar3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane38, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                            .addComponent(jScrollPane38, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
                             .addGroup(visualizar3Layout.createSequentialGroup()
                                 .addComponent(seleccionarV6)
                                 .addGap(0, 0, Short.MAX_VALUE))))
@@ -6385,6 +6471,8 @@ public final class Interfaz extends javax.swing.JFrame {
 }
     private void contactosCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactosCrearActionPerformed
        if(bNombreC.getText().length()!=0 && bApellidoC.getText().length()!=0 && (bCelularC.getText().length()!=0 || bCorreoC.getText().length()!=0)){ 
+            String s=this.bNombreC.getText()+" "+this.bApellidoC.getText();
+            if(!this.hashmapClientes.containsKey(s)){ 
             cliente=new Cliente();
             cliente.setNombe(this.bNombreC.getText());
             cliente.setApellido(this.bApellidoC.getText());
@@ -6405,7 +6493,7 @@ public final class Interfaz extends javax.swing.JFrame {
          
             cliente.setNumCliente(this.hashmapClientes.size()+this.hashmapClientesEliminados.size());
             this.hashmapClientes.put(cliente.getApellidoNombre(),cliente);
-            this.hashmapClientesCodigo.put(Integer.toString(cliente.getNumCliente()),cliente.getApellidoNombre());
+            //this.hashmapClientesCodigo.put(Integer.toString(cliente.getNumCliente()),cliente.getApellidoNombre());
             //System.out.println("Creando: "+cliente.getApellidoNombre()+" Num: "+cliente.getNumCliente());
             this.crearArchivosContacto(cliente);
             JOptionPane.showMessageDialog(null,"Cliente: "+cliente.getNombreApellido()+" añadido exitosamente");
@@ -6413,6 +6501,7 @@ public final class Interfaz extends javax.swing.JFrame {
             jLabel40.setText("Estado: Esperando ingreso de datos");
             this.updateVCliente();
             this.updateVOrden();
+            }
             
        }
     }//GEN-LAST:event_contactosCrearActionPerformed
@@ -7317,7 +7406,7 @@ public final class Interfaz extends javax.swing.JFrame {
             cliente.crearTxTOrdenes(orden);
             cliente.addOrden(orden);
             cliente.setDeudaOrdenSi();
-             JOptionPane.showMessageDialog(null,"Orden:"+orden.getOrdenID()+"añadida exitosamente");
+            JOptionPane.showMessageDialog(null,"Orden:"+orden.getOrdenID()+"añadida exitosamente");
             this.vaciarTablasO();
             this.vaciarBarrasO();
             this.updateVOrden();
@@ -7480,9 +7569,9 @@ public final class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_bCorreoC1ActionPerformed
 
-    private void bCelCuidadorC1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCelCuidadorC1ActionPerformed
+    private void bNumCuentaC1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNumCuentaC1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bCelCuidadorC1ActionPerformed
+    }//GEN-LAST:event_bNumCuentaC1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
@@ -7490,29 +7579,37 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void contactosCrear6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactosCrear6ActionPerformed
        if(bNombreC1.getText().length()!=0 && bApellidoC1.getText().length()!=0 && (bCelularC1.getText().length()!=0 || bCorreoC1.getText().length()!=0)){ 
-            distribuidor=new Distribuidor();
-            distribuidor.setNombre(this.bNombreC1.getText());
-            distribuidor.setApellido(this.bApellidoC1.getText());
-            distribuidor.setCorreo(this.bCorreoC1.getText());
-            distribuidor.setCelular(this.bCelularC1.getText());
-            
-            if(this.bTelFijoC6.getText().length()!=0){
-            distribuidor.setTelFijo(this.bTelFijoC6.getText());}
-            if(this.bTelFijoC7.getText().length()!=0){
-            distribuidor.setTelFijoOficina1(this.bTelFijoC7.getText());}
-            if(this.bTelFijoC8.getText().length()!=0){
-            distribuidor.setTelFijoOficina2(this.bTelFijoC8.getText());}
-         
-            distribuidor.setNumCliente(this.hashmapDistribuidores.size()+this.hashmapDistribuidoresEliminados.size());
-            this.hashmapClientes.put(cliente.getApellidoNombre(),cliente);
-            this.hashmapClientesCodigo.put(Integer.toString(cliente.getNumCliente()),cliente.getApellidoNombre());
-            //System.out.println("Creando: "+cliente.getApellidoNombre()+" Num: "+cliente.getNumCliente());
-            this.crearArchivosContacto(cliente);
-            JOptionPane.showMessageDialog(null,"Cliente: "+cliente.getNombreApellido()+" añadido exitosamente");
-            cliente= null;
-            jLabel40.setText("Estado: Esperando ingreso de datos");
-            this.updateVCliente();
-            this.updateVOrden();
+            String s=this.bNombreC1.getText()+" "+this.bApellidoC1.getText();
+            if(!this.hashmapDistribuidores.containsKey(s)){
+                distribuidor=new Distribuidor();
+                distribuidor.setNombre(this.bNombreC1.getText());
+                distribuidor.setApellido(this.bApellidoC1.getText());
+                distribuidor.setCelular(this.bCelularC1.getText());
+
+                if(this.bTelFijoC6.getText().length()!=0){
+                distribuidor.setTelFijo(this.bTelFijoC6.getText());}
+                if(this.bTelFijoC7.getText().length()!=0){
+                distribuidor.setTelFijoOficina1(this.bTelFijoC7.getText());}
+                if(this.bTelFijoC8.getText().length()!=0){
+                distribuidor.setTelFijoOficina2(this.bTelFijoC8.getText());}
+                if(this.bEmpresaC1.getText().length()!=0){
+                distribuidor.setEmpresa(this.bEmpresaC1.getText());}
+                if(this.bNumCuentaC1.getText().length()!=0){
+                distribuidor.setCuentaDeposito(this.bNumCuentaC1.getText());}
+                if(this.bCorreoC1.getText().length()!=0){
+                distribuidor.setCorreo(this.bCorreoC1.getText());}
+
+                distribuidor.setNumCliente(this.hashmapDistribuidores.size()+this.hashmapDistribuidoresEliminados.size());
+                this.hashmapDistribuidores.put(distribuidor.getApellidoNombre(),distribuidor);
+                //this.hashmapClientesCodigo.put(Integer.toString(cliente.getNumCliente()),cliente.getApellidoNombre());
+                //System.out.println("Creando: "+cliente.getApellidoNombre()+" Num: "+cliente.getNumCliente());
+                this.crearArchivosDistribuidor(distribuidor);
+                JOptionPane.showMessageDialog(null,"Distribuidor: "+distribuidor.getNombreApellido()+" añadido exitosamente");
+                distribuidor= null;
+                jLabel40.setText("Estado: Esperando ingreso de datos");
+                this.updateVCliente();
+                this.updateVOrden();
+                }
             }
     }//GEN-LAST:event_contactosCrear6ActionPerformed
 
@@ -7750,7 +7847,6 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField bApellidoE1;
     private javax.swing.JTextField bApellidoE2;
     private javax.swing.JTextField bCelCuidadorC;
-    private javax.swing.JTextField bCelCuidadorC1;
     private javax.swing.JTextField bCelCuidadorC2;
     private javax.swing.JTextField bCelCuidadorE;
     private javax.swing.JTextField bCelCuidadorE1;
@@ -7770,12 +7866,12 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField bCorreoE1;
     private javax.swing.JTextField bCorreoE2;
     private javax.swing.JTextField bCuidadorC;
-    private javax.swing.JTextField bCuidadorC1;
     private javax.swing.JTextField bCuidadorC2;
     private javax.swing.JTextField bCuidadorC4;
     private javax.swing.JTextField bCuidadorE;
     private javax.swing.JTextField bCuidadorE1;
     private javax.swing.JTextField bCuidadorE2;
+    private javax.swing.JTextField bEmpresaC1;
     private javax.swing.JTextField bFechaOrdenesCrear1;
     private javax.swing.JTextField bFechaOrdenesCrear8;
     private javax.swing.JTextField bNombreC;
@@ -7784,6 +7880,7 @@ public final class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField bNombreE;
     private javax.swing.JTextField bNombreE1;
     private javax.swing.JTextField bNombreE2;
+    private javax.swing.JTextField bNumCuentaC1;
     private javax.swing.JTextField bRepuestosModCantidad;
     private javax.swing.JTextField bRepuestosModCodigo;
     private javax.swing.JTextField bRepuestosModNombre;

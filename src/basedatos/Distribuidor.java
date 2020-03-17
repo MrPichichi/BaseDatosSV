@@ -1,9 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package basedatos;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -16,7 +14,21 @@ public class Distribuidor extends Contactos{
     public int getNumCliente() {
         return numCliente;
     }
-
+    public ArrayList getInformacionDistribuidor(){
+        ArrayList<String> in=new ArrayList<>();
+        in.add(Integer.toString(this.numCliente));
+        in.add(this.nombre);
+        in.add(this.apellido);
+        in.add(this.celular);
+        in.add(this.TelFijo);
+        in.add(this.TelFijoOficina1);
+        in.add(this.TelFijoOficina2);
+        in.add(this.correo);
+        in.add(this.empresa);
+        in.add(this.cuentaDeposito);
+        return in;
+    
+    }
     public void setNumCliente(int numCliente) {
         this.numCliente = numCliente;
     }
@@ -47,6 +59,12 @@ public class Distribuidor extends Contactos{
 
     public String getApellido() {
         return apellido;
+    }
+    public String getApellidoNombre() {
+        return apellido+" "+nombre;
+    }
+    public String getNombreApellido() {
+        return nombre+" "+apellido;
     }
 
     public void setApellido(String apellido) {

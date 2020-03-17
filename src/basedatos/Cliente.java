@@ -43,10 +43,10 @@ public class Cliente extends Contactos{
     public String[] getListadoOrdenes() {
         return listadoOrdenes;
     }
-        public void actualizarListadoOrdenes(){
-            this.arrayListOrdenes=new  ArrayList<>();
+    public void actualizarListadoOrdenes(){
+        this.arrayListOrdenes=new  ArrayList<>();
             hashMapOrdenes.entrySet().forEach((Map.Entry<String, Orden> entry) -> {
-                this.arrayListOrdenes.add(entry.getValue().getOrdenID());
+            this.arrayListOrdenes.add(entry.getValue().getOrdenID());
             });
             Collections.sort(this.arrayListOrdenes, String::compareTo);
             listadoOrdenes=new String[arrayListOrdenes.size()];
@@ -58,20 +58,15 @@ public class Cliente extends Contactos{
     public void addOrdenNoCancelada(String orden){
         arrayListOrdeneNoCanceladas=new ArrayList<>();
         listadoOrdenesNoCanceladas =new String[1];
-        
         this.arrayListOrdeneNoCanceladas.add(orden);
-        
-        
     }
     public int getNumCliente() {
         return numCliente;
     }
-  
     public void imprimirOrdenes(){
         this.hashMapOrdenes.entrySet().forEach((e) -> {
             //System.out.println(e.getKey() + " " + e.getValue());
         });
-    
     }
     public String [] getOrdenesNoCanceladas(){
         ArrayList<String> ordenesNoCanceladas= new ArrayList();
