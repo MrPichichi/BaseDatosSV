@@ -157,8 +157,8 @@ public class Cliente extends Contactos{
         try {   
             //ord.setNumTxT(Integer.toString(this.arrayListOrdenes.size()));
             
-            File file = new File("Clientes/"+this.getNumCliente()+"/Ordenes/"+ord.getNumeroOrden()+".txt");
-            System.out.println("CREANDO TXT ORDEN: "+"Clientes/"+this.getNumCliente()+"/Ordenes/"+ord.getNumeroOrden()+".txt");
+            File file = new File("Contactos/Clientes/ClientesActivos/"+this.getNumCliente()+"/Ordenes/"+ord.getNumeroOrden()+".txt");
+            System.out.println("CREANDO TXT ORDEN: "+"Contactos/Clientes/ClientesActivos"+this.getNumCliente()+"/Ordenes/"+ord.getNumeroOrden()+".txt");
             try{
                 file.createNewFile();
 
