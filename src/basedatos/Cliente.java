@@ -434,7 +434,7 @@ public class Cliente extends Contactos{
                 this.celularCuidador+"\n  - Guarderia: "+this.getGuarderia()+"\n  - Deuda Guarderia: "+this.getDeudaGuarderia()+"\n  - Deuda Orden: "+this.getDeudaOrden());
     }
     public String getInformacionEmbarcaciones(){
-        String infoEmb="\n\n  ============================\n                      EMBARCACIONES\n  ============================\n";
+        String infoEmb="\n\n  ==========================\n                      EMBARCACIONES\n  ==========================\n";
         for(int x=0;x<this.listadoEmbarcaciones.size();x++){
             this.emb=this.hashMapEmbarcaciones.get(this.listadoEmbarcaciones.get(x));
             infoEmb+="\n    -=[ "+emb.getTipoMarca()+" ]=-\n  - Tipo: "+emb.tipo+"\n  - Marca: "+emb.marca+"\n  - Modelo: "+

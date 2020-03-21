@@ -29,6 +29,11 @@ public class Distribuidor extends Contactos{
         return in;
     
     }
+     public String getInformacionDistribuidorVisualizar(){
+        return ("\n  - N°Cliente: "+this.numCliente+"\n  - Nombre: "+this.nombre+"\n  - Apellido: "+this.apellido+"\n  - Correo: "+this.correo+"\n  - Celular: "+this.celular+
+                "\n  - Telefono fijo: "+this.TelFijo+"\n  - Telefono fijo Oficina 1: "+this.TelFijoOficina1+"\n  - Telefono fijo Oficina 2: "+this.TelFijoOficina2+"\n  - Empresa: "+this.empresa+"\n  - N° Cuenta: "+
+                this.cuentaDeposito);
+    }
     public void setNumCliente(int numCliente) {
         this.numCliente = numCliente;
     }
