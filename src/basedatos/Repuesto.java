@@ -15,7 +15,7 @@ public class Repuesto {
     int precio;
     double cantidad=0;
     public String getInformacionVisualizar(){
-        String s="\n Repuesto: "+this.nombre+"\n Precio: $ "+this.getPrecio()+"\n Codigo: "+this.getCodigo()+"\n Disponibles: "+this.getCantidad();
+        String s="\n Repuesto: "+this.nombre+"\n Precio: $ "+this.getPrecio()+"\n Codigo/N° Parte: "+this.getCodigo()+"\n Disponibles: "+this.getCantidad();
         return s;
     }
      public String getInfoParaTxT(){
