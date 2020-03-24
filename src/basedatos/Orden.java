@@ -104,7 +104,7 @@ public class Orden {
         return this.manoObra;
     }
     public String getInformacion(){
-        String s="======================\n  DETALLES\n======================\n\n"+
+        String s="======================\n               DETALLES\n======================\n\n"+
                 "  N° Orden: "+this.numeroOrden+"\n  Cliente: "+this.cliente+"\n  Embarcacion: "+this.embrcacion+"\n  Fecha: "+this.getFecha()+"\n  Cancelada: "+this.getCancelado()+
                 "\n\n  MANO DE OBRA"+this.getManoObraVisualizar()+
                 "\n\n  REPUESTOS"+this.getRepuestos()+
